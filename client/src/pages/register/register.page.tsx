@@ -1,0 +1,116 @@
+import { useState } from "react";
+import { NavLink } from "react-router-dom";
+import thumbnail from "../../assets/images/auth/thumbnail.png";
+import person from "../../assets/images/auth/person.png";
+import { useToast } from "../../contexts/toastContext";
+
+const RegisterPage = () => {
+    const toast = useToast();
+    
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [showConfirmPasssword, setShowConfirmPassword] = useState<boolean>(false);
+
+    const [password, setPassword] = useState<string>("");
+    const [confirmPasword, setConfirmPassword] = useState<string>("");
+
+    return (
+        <main className="register-page w-full min-h-[90vh] flex">
+            <div className="hidden lg:flex w-1/2 bg-gray-50 items-center justify-center p-6 ps-20">
+                <img
+                    src={thumbnail}
+                    alt="Thumbnail"
+                    className="max-h-[90vh] w-auto object-contain rounded-lg shadow-lg"
+                />
+            </div>
+            <div className="w-full lg:w-1/2 flex items-center justify-center px-6 lg:px-12 bg-gray-50">
+                <div className="w-full max-w-lg bg-white p-8 rounded-xl shadow-lg">
+                    <div className="flex items-center gap-3 mb-8">
+                        <img src={person} alt="Person" className="w-14 h-14" />
+                        <h3 className="text-2xl font-semibold">Đăng ký tài khoản 👋</h3>
+                    </div>
+
+                    <div className="space-y-4">
+                        <div className="relative flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500">
+                            <i className="fa-solid fa-envelope-circle-check text-gray-400 mr-2"></i>
+                            <input
+                                type="email"
+                                placeholder="email@example.com"
+                                className="flex-1 outline-none bg-transparent"
+                            />
+                        </div>
+
+                        <div className="relative flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500">
+                            <i className="fa-solid fa-lock text-gray-400 mr-2"></i>
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                placeholder="••••••••"
+                                className="flex-1 outline-none bg-transparent"
+                                value={password}
+                                onChange={(event) => setPassword(event.target.value)}
+                            />
+                            <i
+                                className={`fa-solid ${showPassword ? "fa-eye" : "fa-eye-slash"
+                                    } text-gray-400 cursor-pointer absolute top-1/2 right-2 lg:right-4 -translate-y-1/2`}
+                                onClick={() => setShowPassword(!showPassword)}
+                            ></i>
+                        </div>
+
+                        <div className="relative flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500">
+                            <i className="fa-solid fa-lock text-gray-400 mr-2"></i>
+                            <input
+                                type={showConfirmPasssword ? "text" : "password"}
+                                placeholder="••••••••"
+                                className="flex-1 outline-none bg-transparent"
+                                value={confirmPasword}
+                                onChange={(event) => setConfirmPassword(event.target.value)}
+                            />
+                            <i
+                                className={`fa-solid ${showConfirmPasssword ? "fa-eye" : "fa-eye-slash"
+                                    } text-gray-400 cursor-pointer absolute top-1/2 right-2 lg:right-4 -translate-y-1/2`}
+                                onClick={() => setShowConfirmPassword(!showConfirmPasssword)}
+                            ></i>
+                        </div>
+
+                        {password !== confirmPasword && (
+                            <span className="text-red-600 text-sm block">
+                                * Mật khẩu xác nhận phải giống với mật khẩu đăng ký
+                            </span>
+                        )}
+                        <div className="relative flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500">
+                            <i className="fa-solid fa-key text-gray-400 mr-2"></i>
+                            <input
+                                type="text"
+                                placeholder="Verification code"
+                                className="flex-1 outline-none bg-transparent"
+                            />
+                            <span className="text-sm text-gray-500 absolute top-1/2 right-2 lg:right-4 -translate-y-1/2">Captcha</span>
+                        </div>
+                    </div>
+                    <div className="flex gap-3 mt-6">
+                        <button className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-600 transition cursor-pointer"
+                        onClick={()=> {
+                            toast.showToast("Hehehe", "Hehehehe", "note")
+                        }}>
+                            Đăng ký
+                        </button>
+                    </div>
+                    <div className="text-center text-gray-700 mt-3">Hoặc</div>
+                    <div className="mt-3 flex gap-3">
+                        <NavLink
+                            to="/auth/login"
+                            className="flex-1 border py-2 rounded-lg hover:bg-gray-50 transition text-center cursor-pointer"
+                        >
+                            Đăng nhập
+                        </NavLink>
+                        <button className="flex-1 border py-2 rounded-lg hover:bg-gray-50 transition cursor-pointer">
+                            <i className="fa-brands fa-google me-2"></i>
+                            Google
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    );
+};
+
+export default RegisterPage;

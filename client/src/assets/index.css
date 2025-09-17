@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+/* Disable eye input type password */
+/* Edge browser */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+/* Chorme browser */
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-clear-button {
+  display: none;
+}
+
+input:focus {
+    outline: none;
+}
+
+select:focus {
+  outline: none;
+}
