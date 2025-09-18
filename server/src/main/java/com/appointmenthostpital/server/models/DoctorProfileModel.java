@@ -15,6 +15,7 @@ import jakarta.persistence.Table;
 public class DoctorProfileModel {
     @Id
     private Long id;
+    private String image;
     private String fullName;
     private String gender;
     private String phone;
@@ -40,6 +41,14 @@ public class DoctorProfileModel {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getFullName() {
@@ -116,8 +125,8 @@ public class DoctorProfileModel {
 
     @Override
     public String toString() {
-        return "DoctorProfileModel [id=" + id + ", fullName=" + fullName + ", gender=" + gender + ", phone=" + phone
-                + ", birthDate=" + birthDate + ", degree=" + degree + ", workDate=" + workDate + ", status=" + status
-                + ", userModel=" + userModel + ", departmentModel=" + departmentModel + "]";
+        return "DoctorProfileModel [id=" + id + ", image=" + image + ", fullName=" + fullName + ", gender=" + gender
+                + ", phone=" + phone + ", birthDate=" + birthDate + ", degree=" + degree + ", workDate=" + workDate
+                + ", status=" + status + ", userModel=" + userModel + ", departmentModel=" + departmentModel + "]";
     }
 }

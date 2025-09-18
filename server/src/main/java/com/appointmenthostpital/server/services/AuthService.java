@@ -60,12 +60,13 @@ public class AuthService {
      */
     public LoginDTO.LoginResponse handlerLogin(LoginDTO.LoginRequest loginRequest) {
         Authentication authentication = this.authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
-        );
+                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
         JWTResponse jwtResponse = this.jwtService.generateToken(authentication);
 
-        return new LoginDTO.LoginResponse(jwtResponse.getAccessToken(), loginRequest.getEmail(), "USER", 0, 0);
+        return new LoginDTO.LoginResponse(jwtResponse.getAccessToken(), loginRequest.getEmail(),
+                authentication.getAuthorities().iterator().next().toString(), jwtResponse.getNow(),
+                jwtResponse.getValidity());
     }
 
 }

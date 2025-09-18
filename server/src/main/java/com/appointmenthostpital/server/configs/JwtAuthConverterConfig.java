@@ -10,11 +10,11 @@ public class JwtAuthConverterConfig {
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter converter = new JwtGrantedAuthoritiesConverter();
-        converter.setAuthoritiesClaimName("role");      // Get role from "role" claim
-        // converter.setAuthorityPrefix("ROLE_");                            // Spring requires prefix ROLE_
+        converter.setAuthoritiesClaimName("role");
+        converter.setAuthorityPrefix("");
 
-        JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
-        jwtConverter.setJwtGrantedAuthoritiesConverter(converter);
-        return jwtConverter;
+        JwtAuthenticationConverter jwtAuthConverter = new JwtAuthenticationConverter();
+        jwtAuthConverter.setJwtGrantedAuthoritiesConverter(converter);
+        return jwtAuthConverter;
     }
 }

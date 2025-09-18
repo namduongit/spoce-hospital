@@ -39,8 +39,11 @@ public class JWTConfig {
 
     @Bean
     public JwtDecoder jwtDecoder() {
-        return NimbusJwtDecoder.withSecretKey(this.getSecretKey()).build();
+        return NimbusJwtDecoder.withSecretKey(this.getSecretKey())
+                .macAlgorithm(JWT_ALGORITHM)
+                .build();
     }
+
 
     @Bean
     public JwtEncoder jwtEncoder() {

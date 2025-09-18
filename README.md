@@ -6,8 +6,8 @@ _Backend: Spring Boot | Frontend: Vite + TypeScript_
 ---
 
 ### Get Started
-- Server:
-- Client:
+- Server: Config variable in `application.properties`
+- Client: Config variable in `.env`
 
 *Note* You must config variable in `.env` and `application.properties`. You can read example file to config
 

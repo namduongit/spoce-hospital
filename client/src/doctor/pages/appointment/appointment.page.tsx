@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { rooms } from "../../../models/data";
 import { departments } from "../../../models/data";
@@ -11,6 +11,10 @@ import PaginationComponent from "../../components/paginations/table.pagination";
 const DoctorAppointmentPage = () => {
     const [row, setRow] = useState<number>(5);
     const [page, setPage] = useState<number>(1);
+    
+    useEffect(() => {
+        
+    }, [setRow]);
 
     return (
         <main className="appointment-page">
@@ -38,10 +42,10 @@ const DoctorAppointmentPage = () => {
                                 ))}
                             </select>
 
-                            <select name="" className="border border-gray-300 rounded-md py-2 px-4 w-50">
-                                <option value="">Số hàng</option>
+                            <select name="" className="border border-gray-300 rounded-md py-2 px-4 w-50" onChange={(event) => setRow(parseInt(event.target.value))}>
+                                <option value="5">Số hàng</option>
                                 {rows.map((row) => (
-                                    <option key={row.id} value={row.id} onClick={() => setRow(row.value)}>
+                                    <option key={row.id} value={row.id}>
                                         {row.name}
                                     </option>
                                 ))}
