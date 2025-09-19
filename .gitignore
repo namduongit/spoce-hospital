@@ -2,6 +2,13 @@
 !**/.vscode/
 !**/.idea/
 !.vscode/extensions.json
+.vscode
+application.properties
+.env
+.env
+.env.local
+.env.*.local
+
 
 # Logs
 logs
@@ -31,9 +38,3 @@ node_modules/
 client/package-lock.json
 client/yarn.lock
 client/pnpm-lock.yaml
-
-# Env files (keep .env.example)
-.env
-.env.local
-.env.*.local
-application.properties
