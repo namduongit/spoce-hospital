@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../../contexts/authContext";
 import ScheduleNowButton from "../../components/buttons/scheduleNow.button";
 import MenuHeader from "../../components/menus/header.menu";
 import AccountButton from "../../components/buttons/account.button";
+import { LoggedInButton } from "../../components/buttons/loggedIn.button";
 
 const HeaderLayout = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { isAuthenticated } = useAuth();
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
     `relative px-2 py-1 block text-gray-700 hover:text-blue-600 transition ${
@@ -40,7 +43,12 @@ const HeaderLayout = () => {
             Liên hệ
           </NavLink>
           <ScheduleNowButton />
-          <AccountButton />
+          
+          {isAuthenticated ? 
+          <LoggedInButton />
+          : 
+          <AccountButton setOpen={() => {}} />
+          }
         </nav>
 
         <button

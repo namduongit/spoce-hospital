@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 
 import thumbnail from "../../assets/images/auth/thumbnail.png";
 import person from "../../assets/images/auth/person.png";
 
 import { useToast } from "../../contexts/toastContext";
+import { useAuth } from '../../contexts/authContext';
 
 import api from "../../api/api";
 
@@ -14,8 +15,8 @@ const LoginPage = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-
     const [showPassword, setShowPassword] = useState<boolean>(false);
+    const { setAuth, isAuthenticated } = useAuth();
 
     async function handleLogin() {
         try {
@@ -24,8 +25,11 @@ const LoginPage = () => {
                 password: password
             });
             toast.showToast("Thông báo", response.message, "success");
+            setAuth(response.data.accessToken, response.data.expiresAt);
             navigate("/")
         } catch (error: any) {
+            if (!error.response.data.result) toast.showToast("Thông báo", "Email hoặc mật khẩu không đúng", "error");
+
             const errorMessages = error.response.data.errorMessage;
             if (Array.isArray(errorMessages)) {
                 errorMessages.forEach(errorMessage => {
@@ -35,6 +39,9 @@ const LoginPage = () => {
         }
     }
 
+    useEffect(() => {
+        if (isAuthenticated) navigate("/");
+    }, [isAuthenticated, navigate]);
 
     return (
         <main className="login-page w-full min-h-[90vh] flex">

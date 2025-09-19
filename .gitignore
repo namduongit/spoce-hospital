@@ -1,5 +1,6 @@
 # Client & Server
 !**/.vscode/
+!**/.idea/
 !.vscode/extensions.json
 
 # Logs
@@ -18,6 +19,7 @@ build/
 .gradle/
 **/target/
 **/build/
+**/.idea
 
 # Wrapper 
 server/gradlew
