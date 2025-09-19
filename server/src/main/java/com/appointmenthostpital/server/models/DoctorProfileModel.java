@@ -19,9 +19,9 @@ public class DoctorProfileModel {
     private String fullName;
     private String gender;
     private String phone;
-    private String birthDate;
+    private String birthDay;
     private String degree;
-    private String workDate;
+    private String workDay;
     private String status;
 
     @OneToOne
@@ -75,12 +75,12 @@ public class DoctorProfileModel {
         this.phone = phone;
     }
 
-    public String getBirthDate() {
-        return birthDate;
+    public String getBirthDay() {
+        return birthDay;
     }
 
-    public void setBirthDate(String birthDate) {
-        this.birthDate = birthDate;
+    public void setBirthDay(String birthDay) {
+        this.birthDay = birthDay;
     }
 
     public String getDegree() {
@@ -91,12 +91,12 @@ public class DoctorProfileModel {
         this.degree = degree;
     }
 
-    public String getWorkDate() {
-        return workDate;
+    public String getWorkDay() {
+        return workDay;
     }
 
-    public void setWorkDate(String workDate) {
-        this.workDate = workDate;
+    public void setWorkDay(String workDay) {
+        this.workDay = workDay;
     }
 
     public String getStatus() {
@@ -126,7 +126,7 @@ public class DoctorProfileModel {
     @Override
     public String toString() {
         return "DoctorProfileModel [id=" + id + ", image=" + image + ", fullName=" + fullName + ", gender=" + gender
-                + ", phone=" + phone + ", birthDate=" + birthDate + ", degree=" + degree + ", workDate=" + workDate
+                + ", phone=" + phone + ", birthDay=" + birthDay + ", degree=" + degree + ", workDay=" + workDay
                 + ", status=" + status + ", userModel=" + userModel + ", departmentModel=" + departmentModel + "]";
     }
 }

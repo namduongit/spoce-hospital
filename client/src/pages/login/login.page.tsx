@@ -24,6 +24,8 @@ const LoginPage = () => {
                 email: email,
                 password: password
             });
+
+            console.log(response)
             toast.showToast("Thông báo", response.message, "success");
             setAuth(response.data.accessToken, response.data.expiresAt);
             navigate("/")

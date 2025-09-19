@@ -17,7 +17,7 @@ public class UserProfileModel {
     private String fullName;
     private String phone;
     private String address;
-    private String birthDate;
+    private String birthDay;
 
     @OneToOne
     @MapsId
@@ -57,12 +57,12 @@ public class UserProfileModel {
         this.address = address;
     }
 
-    public String getBirthDate() {
-        return birthDate;
+    public String getBirthDay() {
+        return birthDay;
     }
 
-    public void setBirthDate(String birthDate) {
-        this.birthDate = birthDate;
+    public void setBirthDay(String birthDay) {
+        this.birthDay = birthDay;
     }
 
     public UserModel getUserModel() {
@@ -76,6 +76,6 @@ public class UserProfileModel {
     @Override
     public String toString() {
         return "UserProfileModel [id=" + id + ", fullName=" + fullName + ", phone=" + phone + ", address=" + address
-                + ", birthDate=" + birthDate + ", userModel=" + userModel + "]";
+                + ", birthDay=" + birthDay + ", userModel=" + userModel + "]";
     }
 }

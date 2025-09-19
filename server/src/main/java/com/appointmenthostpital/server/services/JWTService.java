@@ -13,17 +13,11 @@ import org.springframework.stereotype.Service;
 
 import com.appointmenthostpital.server.configs.JWTConfig;
 import com.appointmenthostpital.server.dtos.JWTResponse;
-import com.appointmenthostpital.server.models.DoctorProfileModel;
-import com.appointmenthostpital.server.models.UserModel;
-import com.appointmenthostpital.server.models.UserProfileModel;
 
 @Service
 public class JWTService {
     @Autowired
     private JWTConfig jwtConfig;
-
-    @Autowired
-    private UserService userService;
 
     public JWTResponse generateToken(Authentication authentication) {
         Instant now = Instant.now();

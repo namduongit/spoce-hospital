@@ -35,7 +35,6 @@ const AccountButton = ({ setOpen }: AccountButtonProps) => {
                     {isAuthenticated ?
                     <>
                     <NavLink to="/account" className={() => ("text-gray-700 hover:font-bold hover:bg-gray-100 hover:text-blue-600 px-4 py-3")}>
-                        <i className="fa-solid fa-person me-2"></i>
                         Thông tin tài khoản
                     </NavLink>
                     <div className="text-gray-700 hover:font-bold hover:bg-gray-100 hover:text-blue-600 px-4 py-3" onClick={handleLogoutClick}>
