@@ -1,49 +1,33 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 
 import thumbnail from "../../assets/images/auth/thumbnail.png";
 import person from "../../assets/images/auth/person.png";
 
 import { useToast } from "../../contexts/toastContext";
-import { useAuth } from '../../contexts/authContext';
-
-import api from "../../api/api";
+import { login } from "../../services/authService";
+import { useAuth } from "../../contexts/authContext";
 
 const LoginPage = () => {
     const toast = useToast();
+    const auth = useAuth();
 
     const navigate = useNavigate();
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+
     const [showPassword, setShowPassword] = useState<boolean>(false);
-    const { setAuth, isAuthenticated } = useAuth();
 
     async function handleLogin() {
-        try {
-            const response: any = await api.post("/auth/login", {
-                email: email,
-                password: password
-            });
-
-            console.log(response)
-            toast.showToast("Thông báo", response.message, "success");
-            setAuth(response.data.accessToken, response.data.expiresAt);
-            navigate("/")
-        } catch (error: any) {
-            if (!error.response.data.result) toast.showToast("Thông báo", "Email hoặc mật khẩu không đúng", "error");
-
-            const errorMessages = error.response.data.errorMessage;
-            if (Array.isArray(errorMessages)) {
-                errorMessages.forEach(errorMessage => {
-                    toast.showToast("hello", errorMessage, "error");
-                })
-            }
+        const restResponse = await login(email, password);
+        if (restResponse.statusCode === 400) {
+            toast.showToast("Thông báo", "Tài khoản hoặc mật khẩu không chính xác", "error");
+        } else if (restResponse.statusCode === 200) {
+            toast.showToast("Thông báo", restResponse.message, "success");
+            setTimeout(() => navigate("/"), 1000);
+            auth.setAuth(restResponse.data);
         }
     }
-
-    useEffect(() => {
-        if (isAuthenticated) navigate("/");
-    }, [isAuthenticated, navigate]);
 
     return (
         <main className="login-page w-full min-h-[90vh] flex">

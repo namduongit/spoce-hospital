@@ -21,9 +21,6 @@ export const LoggedInButton = () => {
                              hover:bg-blue-600 hover:text-white transition delay-100 duration-300 ease-in-out"
                     onClick={handleClick}
             >
-                <div className="w-6 h-6">
-                    <i className="fa-solid fa-person"></i>
-                </div>
                 Tài khoản
             </button>
             {isOpen && (
@@ -36,7 +33,7 @@ export const LoggedInButton = () => {
                            after:border-l-[8px] after:block after:w-0 after:h-0 after:-top-[8px] after:right-15
                            after:border-l-transparent after:border-r-transparent after:border-b-white"
             >
-                <NavLink to="/account"><li className="py-3 px-4 cursor-pointer hover:bg-blue-50 hover:text-blue-500">Thông tin tài khoản</li></NavLink>
+                <NavLink to="/page/account"><li className="py-3 px-4 cursor-pointer hover:bg-blue-50 hover:text-blue-500">Thông tin tài khoản</li></NavLink>
                 <li className="py-3 px-4 cursor-pointer hover:bg-blue-50 hover:text-blue-500" onClick={handleLogoutClick}>Đăng xuất</li>
             </ul>)}
         </div>

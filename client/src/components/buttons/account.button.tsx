@@ -1,22 +1,10 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../contexts/authContext";
-import { useToast } from "../../contexts/toastContext";
 
-type AccountButtonProps = {
-    setOpen: (value: boolean) => void;
-};
-
-const AccountButton = ({ setOpen }: AccountButtonProps) => {
+const AccountButton = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
-    const { isAuthenticated, clearAuth } = useAuth();
-    const { showToast } = useToast();
-
-    const handleLogoutClick = () => {
-        clearAuth();
-        setIsOpen(false);
-        showToast("Thông báo", "Đăng xuất thành công!", "success");
-    };
+    const auth = useAuth();
 
     return (
         <div className="relative account-button lg:text-white lg:py-2 lg:px-3 lg:rounded-[5px] lg:bg-blue-600 cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
@@ -29,33 +17,32 @@ const AccountButton = ({ setOpen }: AccountButtonProps) => {
             </span>
 
             {isOpen && (
-                <nav className="account-nav bg-white flex flex-col
-                ms-3
-                lg:!absolute lg:shadow-xl lg:min-w-40 lg:-start-34 lg:mt-5">
-                    {isAuthenticated ?
-                    <>
-                    <NavLink to="/account" className={() => ("text-gray-700 hover:font-bold hover:bg-gray-100 hover:text-blue-600 px-4 py-3")}>
-                        Thông tin tài khoản
-                    </NavLink>
-                    <div className="text-gray-700 hover:font-bold hover:bg-gray-100 hover:text-blue-600 px-4 py-3" onClick={handleLogoutClick}>
-                        <i className="fa-solid fa-right-from-bracket me-2"></i>
-                        Đăng xuất
-                    </div>
-                    </> :
-                    <>
-                    <NavLink to="/auth/login" onClick={() => setOpen(false)}  className={() => ("text-gray-700 hover:font-bold hover:bg-gray-100 hover:text-blue-600 px-4 py-3")}>
-                        <i className="fa-solid fa-right-to-bracket me-2"></i>
-                        Đăng nhập
-                    </NavLink>
-                    <NavLink to="/auth/register" className={() => ("text-gray-700 hover:font-bold hover:bg-gray-100 hover:text-blue-600 px-4 py-3")}>
-                        <i className="fa-solid fa-user-plus me-2"></i>
-                        Đăng ký
-                    </NavLink>
-                    </>
-                    }
+                <nav className="account-nav bg-white flex flex-col ms-5 lg:!absolute lg:shadow-xl lg:min-w-40 lg:-start-34 lg:mt-5">
+                    {auth.isAuthenticated ? (
+                        <>
+                            <NavLink to="/page/account" className="text-gray-700 hover:font-bold hover:bg-gray-100 hover:text-blue-600 px-4 py-1 lg:py-3">
+                                Tài khoản
+                            </NavLink>
+                            <NavLink to="/auth/history" className="text-gray-700 hover:font-bold hover:bg-gray-100 hover:text-blue-600 px-4 py-1 lg:py-3">
+                                Lịch sử
+                            </NavLink>
+                            <NavLink to="/auth/logout" className="text-gray-700 hover:font-bold hover:bg-gray-100 hover:text-blue-600 px-4 py-1 lg:py-3">
+                                Đăng xuất
+                            </NavLink>
+                        </>
+                    ) : (
+                        <>
+                            <NavLink to="/auth/login" className="text-gray-700 hover:font-bold hover:bg-gray-100 hover:text-blue-600 px-4 py-1 lg:py-3">
+                                Đăng nhập
+                            </NavLink>
+                            <NavLink to="/auth/register" className="text-gray-700 hover:font-bold hover:bg-gray-100 hover:text-blue-600 px-4 py-1 lg:py-3">
+                                Đăng ký
+                            </NavLink>
+                        </> 
+                    )}
                 </nav>
             )}
-        </div>
+        </div >
     )
 }
 

@@ -21,7 +21,7 @@ public class _UserDetailService implements UserDetailsService {
         return User
         .withUsername(userModel.getEmail())
         .password(userModel.getPassword())
-        .roles(userModel.getRole()).build();
+        .authorities(userModel.getRole()).build();
     }
     
 }

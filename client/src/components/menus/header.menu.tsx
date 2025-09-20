@@ -16,7 +16,7 @@ const HeaderMenu = (props: IProps) => {
             <NavLink to="/page/doctors" className={props.navLinkClass} onClick={() => props.setIsOpen(false)}>Bác sĩ</NavLink>
             <NavLink to="/page/about" className={props.navLinkClass} onClick={() => props.setIsOpen(false)}>Giới thiệu</NavLink>
             <NavLink to="/page/contact" className={props.navLinkClass} onClick={() => props.setIsOpen(false)}>Liên hệ</NavLink>
-            <AccountButton setOpen={props.setIsOpen} />
+            <AccountButton />
             <ScheduleNowButton />
         </nav>
     )

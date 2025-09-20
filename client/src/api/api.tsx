@@ -1,4 +1,7 @@
 import axios from "axios";
+import type { UserAuth } from "../contexts/authContext";
+
+const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
 type RestResponse = {
   statusCode: number,
@@ -9,17 +12,30 @@ type RestResponse = {
 }
 
 const api = axios.create({
-  baseURL: "http://localhost:8000"
+  baseURL: SERVER_URL
 });
 
 api.interceptors.response.use(
   (response) => {
-    return response.data;
+    return response;
   },
   (error: any) => {
-    console.log(`Error in when use API: ${error}`);
-    return Promise.reject(error);
+    return error.response;
   }
 );
 
-export default api;
+api.interceptors.request.use((config) => {
+  const authSession = sessionStorage.getItem("CURRENT_USER");
+  if (authSession) {
+    const auth: UserAuth = JSON.parse(authSession);
+    if (auth?.accessToken) {
+      config.headers.Authorization = `Bearer ${auth.accessToken}`;
+    }
+  }
+  return config;
+});
+
+api.defaults.withCredentials = true;
+
+export { api };
+export type { RestResponse };

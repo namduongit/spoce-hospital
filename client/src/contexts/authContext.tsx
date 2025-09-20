@@ -1,14 +1,22 @@
 import { createContext, useContext, useState, useMemo, useEffect } from "react";
+import { useToast } from "./toastContext";
+import { valid } from "../services/authService";
 
 type UserAuth = {
-
+  accessToken: string,
+  email: string,
+  expiresAt: number,
+  issuedAt: number,
+  role: string
 };
 
 type AuthContext = {
   token: string | null,
+  email: string | null,
+  role: string | null,
   expiresAt: number | null,
   isAuthenticated: boolean,
-  setAuth: (t: string, expire: number) => void,
+  setAuth: (authResponse: UserAuth) => void,
   clearAuth: () => void
 };
 
@@ -16,30 +24,32 @@ const AuthContext = createContext<AuthContext | undefined>(undefined);
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
-  const [token, setToken] = useState<string | null>(null);
+  const [token, setToken] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [role, setRole] = useState<string>("");
   const [expiresAt, setExpiresAt] = useState<number | null>(null);
 
-  // Kiểm tra nếu đã có token trên session và chưa hết hạn
+  const toast = useToast();
+
   useEffect(() => {
-    const authSession = sessionStorage.getItem("auth");
-    if (!authSession) return;
+    const authSessionStr = sessionStorage.getItem("CURRENT_USER");
+    if (!authSessionStr) return;
+    const authSession: UserAuth = JSON.parse(authSessionStr);
 
-    try {
-      const auth = JSON.parse(authSession) as { token: string, expiresAt: number };
-      const currentTime = Date.now();
-
-      if (auth.expiresAt * 1000 > currentTime) {
-        setToken(auth.token);
-        setExpiresAt(auth.expiresAt);
-      } else {
-        sessionStorage.removeItem("auth");
+    const validToken = async () => {
+      const restResponse = await valid();
+      if (restResponse.statusCode === 401) {
+        toast.showToast("Thông báo", "Tài khoản không hợp lệ", "warning");
+      } else if (restResponse.statusCode === 200) {
+        const data: UserAuth = restResponse.data;
+        data.accessToken = authSession.accessToken;
+        setAuth(data);
       }
-    } catch {
-      sessionStorage.removeItem("auth");
     }
+
+    validToken();
   }, []);
 
-  // Kiểm tra nếu token hết hạn thì log out
   useEffect(() => {
     if (!token || !expiresAt) return;
 
@@ -57,20 +67,28 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return () => window.clearTimeout(timeOut);
   }, [token, expiresAt]);
 
+  // Function clear token
   const clearAuth = () => {
-    setToken(null);
-    setExpiresAt(null);
-    sessionStorage.removeItem("auth");
+    setToken("");
+    setEmail("");
+    setRole("");
+    setExpiresAt(0);
+    sessionStorage.removeItem("CURRENT_USER");
   };
 
-  const setAuth = (token: string, expire: number) => {
-    setToken(token);
-    setExpiresAt(expire);
-    sessionStorage.setItem("auth", JSON.stringify({ token: token, expiresAt: expire }));
+  // Function set variable
+  const setAuth = (authResponse: UserAuth) => {
+    setToken(authResponse.accessToken);
+    setEmail(authResponse.email);
+    setRole(authResponse.role);
+    setExpiresAt(authResponse.expiresAt);
+    sessionStorage.setItem("CURRENT_USER", JSON.stringify(authResponse));
   };
 
   const value = useMemo(() => ({
     token,
+    email,
+    role,
     expiresAt,
     isAuthenticated: !!token,
     setAuth,
@@ -91,6 +109,6 @@ const useAuth = () => {
   return ctx;
 };
 
-export { AuthProvider, useAuth }; 
+export { AuthProvider, useAuth };
 export type { UserAuth };
 

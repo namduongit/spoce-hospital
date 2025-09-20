@@ -15,6 +15,7 @@ const DoctorAppointmentPage = lazy(() => import("./doctor/pages/appointment/appo
 
 const LoginPage = lazy(() => import("./pages/login/login.page"));
 const RegisterPage = lazy(() => import("./pages/register/register.page"));
+const AccountPage = lazy(() => import("./pages/account/account.page"));
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
         path: "auth/register",
         Component: RegisterPage,
       },
+      {
+        path: "page/account",
+        Component: AccountPage
+      }
     ],
   },
   {
@@ -44,16 +49,16 @@ const router = createBrowserRouter([
       {
         path: "appointments",
         Component: DoctorAppointmentPage
-      }
+      },
     ]
   }
 ]);
 
 // Render app
 createRoot(document.getElementById("root")!).render(
-    <AppProviders>
-      <Suspense fallback={<RotateLoading />}>
-        <RouterProvider router={router} />
-      </Suspense>
-    </AppProviders>
+  <AppProviders>
+    <Suspense fallback={<RotateLoading />}>
+      <RouterProvider router={router} />
+    </Suspense>
+  </AppProviders>
 );
