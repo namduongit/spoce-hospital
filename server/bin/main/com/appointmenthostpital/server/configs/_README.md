@@ -121,6 +121,7 @@ public class SecurityConfig {
         return http.build();
     }
 
+    // Redefine password comparison when the user uses (Encode)
     @Bean
     public AuthenticationProvider authenticationProvider(_UserDetailService userDetailService) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailService);
@@ -132,7 +133,8 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
+    
+    // What field does JwtConverter define?
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter converter = new JwtGrantedAuthoritiesConverter();

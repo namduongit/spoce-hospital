@@ -60,13 +60,16 @@ export const appointments = Array.from({ length: 20 }, (_, i) => {
 	const doctorId = ((i % 4) + 7);
 	const roomId = (i % 8) + 1;
 	const departmentId = ((i % 3) + 1);
+
+	const status: ['PENDING', 'CONFIRMED', 'CANCELED', 'COMPLETED'] = ['PENDING', 'CONFIRMED', 'CANCELED', 'COMPLETED'];
+
 	return {
 		id: i + 1,
 		fullName: `User ${userId} Appointment ${i + 1}`,
 		phone: `555-000-${String(i + 1).padStart(4, '0')}`,
 		time: `2025-09-${String((i % 30) + 1).padStart(2, '0')}T09:00:00`,
 		note: `Appointment note ${i + 1}`,
-		status: ['PENDING', 'CONFIRMED', 'CANCELED', 'COMPLETED'][i % 4],
+		status: status[i % 4],
 		departmentId,
 		doctorId,
 		roomId,

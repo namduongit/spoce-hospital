@@ -11,7 +11,7 @@ const navLinks = [
 ];
 
 const DoctorMainSidebar = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
 
   return (
     <div className='sidebar-component'>

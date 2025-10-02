@@ -1,7 +1,8 @@
 
 import icon from '../../images/icon.png';
 
-const DoctorHeaderLayout = () => (
+const DoctorHeaderLayout = () => {
+    return (
         <header className="header-layout w-full bg-white shadow sticky top-0 start-0 z-10">
             <div className="header-wrap flex items-center justify-between px-4 py-2">
                 <a href="/doctor" className="header__logo flex items-center space-x-2 text-xl font-bold">
@@ -13,6 +14,7 @@ const DoctorHeaderLayout = () => (
                 </nav>
             </div>
         </header>
-);
+    )
+}
 
 export default DoctorHeaderLayout;

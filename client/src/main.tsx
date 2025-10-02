@@ -8,10 +8,12 @@ import Layout from "./layouts/layout";
 import HomePage from "./pages/home/home.page";
 import RotateLoading from "./components/loadings/rotate.loading";
 
-const DoctorLayout = lazy(() => import("./doctor/layouts/layout"))
-const DoctorHomePage = lazy(() => import("./doctor/pages/home/home.page"))
-const DoctorLoginPage = lazy(() => import("./doctor/pages/login/login.page"))
-const DoctorAppointmentPage = lazy(() => import("./doctor/pages/appointment/appointment.page"))
+const DoctorLayout = lazy(() => import("./doctor/layouts/layout"));
+const DoctorHomePage = lazy(() => import("./doctor/pages/home/home.page"));
+const DoctorLoginPage = lazy(() => import("./doctor/pages/login/login.page"));
+const DoctorAppointmentPage = lazy(() => import("./doctor/pages/appointment/appointment.page"));
+
+const AdminLayout = lazy(() => import("./admin/layouts/layout"));
 
 const LoginPage = lazy(() => import("./pages/login/login.page"));
 const RegisterPage = lazy(() => import("./pages/register/register.page"));
@@ -50,6 +52,13 @@ const router = createBrowserRouter([
         path: "appointments",
         Component: DoctorAppointmentPage
       },
+    ]
+  },
+  {
+    path: "/admin",
+    Component: AdminLayout,
+    children: [
+      
     ]
   }
 ]);

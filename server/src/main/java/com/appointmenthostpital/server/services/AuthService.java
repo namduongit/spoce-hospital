@@ -75,6 +75,7 @@ public class AuthService {
      * @param authentication
      * @return
      */
+    @SuppressWarnings("null")
     public ValidResponse handlerValid(Authentication authentication) {
         String email = authentication.getName();
         UserModel userModel = this.userRepository.findByEmail(email);

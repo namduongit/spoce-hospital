@@ -14,7 +14,6 @@ const DoctorLayout = () => {
                 <main className="flex-1 p-4 bg-gray-150 min-h-0 px-6">
                     <Outlet />
                 </main>
-                 {/* <Outlet /> */}
             </div>  
             <DoctorFooterLayout />
         </div>
