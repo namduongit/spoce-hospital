@@ -7,6 +7,7 @@ import "./assets/index.css";
 import Layout from "./layouts/layout";
 import HomePage from "./pages/home/home.page";
 import RotateLoading from "./components/loadings/rotate.loading";
+import AssistorProtectedRouter from './assistor/pages/protected/AssistorProtectedRoute';
 
 const DoctorLayout = lazy(() => import("./doctor/layouts/layout"));
 const DoctorHomePage = lazy(() => import("./doctor/pages/home/home.page"));
@@ -18,6 +19,10 @@ const AdminLayout = lazy(() => import("./admin/layouts/layout"));
 const LoginPage = lazy(() => import("./pages/login/login.page"));
 const RegisterPage = lazy(() => import("./pages/register/register.page"));
 const AccountPage = lazy(() => import("./pages/account/account.page"));
+const AssistorLoginPage = lazy(() => import("./assistor/pages/login/AssistorLoginPage"));
+const AssistorPage = lazy(() => import('./assistor/Layout'));
+const AssistorHomePage = lazy(() => import('./assistor/pages/home/Home'));
+const AssistorAppointment = lazy(() => import('./assistor/pages/appointment/Appointment'));
 
 const router = createBrowserRouter([
   {
@@ -59,6 +64,27 @@ const router = createBrowserRouter([
     Component: AdminLayout,
     children: [
       
+    ]
+  },
+  {
+    path: "/assistor/login",
+    Component: AssistorLoginPage
+  },
+  {
+    path: "/assistor",
+    element: (
+      <AssistorProtectedRouter>
+        <AssistorPage />
+      </AssistorProtectedRouter>
+    ),
+    children: [
+      {
+        index: true, Component: AssistorHomePage
+      },
+      {
+        path: "appointments",
+        Component: AssistorAppointment
+      }
     ]
   }
 ]);

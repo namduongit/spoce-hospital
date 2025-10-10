@@ -50,7 +50,7 @@ const DoctorDetailAppointment = (props: DoctorDetailAppointment) => {
                                 </div>
                                 <p className="flex justify-between text-gray-600 font-medium mb-1">Họ và tên: <span className="text-black">{appointment.fullName}</span></p>
                                 <p className="flex justify-between text-gray-600 font-medium mb-1">Số điện thoại: <span className="text-black">{appointment.phone}</span></p>
-                                <p>Giờ khám: <span>{formatDateToHourAndDay(new Date(appointment.time))}</span></p>
+                                <p className="flex justify-between text-gray-600 font-medium mb-1">Giờ khám: <span className="text-black">{formatDateToHourAndDay(new Date(appointment.time))}</span></p>
                             </div>
 
                             <div className="doctor-detail__item border-1 border-gray-300 px-3 py-3 bg-white rounded shadow">

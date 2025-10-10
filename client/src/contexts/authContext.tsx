@@ -16,6 +16,7 @@ type AuthContext = {
   role: string | null,
   expiresAt: number | null,
   isAuthenticated: boolean,
+  isLoading: boolean,
   setAuth: (authResponse: UserAuth) => void,
   clearAuth: () => void
 };
@@ -28,22 +29,30 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [email, setEmail] = useState<string>("");
   const [role, setRole] = useState<string>("");
   const [expiresAt, setExpiresAt] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const toast = useToast();
 
   useEffect(() => {
     const authSessionStr = sessionStorage.getItem("CURRENT_USER");
-    if (!authSessionStr) return;
+    if (!authSessionStr) {
+      setIsLoading(false);
+      return;
+    }
     const authSession: UserAuth = JSON.parse(authSessionStr);
 
     const validToken = async () => {
       const restResponse = await valid();
       if (restResponse.statusCode === 401) {
         toast.showToast("Thông báo", "Tài khoản không hợp lệ", "warning");
+        setIsLoading(false);
       } else if (restResponse.statusCode === 200) {
         const data: UserAuth = restResponse.data;
         data.accessToken = authSession.accessToken;
         setAuth(data);
+        setIsLoading(false);
+      } else {
+        setIsLoading(false);
       }
     }
 
@@ -91,9 +100,10 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     role,
     expiresAt,
     isAuthenticated: !!token,
+    isLoading,
     setAuth,
     clearAuth
-  }), [token, expiresAt]);
+  }), [token, expiresAt, isLoading]);
 
 
   return (
