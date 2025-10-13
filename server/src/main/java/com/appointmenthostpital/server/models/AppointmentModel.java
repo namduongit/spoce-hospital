@@ -1,7 +1,10 @@
 package com.appointmenthostpital.server.models;
 
+import java.sql.Timestamp;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,15 +19,21 @@ public class AppointmentModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String fullName;
+    @Column(nullable = false)
     private String phone;
+    @Column(nullable = false)
     private String time;
     private String note;
-    private String status;
+    @Column(columnDefinition = "enum('PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELED') default 'PENDING'")
+    private String status = "PENDING";
+    
+    private Timestamp createdAt = new Timestamp(System.currentTimeMillis());
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
     @JsonBackReference
+    @JoinColumn(name = "user_id")
     private UserModel userModel;
 
     @ManyToOne
@@ -90,6 +99,14 @@ public class AppointmentModel {
         this.status = status;
     }
 
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public UserModel getUserModel() {
         return userModel;
     }
@@ -125,7 +142,8 @@ public class AppointmentModel {
     @Override
     public String toString() {
         return "AppointmentModel [id=" + id + ", fullName=" + fullName + ", phone=" + phone + ", time=" + time
-                + ", note=" + note + ", status=" + status + ", userModel=" + userModel + ", departmentModel="
-                + departmentModel + ", roomModel=" + roomModel + ", doctorModel=" + doctorModel + "]";
+                + ", note=" + note + ", status=" + status + ", createdAt=" + createdAt + ", userModel=" + userModel
+                + ", departmentModel=" + departmentModel + ", roomModel=" + roomModel + ", doctorModel=" + doctorModel
+                + "]";
     }
 }

@@ -23,5 +23,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src", "src/components/loadings/rotate.loading.tsx"]
+  "include": ["src", "src/components/common/loading.tsx"]
 }

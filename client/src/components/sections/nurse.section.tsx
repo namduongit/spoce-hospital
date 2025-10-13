@@ -1,12 +1,14 @@
-type NurseSectionProps = {
-    id: number,
-    image: string,
-    name: string,
-    position: string,
-    detail: string,
+type NurseSection = {
+  id: number,
+  image: string,
+  name: string,
+  position: string,
+  detail: string,
 }
 
-const NurseSection = ({ id, image, name, position, detail }: NurseSectionProps) => {
+const NurseSection = (props: NurseSection) => {
+  const { image, name, position, detail } = props;
+
   return (
     <div className="block nurse-section bg-white rounded-2xl shadow-2xl px-4 py-4 flex-col">
       <div className="nurse-section__wrap flex flex-col flex-grow">

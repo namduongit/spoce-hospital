@@ -10,7 +10,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
 import com.appointmenthostpital.server.configs.JWTConfig;
-import com.appointmenthostpital.server.dtos.JWTResponse;
+import com.appointmenthostpital.server.dtos.auth.JWTResponse;
 
 @Service
 public class JWTService {

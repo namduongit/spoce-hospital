@@ -81,10 +81,4 @@ public class UserDetailDTO {
     public void setUserAppointmets(List<AppointmentModel> userAppointmets) {
         this.userAppointmets = userAppointmets;
     }
-
-    @Override
-    public String toString() {
-        return "AuthDetailDTO [id=" + id + ", email=" + email + ", role=" + role + ", type=" + type + ", status="
-                + status + ", userProfileModel=" + userProfileModel + ", userAppointmets=" + userAppointmets + "]";
-    }
 }

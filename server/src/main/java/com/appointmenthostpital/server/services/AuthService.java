@@ -7,10 +7,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
-import com.appointmenthostpital.server.dtos.JWTResponse;
-import com.appointmenthostpital.server.dtos.LoginDTO;
-import com.appointmenthostpital.server.dtos.RegisterDTO;
-import com.appointmenthostpital.server.dtos.ValidResponse;
+import com.appointmenthostpital.server.dtos.auth.JWTResponse;
+import com.appointmenthostpital.server.dtos.auth.LoginDTO;
+import com.appointmenthostpital.server.dtos.auth.RegisterDTO;
+import com.appointmenthostpital.server.dtos.auth.ValidResponse;
+import com.appointmenthostpital.server.exceptions.AccountLockedException;
+import com.appointmenthostpital.server.exceptions.NotFoundResourceException;
+import com.appointmenthostpital.server.exceptions.PasswordNotValidException;
 import com.appointmenthostpital.server.models.UserModel;
 import com.appointmenthostpital.server.models.UserProfileModel;
 import com.appointmenthostpital.server.repositories.UserRepository;
@@ -37,7 +40,7 @@ public class AuthService {
      * @param registerRequest
      * @return
      */
-    public RegisterDTO.RegisterResponse handlerRegister(RegisterDTO.RegisterRequest registerRequest) {
+    public RegisterDTO.RegisterResponse handleRegister(RegisterDTO.RegisterRequest registerRequest) {
         UserModel userModel = new UserModel();
         UserProfileModel profileModel = new UserProfileModel();
 
@@ -60,14 +63,25 @@ public class AuthService {
      * @param loginRequest
      * @return
      */
-    public LoginDTO.LoginResponse handlerLogin(LoginDTO.LoginRequest loginRequest) {
+    public LoginDTO.LoginResponse handleLogin(LoginDTO.LoginRequest request) {
+        UserModel userModel = this.userRepository.findByEmail(request.getEmail());
+        if (userModel == null) {
+            throw new NotFoundResourceException("Không tìm thấy tài khoản");
+        }
+        if (!bCryptPassword.passwordEncoder().matches(request.getPassword(), userModel.getPassword())) {
+            throw new PasswordNotValidException("Mật khẩu không đúng");
+        }
+        if (userModel.getStatus().equals("INACTIVE")) {
+            throw new AccountLockedException("Tài khoản đã bị khóa");
+        }
+
         Authentication authentication = this.authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
+            new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
 
         JWTResponse jwtResponse = this.jwtService.generateToken(authentication);
 
-        return new LoginDTO.LoginResponse(jwtResponse.getAccessToken(), loginRequest.getEmail(), jwtResponse.getRole(), jwtResponse.getNow(), jwtResponse.getValidity());
+        return new LoginDTO.LoginResponse(jwtResponse.getAccessToken(), request.getEmail(), jwtResponse.getRole(), jwtResponse.getNow(), jwtResponse.getValidity());
     }
 
     /**
@@ -76,7 +90,7 @@ public class AuthService {
      * @return
      */
     @SuppressWarnings("null")
-    public ValidResponse handlerValid(Authentication authentication) {
+    public ValidResponse handleValid(Authentication authentication) {
         String email = authentication.getName();
         UserModel userModel = this.userRepository.findByEmail(email);
         Jwt jwt = (Jwt)authentication.getPrincipal();

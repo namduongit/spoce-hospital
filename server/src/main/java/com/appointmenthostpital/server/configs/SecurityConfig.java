@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.appointmenthostpital.server.services._UserDetailService;
@@ -26,8 +25,9 @@ public class SecurityConfig {
 
     /**
      * @Note
-     * - After send request, OPTIONS request (preflight) will ask BE: Can i do this ? (None AccessToken)
-     * - OPTION success -> then next
+     *       - After send request, OPTIONS request (preflight) will ask BE: Can i do
+     *       this ? (None AccessToken)
+     *       - OPTION success -> then next
      * 
      * @param http
      * @param jwtAuthConverter
@@ -36,26 +36,26 @@ public class SecurityConfig {
      */
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationConverter jwtAuthConverter) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthConverterConfig jwtAuthConverterConfig,
+            AccessDeniedConfig accessDeniedConfig) throws Exception {
         return http
+                .cors(cors -> {
+                })
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        // Not require Jwt token for auth routes
                         .requestMatchers("/auth/*").permitAll()
-                        // Require Jwt token for user and other roles
                         .requestMatchers("/api/public/**").authenticated()
-                        // Require Jwt token for user-specific endpoints
-                        .requestMatchers("/api/user/**").authenticated()
-                        // Require Jwt token for admin role
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/**").permitAll()
+                        // .requestMatchers("/api/accounts/**").hasAnyRole("ADMIN")
                         // All other requests require authentication
                         .anyRequest().authenticated())
-                // Configure JWT authentication
+                // Configure JWT authentication conversion
                 .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter)))
+                        .jwt(jwt -> jwt
+                                .jwtAuthenticationConverter(jwtAuthConverterConfig.jwtAuthenticationConverter())))
+                .exceptionHandling(exception -> exception.accessDeniedHandler(accessDeniedConfig))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
                 .build();
     }
 

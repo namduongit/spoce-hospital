@@ -1,6 +1,6 @@
 import section from '../../assets/images/main/section.png'
-import ContactNowButton from '../buttons/contactNow.button';
-import ScheduleNowButton from '../buttons/scheduleNow.button';
+import PatientLogoutButton from '../buttons/logout.button';
+import PatientScheduleButton from '../buttons/schedule.button';
 import HeroSection from './hero.section';
 
 const MainSection = () => {
@@ -84,8 +84,8 @@ const MainSection = () => {
                     </ul>
 
                     <div className="main-section__buttons flex justify-start gap-2.5 mt-6">
-                        <ScheduleNowButton />
-                        <ContactNowButton />
+                        <PatientLogoutButton />
+                        <PatientScheduleButton />
                     </div>
                 </div>
             </div>

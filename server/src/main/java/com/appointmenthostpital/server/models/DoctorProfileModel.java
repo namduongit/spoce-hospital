@@ -2,6 +2,7 @@ package com.appointmenthostpital.server.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -17,12 +18,14 @@ public class DoctorProfileModel {
     private Long id;
     private String image;
     private String fullName;
-    private String gender;
+    @Column(columnDefinition = "enum ('MALE', 'FEMALE', 'OTHER') default 'OTHER'")
+    private String gender = "OTHER";
     private String phone;
-    private String birthDay;
+    private String birthDate;
     private String degree;
     private String workDay;
-    private String status;
+    @Column(columnDefinition = "enum ('AVAILABLE', 'BUSY', 'OFFLINE') default 'AVAILABLE'")
+    private String status = "AVAILABLE";
 
     @OneToOne
     @MapsId
@@ -75,12 +78,12 @@ public class DoctorProfileModel {
         this.phone = phone;
     }
 
-    public String getBirthDay() {
-        return birthDay;
+    public String getBirthDate() {
+        return birthDate;
     }
 
-    public void setBirthDay(String birthDay) {
-        this.birthDay = birthDay;
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
     }
 
     public String getDegree() {
@@ -126,7 +129,7 @@ public class DoctorProfileModel {
     @Override
     public String toString() {
         return "DoctorProfileModel [id=" + id + ", image=" + image + ", fullName=" + fullName + ", gender=" + gender
-                + ", phone=" + phone + ", birthDay=" + birthDay + ", degree=" + degree + ", workDay=" + workDay
+                + ", phone=" + phone + ", birthDate=" + birthDate + ", degree=" + degree + ", workDay=" + workDay
                 + ", status=" + status + ", userModel=" + userModel + ", departmentModel=" + departmentModel + "]";
     }
 }

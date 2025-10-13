@@ -1,0 +1,174 @@
+import { useEffect, useState } from "react";
+import { appointmentStatus } from "../../../constants/status.constant";
+
+import type { DoctorResponse } from "../../../responses/doctor.response";
+import type { DepartmentResponse } from "../../../responses/department.response";
+
+import { updateDoctor } from "../../../services/doctor.service";
+
+import useCallApi from "../../../hooks/useCallApi";
+
+type EditDoctor = {
+    doctorSelect: DoctorResponse,
+    departments: DepartmentResponse[],
+    setShowEdit: (showEdit: boolean) => void,
+    onSuccess?: () => void
+}
+
+const EditDoctor = (props: EditDoctor) => {
+    const { doctorSelect, setShowEdit, departments, onSuccess } = props;
+
+    const { execute, notify, doFunc, loading } = useCallApi();
+
+    const [submitData, setSubmitData] = useState({
+        image: "",
+        fullName: "",
+        gender: "",
+        phone: "",
+        birthday: "",
+
+        degree: "",
+        status: "",
+
+        departmentId: "",
+    });
+
+    const handleFormChange = (field: keyof typeof submitData, value: string) => {
+        setSubmitData(prev => ({ ...prev, [field]: value }));
+    }
+
+    useEffect(() => {
+        setSubmitData({
+            image: doctorSelect.image ?? "",
+            fullName: doctorSelect.fullName ?? "",
+            gender: doctorSelect.gender ?? "",
+            phone: doctorSelect.phone ?? "",
+            birthday: doctorSelect.birthDate ?? "",
+            degree: doctorSelect.degree ?? "",
+            status: doctorSelect.status ?? "",
+            departmentId: doctorSelect.departmentId.toString() ?? "",
+        });
+    }, [doctorSelect]);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const restResponse = await execute(
+            updateDoctor(doctorSelect.id, { 
+                ...submitData, 
+                departmentId: Number(submitData.departmentId) 
+            })
+        );
+        notify(restResponse!, "Cập nhật bác sĩ thành công");
+        doFunc(() => {
+            onSuccess?.();
+            setShowEdit(false);
+        });
+    }
+
+    return (
+        <div className="fixed top-0 start-0 bg-gray-400/60 w-full h-full z-10 flex justify-center items-center">
+            <div className="bg-white rounded-lg p-6 w-full max-w-2xl mx-4">
+                <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-xl font-bold text-gray-800">Sửa thông tin bác sĩ - # {doctorSelect.id}</h2>
+                    <button
+                        onClick={() => setShowEdit(false)}
+                        className="text-gray-500 hover:text-gray-700 text-xl"
+                    >
+                        x
+                    </button>
+                </div>
+                <form className="space-y-4" onSubmit={handleSubmit}>
+                    <div className="flex gap-2">
+                        <div className="flex-1">
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Email tài khoản
+                            </label>
+                            <div className="relative">
+                                <input
+                                    type="email"
+                                    className="w-full px-3 py-2 border text-gray-600 border-gray-300 bg-gray-50 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    disabled
+                                    value={doctorSelect.email}
+                                />
+                            </div>
+                        </div>
+                        <div className="flex-1">
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Số điện thoại
+                            </label>
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    required
+                                    value={doctorSelect.phone}
+                                    onChange={(e) => handleFormChange("phone", e.target.value)}
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex gap-2">
+                        <div className="flex-1">
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Khoa khám *
+                            </label>
+                            <select
+                                name="role"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                required
+                                value={submitData.departmentId}
+                                onChange={(e) => handleFormChange("departmentId", e.target.value)}
+                            >
+                                <option value="">Chọn khoa khám</option>
+                                {departments.map((department) => (
+                                    <option key={department.id} value={department.id}>
+                                        {department.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="flex-1">
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Trạng thái *
+                            </label>
+                            <select
+                                name="role"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                required
+                                value={submitData.status}
+                                onChange={(e) => handleFormChange("status", e.target.value)}
+                            >
+                                <option value="">Chọn trạng thái</option>
+                                {appointmentStatus.map((status) => (
+                                    <option key={status.id} value={status.value}>
+                                        {status.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="flex gap-3 pt-4">
+                        <button
+                            type="button"
+                            className="flex-1 px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50 transition"
+                        >
+                            Hủy
+                        </button>
+                        <button
+                            type="submit"
+                            className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition disabled:opacity-50"
+                            disabled={loading}
+                        >
+                            {loading ? "Đang cập nhật ..." : "Lưu thay đổi"}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    )
+
+};
+
+export default EditDoctor;

@@ -6,6 +6,7 @@ input[type="password"]::-ms-reveal,
 input[type="password"]::-ms-clear {
   display: none;
 }
+
 /* Chorme browser */
 input[type="password"]::-webkit-credentials-auto-fill-button,
 input[type="password"]::-webkit-clear-button {
@@ -13,9 +14,17 @@ input[type="password"]::-webkit-clear-button {
 }
 
 input:focus {
-    outline: none;
+  outline: none;
 }
 
 select:focus {
+  outline: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+textarea:focus {
   outline: none;
 }

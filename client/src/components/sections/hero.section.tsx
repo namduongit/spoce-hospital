@@ -1,4 +1,4 @@
-import MiniHeroSection from "./miniHero.section";
+import MiniSection from "./mini.section";
 
 const HeroSection = () => {
     const sections = [
@@ -34,7 +34,7 @@ const HeroSection = () => {
             <div className="hero-section__title font-bold text-blue-600 text-2xl my-5 lg:text-center">Về dịch vụ SPOCETech</div>
             <div className="hero-section__wrap grid grid-cols-2 lg:grid-cols-4 gap-8">
                 {sections && sections.map((section, id) => (
-                    <MiniHeroSection
+                    <MiniSection
                         key={id}
                         icon={section.icon}
                         title={section.title}

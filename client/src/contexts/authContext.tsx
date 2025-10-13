@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useMemo, useEffect } from "react";
 import { useToast } from "./toastContext";
-import { valid } from "../services/authService";
+import { valid } from "../services/_auth.service";
+import useCallApi from "../hooks/useCallApi";
 
 type UserAuth = {
   accessToken: string,
@@ -10,13 +11,19 @@ type UserAuth = {
   role: string
 };
 
+type AuthResponse = {
+  email: string,
+  role: string,
+  issuedAt: number,
+  expiresAt: number
+}
+
 type AuthContext = {
   token: string | null,
   email: string | null,
   role: string | null,
   expiresAt: number | null,
   isAuthenticated: boolean,
-  isLoading: boolean,
   setAuth: (authResponse: UserAuth) => void,
   clearAuth: () => void
 };
@@ -29,31 +36,26 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [email, setEmail] = useState<string>("");
   const [role, setRole] = useState<string>("");
   const [expiresAt, setExpiresAt] = useState<number | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const toast = useToast();
+  const { execute, doFunc } = useCallApi();
+  const { showToast } = useToast();
 
   useEffect(() => {
     const authSessionStr = sessionStorage.getItem("CURRENT_USER");
-    if (!authSessionStr) {
-      setIsLoading(false);
-      return;
-    }
+    if (!authSessionStr) return;
     const authSession: UserAuth = JSON.parse(authSessionStr);
 
     const validToken = async () => {
-      const restResponse = await valid();
-      if (restResponse.statusCode === 401) {
-        toast.showToast("Thông báo", "Tài khoản không hợp lệ", "warning");
-        setIsLoading(false);
-      } else if (restResponse.statusCode === 200) {
-        const data: UserAuth = restResponse.data;
-        data.accessToken = authSession.accessToken;
-        setAuth(data);
-        setIsLoading(false);
-      } else {
-        setIsLoading(false);
-      }
+      const restResponse = await execute(valid());
+      doFunc(() => {
+        if (!restResponse?.result) {
+          showToast("Thông báo", "Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại", "error");
+          clearAuth();
+          return; 
+        }
+        const authResponse: AuthResponse = restResponse.data;
+        setAuth({...authSession, email: authResponse.email, role: authResponse.role, issuedAt: authResponse.issuedAt, expiresAt: authResponse.expiresAt });
+      });
     }
 
     validToken();
@@ -100,10 +102,9 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     role,
     expiresAt,
     isAuthenticated: !!token,
-    isLoading,
     setAuth,
     clearAuth
-  }), [token, expiresAt, isLoading]);
+  }), [token, expiresAt]);
 
 
   return (

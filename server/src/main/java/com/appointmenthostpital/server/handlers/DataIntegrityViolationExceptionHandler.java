@@ -10,6 +10,7 @@ import com.appointmenthostpital.server.utils.HttpStatusResponse;
 
 @RestControllerAdvice
 public class DataIntegrityViolationExceptionHandler {
+    // Data Integrity Violation Exception - Exists Resource (400 API) in server side
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<RestResponse<?>> dataIntegrityViolationExceptionHandler(DataIntegrityViolationException exception) {
         RestResponse<?> restResponse = new RestResponse<>();
@@ -17,7 +18,7 @@ public class DataIntegrityViolationExceptionHandler {
         restResponse.setResult(false);
         restResponse.setData(null);
         restResponse.setMessage(HttpStatusResponse.BAD_MESSAGE);
-        restResponse.setErrorMessage("Dữ liệu đã tồn tại trong hệ thống");
+        restResponse.setErrorMessage(HttpStatusResponse.EXISTS_RESOURCE);
 
         return ResponseEntity.status(HttpStatusResponse.BAD_REQUEST).body(restResponse);
     }

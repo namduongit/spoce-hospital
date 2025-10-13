@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,7 +22,9 @@ public class RoomModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;    
+    @Column(nullable = false)
     private String name;
+    @Column(columnDefinition = "enum ('EMPTY', 'FULL', 'REPAIR') default 'EMPTY'", nullable = false)
     private String status;
     
     @ManyToOne
@@ -32,6 +35,18 @@ public class RoomModel {
     @OneToMany(mappedBy = "roomModel", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<AppointmentModel> appointmentModels;
+
+    public RoomModel() {
+    }
+
+    public RoomModel(Long id, String name, String status, DepartmentModel departmentModel,
+            List<AppointmentModel> appointmentModels) {
+        this.id = id;
+        this.name = name;
+        this.status = status;
+        this.departmentModel = departmentModel;
+        this.appointmentModels = appointmentModels;
+    }
 
     public Long getId() {
         return id;

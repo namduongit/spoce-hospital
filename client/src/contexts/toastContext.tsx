@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import { motion } from "motion/react";
 
 type Toast = {
     id: number,
@@ -36,10 +37,13 @@ const ToastProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <ToastContext.Provider value={{ showToast, closeToast }}>
       {children}
-      <div className="toast fixed top-5 right-5 flex flex-col items-end space-y-3 z-11">
-        {toasts.map(toast => (
-          <div
-            key={toast.id}
+      <div className="toast fixed top-5 right-5 flex flex-col items-end space-y-3 z-100">
+        {toasts.map((toast, index) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, type: "spring" }}
             className={`
               flex items-center gap-3 p-4 rounded-lg shadow-lg text-white w-60 lg:w-80
               ${toast.type === "success" ? "bg-green-500" : ""}
@@ -58,7 +62,7 @@ const ToastProvider = ({ children }: { children: React.ReactNode }) => {
               <h3 className="font-semibold">{toast.title}</h3>
               <p className="text-sm">{toast.detail}</p>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </ToastContext.Provider>

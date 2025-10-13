@@ -14,7 +14,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "users")
@@ -22,16 +21,15 @@ public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true)
-    @NotBlank(message = "Email chưa đúng định dạng")
+    @Column(unique = true, nullable = false)
     private String email;
-    @NotBlank(message = "Chưa nhập mật khẩu")
+    @Column(nullable = false)
     private String password;
-    @Column(columnDefinition = "enum('USER', 'CASHIER', 'DOCTOR', 'ADMIN') default 'USER'")
+    @Column(columnDefinition = "enum('USER', 'ASSISTOR', 'DOCTOR', 'ADMIN') default 'USER'", nullable = false)
     private String role = "USER";
-    @Column(columnDefinition = "enum('ACCOUNT', 'GOOGLE') default 'ACCOUNT'")
+    @Column(columnDefinition = "enum('ACCOUNT', 'GOOGLE') default 'ACCOUNT'", nullable = false)
     private String type = "ACCOUNT";
-    @Column(columnDefinition = "enum('ACTIVE', 'INACTIVE') default 'ACTIVE'")
+    @Column(columnDefinition = "enum('ACTIVE', 'INACTIVE') default 'ACTIVE'", nullable = false)
     private String status = "ACTIVE";
 
     @OneToOne(mappedBy = "userModel", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -44,11 +42,29 @@ public class UserModel {
 
     @OneToMany(mappedBy = "userModel", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<AppointmentModel> userAppointmets = new ArrayList<>();
+    private List<AppointmentModel> userAppointments = new ArrayList<>();
 
     @OneToMany(mappedBy = "doctorModel")
     @JsonManagedReference
     private List<AppointmentModel> doctorAppointments = new ArrayList<>();
+
+    public UserModel() {
+    }
+
+    public UserModel(Long id, String email, String password, String role, String type, String status,
+            UserProfileModel userProfileModel, DoctorProfileModel doctorProfileModel,
+            List<AppointmentModel> userAppointmets, List<AppointmentModel> doctorAppointments) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.type = type;
+        this.status = status;
+        this.userProfileModel = userProfileModel;
+        this.doctorProfileModel = doctorProfileModel;
+        this.userAppointments = userAppointmets;
+        this.doctorAppointments = doctorAppointments;
+    }
 
     public Long getId() {
         return id;
@@ -114,12 +130,12 @@ public class UserModel {
         this.doctorProfileModel = doctorProfileModel;
     }
 
-    public List<AppointmentModel> getUserAppointmets() {
-        return userAppointmets;
+    public List<AppointmentModel> getUserAppointments() {
+        return userAppointments;
     }
 
-    public void setUserAppointmets(List<AppointmentModel> userAppointmets) {
-        this.userAppointmets = userAppointmets;
+    public void setUserAppointments(List<AppointmentModel> userAppointments) {
+        this.userAppointments = userAppointments;
     }
 
     public List<AppointmentModel> getDoctorAppointments() {
@@ -134,7 +150,7 @@ public class UserModel {
     public String toString() {
         return "UserModel [id=" + id + ", email=" + email + ", password=" + password + ", role=" + role + ", type="
                 + type + ", status=" + status + ", userProfileModel=" + userProfileModel + ", doctorProfileModel="
-                + doctorProfileModel + ", userAppointmets=" + userAppointmets + ", doctorAppointments="
+                + doctorProfileModel + ", userAppointmets=" + userAppointments + ", doctorAppointments="
                 + doctorAppointments + "]";
     }
 }

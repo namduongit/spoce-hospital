@@ -10,6 +10,7 @@ import com.appointmenthostpital.server.utils.HttpStatusResponse;
 
 @RestControllerAdvice
 public class HttpMessageNotReadableExceptionHandler {
+    // Body Missing Exception
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<RestResponse<?>> httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException exception) {
         RestResponse<Object> restResponse = new RestResponse<>();
@@ -17,7 +18,7 @@ public class HttpMessageNotReadableExceptionHandler {
         restResponse.setResult(false);
         restResponse.setData(null);
         restResponse.setMessage(HttpStatusResponse.INTERNAL_MESSAGE);
-        restResponse.setErrorMessage("Required request body is missing");
+        restResponse.setErrorMessage(HttpStatusResponse.BODY_MISSING);
 
         return ResponseEntity.status(HttpStatusResponse.INTERNAL_SERVER_ERROR).body(restResponse);
     }

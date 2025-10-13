@@ -12,6 +12,7 @@ import com.appointmenthostpital.server.utils.HttpStatusResponse;
 
 @RestControllerAdvice
 public class MethodArgumentNotValidExceptionHandler {
+    // Validation Exception (400 API)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<RestResponse<?>> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException exception) {
         RestResponse<?> restResponse = new RestResponse<>();
