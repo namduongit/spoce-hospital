@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { useAuth } from "../../../contexts/authContext";
+import { useAuth } from "../../../contexts/auth.context";
 
 const OptionButton = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);

@@ -10,13 +10,11 @@ import org.springframework.stereotype.Service;
 import com.appointmenthostpital.server.dtos.auth.JWTResponse;
 import com.appointmenthostpital.server.dtos.auth.LoginDTO;
 import com.appointmenthostpital.server.dtos.auth.RegisterDTO;
-import com.appointmenthostpital.server.dtos.auth.ValidResponse;
+import com.appointmenthostpital.server.dtos.auth.AuthConfig;
 import com.appointmenthostpital.server.exceptions.AccountLockedException;
-import com.appointmenthostpital.server.exceptions.NotFoundResourceException;
 import com.appointmenthostpital.server.exceptions.PasswordNotValidException;
-import com.appointmenthostpital.server.models.UserModel;
+import com.appointmenthostpital.server.models.AccountModel;
 import com.appointmenthostpital.server.models.UserProfileModel;
-import com.appointmenthostpital.server.repositories.UserRepository;
 import com.appointmenthostpital.server.utils.BCryptPassword;
 
 import com.appointmenthostpital.server.utils.DateCustom;
@@ -24,7 +22,7 @@ import com.appointmenthostpital.server.utils.DateCustom;
 @Service
 public class AuthService {
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     private BCryptPassword bCryptPassword;
@@ -35,43 +33,30 @@ public class AuthService {
     @Autowired
     private JWTService jwtService;
 
-    /**
-     * 
-     * @param registerRequest
-     * @return
-     */
     public RegisterDTO.RegisterResponse handleRegister(RegisterDTO.RegisterRequest registerRequest) {
-        UserModel userModel = new UserModel();
+        AccountModel accountModel = new AccountModel();
         UserProfileModel profileModel = new UserProfileModel();
 
-        userModel.setEmail(registerRequest.getEmail());
-        userModel.setPassword(this.bCryptPassword.passwordEncoder().encode(registerRequest.getPassword()));
-        userModel.setRole("USER");
-        userModel.setStatus("ACTIVE");
-        userModel.setUserProfileModel(profileModel);
+        accountModel.setEmail(registerRequest.getEmail());
+        accountModel.setPassword(this.bCryptPassword.passwordEncoder().encode(registerRequest.getPassword()));
+        accountModel.setRole("USER");
+        accountModel.setStatus("ACTIVE");
+        accountModel.setUserProfileModel(profileModel);
 
-        profileModel.setUserModel(userModel);
+        profileModel.setAccountModel(accountModel);
 
-        UserModel model = this.userRepository.save(userModel);
+        AccountModel model = this.userService.handleRegister(accountModel);
 
         return new RegisterDTO.RegisterResponse(model.getId(), model.getEmail(), model.getRole(), model.getType(),
                 DateCustom.getCurrentTimeStamp());
     }
 
-    /**
-     * 
-     * @param loginRequest
-     * @return
-     */
     public LoginDTO.LoginResponse handleLogin(LoginDTO.LoginRequest request) {
-        UserModel userModel = this.userRepository.findByEmail(request.getEmail());
-        if (userModel == null) {
-            throw new NotFoundResourceException("Không tìm thấy tài khoản");
-        }
-        if (!bCryptPassword.passwordEncoder().matches(request.getPassword(), userModel.getPassword())) {
+        AccountModel accountModel = this.userService.handleLogin(request.getEmail());
+        if (!bCryptPassword.passwordEncoder().matches(request.getPassword(), accountModel.getPassword())) {
             throw new PasswordNotValidException("Mật khẩu không đúng");
         }
-        if (userModel.getStatus().equals("INACTIVE")) {
+        if (accountModel.getStatus().equals("INACTIVE")) {
             throw new AccountLockedException("Tài khoản đã bị khóa");
         }
 
@@ -84,18 +69,13 @@ public class AuthService {
         return new LoginDTO.LoginResponse(jwtResponse.getAccessToken(), request.getEmail(), jwtResponse.getRole(), jwtResponse.getNow(), jwtResponse.getValidity());
     }
 
-    /**
-     * 
-     * @param authentication
-     * @return
-     */
     @SuppressWarnings("null")
-    public ValidResponse handleValid(Authentication authentication) {
+    public AuthConfig handleValid(Authentication authentication) {
         String email = authentication.getName();
-        UserModel userModel = this.userRepository.findByEmail(email);
+        AccountModel accountModel = this.userService.getUserByEmail(email);
         Jwt jwt = (Jwt)authentication.getPrincipal();
-        
-        return new ValidResponse(email, userModel.getRole(), (int)jwt.getIssuedAt().getEpochSecond(), (int)jwt.getExpiresAt().getEpochSecond());
+
+        return new AuthConfig(email, accountModel.getRole(), (int)jwt.getIssuedAt().getEpochSecond(), (int)jwt.getExpiresAt().getEpochSecond());
     }
 
 }

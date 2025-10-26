@@ -6,20 +6,14 @@ import EditRoom from "../edits/room.edit";
 import type { RoomResponse } from "../../../responses/room.response";
 import type { DepartmentResponse } from "../../../responses/department.response";
 
-import { deleteRoom } from "../../../services/room.service";
-
-import useCallApi from "../../../hooks/useCallApi";
-
-type RoomTable = {
+type RoomTableProps = {
     rooms: RoomResponse[],
     departments: DepartmentResponse[],
     onSuccess?: () => void,
 }
 
-const RoomTable = (props: RoomTable) => {
+const RoomTable = (props: RoomTableProps) => {
     const { rooms, departments, onSuccess } = props;
-
-    const { execute, notify, doFunc } = useCallApi();
 
     const [page, setPage] = useState<number>(1);
     const [row, setRow] = useState<number>(5);
@@ -36,14 +30,6 @@ const RoomTable = (props: RoomTable) => {
     const handleEdit = (roomSelect: RoomResponse) => {
         setRoomSelect(roomSelect);
         setShowEdit(true);
-    }
-
-    const handleDelete = async (roomSelect: RoomResponse) => {
-        const restResponse = await execute(deleteRoom(roomSelect.id));
-        notify(restResponse!, "Xóa phòng khám thành công");
-        doFunc(() => {
-            onSuccess?.();
-        });
     }
 
     return (
@@ -79,19 +65,16 @@ const RoomTable = (props: RoomTable) => {
                                     <button className="px-0.75 py-0.75 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50" onClick={() => handleEdit(room)}>
                                         <i className="fa-solid fa-wrench"></i>
                                     </button>
-
-                                    <button className="px-0.75 py-0.75 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50" onClick={() => handleDelete(room)}>
-                                        <i className="fa-solid fa-trash"></i>
-                                    </button>
                                 </div>
                             </td>
                         </tr>
                     )) : (
                         <tr>
-                            <td colSpan={5} className="px-4 py-3 text-sm text-gray-600 text-center">
-                                <div className="flex justify-center items-center gap-3">
-                                    <i className="fa-solid fa-inbox"></i>
-                                    <span>Không tìm thấy dữ liệu</span>
+                            <td colSpan={5} className="px-4 py-8 text-center text-gray-500">
+                                <div className="flex flex-col items-center">
+                                    <i className="fa-solid fa-door-open text-4xl mb-3 text-gray-300"></i>
+                                    <p className="text-lg font-medium">Không có phòng nào</p>
+                                    <p className="text-sm mt-1">Chưa có dữ liệu để hiển thị</p>
                                 </div>
                             </td>
                         </tr>

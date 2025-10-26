@@ -7,13 +7,13 @@ import { createRoom } from "../../../services/room.service";
 
 import useCallApi from "../../../hooks/useCallApi";
 
-type AddRoom = {
+type AddRoomProps = {
     departments: DepartmentResponse[],
     setIsOpenCreateRoom: (isOpenCreateRoom: boolean) => void,
     onSuccess?: () => void
 }
 
-const AddRoom = (props: AddRoom) => {
+const AddRoom = (props: AddRoomProps) => {
     const { departments, setIsOpenCreateRoom, onSuccess } = props;
 
     const { execute,notify, loading } = useCallApi();

@@ -20,6 +20,9 @@ public class AppointmentResponse {
     private Long roomId;
     private String roomName;
 
+    public AppointmentResponse() {
+    }
+
     public Long getId() {
         return id;
     }

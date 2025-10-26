@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.appointmenthostpital.server.services._UserDetailService;
+import com.appointmenthostpital.server.services.UserDetailService;
 import com.appointmenthostpital.server.utils.BCryptPassword;
 
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,11 +23,17 @@ public class SecurityConfig {
     @Autowired
     private BCryptPassword bCryptPassword;
 
+    @Autowired
+    private AuthEntryPointConfig authEntryPointConfig;
+
+    @Autowired
+    private AccessDeniedConfig accessDeniedConfig;
+
     /**
      * @Note
-     *       - After send request, OPTIONS request (preflight) will ask BE: Can i do
-     *       this ? (None AccessToken)
-     *       - OPTION success -> then next
+     * - After send request, OPTIONS request (preflight) will ask BE: Can i do
+     * this ? (None AccessToken)
+     * - OPTION success -> then next
      * 
      * @param http
      * @param jwtAuthConverter
@@ -36,33 +42,42 @@ public class SecurityConfig {
      */
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthConverterConfig jwtAuthConverterConfig,
-            AccessDeniedConfig accessDeniedConfig) throws Exception {
-        return http
-                .cors(cors -> {
-                })
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(authz -> authz
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/auth/*").permitAll()
-                        .requestMatchers("/api/public/**").authenticated()
-                        .requestMatchers("/api/**").permitAll()
-                        // .requestMatchers("/api/accounts/**").hasAnyRole("ADMIN")
-                        // All other requests require authentication
-                        .anyRequest().authenticated())
-                // Configure JWT authentication conversion
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt
-                                .jwtAuthenticationConverter(jwtAuthConverterConfig.jwtAuthenticationConverter())))
-                .exceptionHandling(exception -> exception.accessDeniedHandler(accessDeniedConfig))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .build();
+    public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthConverterConfig config) throws Exception {
+        http.csrf(csrf -> csrf.disable()); // Disable CSRF protection for stateless APIs to use Postman
+        http.cors(cors -> {});
+        http.authorizeHttpRequests(authz -> authz
+            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            .requestMatchers("/auth/*").permitAll()
+            .requestMatchers("/api/public/**").authenticated()
+
+            .requestMatchers("/api/accounts/**").hasAnyRole("ADMIN", "DOCTOR", "ASSISTOR", "USER")
+
+            .requestMatchers("/api/departments/**").hasAnyRole("ADMIN", "DOCTOR", "ASSISTOR", "USER")
+            .requestMatchers("/api/doctors/**").hasAnyRole("ADMIN", "DOCTOR", "ASSISTOR", "USER")
+            .requestMatchers("/api/rooms/**").hasAnyRole("ADMIN", "DOCTOR", "ASSISTOR", "USER")
+
+            .requestMatchers("/api/appointments/**").hasAnyRole("ADMIN", "DOCTOR", "ASSISTOR", "USER")
+            .anyRequest().authenticated()
+        );
+        http.oauth2ResourceServer(oauth2r -> oauth2r
+            .jwt(jwt -> jwt
+                .jwtAuthenticationConverter(config.jwtAuthenticationConverter())
+            )
+        );
+        http.exceptionHandling(exception -> exception
+            .accessDeniedHandler(this.accessDeniedConfig)
+            .authenticationEntryPoint(this.authEntryPointConfig)
+        );
+        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        // Config basic auth. Use username and password any request
+        // http.httpBasic(basic -> {});
+        return http.build();
     }
 
-    // AuthenticationProvider to use the custom user details service and password
-    // encoder
+    // AuthenticationProvider to use the custom user details service and password encoder
     @Bean
-    public AuthenticationProvider authenticationProvider(_UserDetailService userDetailService) {
+    public AuthenticationProvider authenticationProvider(UserDetailService userDetailService) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailService);
         provider.setPasswordEncoder(this.bCryptPassword.passwordEncoder());
         return provider;

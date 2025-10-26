@@ -1,10 +1,10 @@
 import thumbnail from '../../../assets/images/auth/thumbnail.png';
 import person from '../../../assets/images/auth/person.png';
 import { useState, useEffect } from 'react';
-import { login } from '../../../services/_auth.service';
-import { useToast } from '../../../contexts/toastContext';
+import { login } from '../../../services/auth.service';
+import { useToast } from '../../../contexts/toast.context';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../../contexts/authContext';
+import { useAuth } from '../../../contexts/auth.context';
 
 const AssistorLoginPage = () => {
     const [showPassword, setShowPassword] = useState<boolean>(false);

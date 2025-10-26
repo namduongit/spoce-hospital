@@ -3,7 +3,7 @@ package com.appointmenthostpital.server.responses;
 public class DoctorResponse {
     private Long id;
     private String email;
-    
+
     private String image;
     private String fullName;
     private String gender;
@@ -15,6 +15,9 @@ public class DoctorResponse {
 
     private Long departmentId;
     private String departmentName;
+
+    public DoctorResponse() {
+    }
 
     public Long getId() {
         return id;

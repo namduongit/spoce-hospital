@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { useAuth } from "../../contexts/authContext";
-import { useToast } from "../../contexts/toastContext";
+import { useAuth } from "../../contexts/auth.context";
+import { useToast } from "../../contexts/toast.context";
 
 const PatientLogoutButton = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);

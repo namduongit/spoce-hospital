@@ -1,23 +1,24 @@
 import { useEffect, useState } from "react";
 import person from "../../../assets/images/auth/person.png"
-import AccountDetail from "../../../components/patient/account.detail";
-import HistoryDetail from "../../../components/patient/history.detail";
-import MedicineDetail from "../../../components/patient/medicine.detail";
-import SettingDetail from "../../../components/patient/setting.detail";
-import AppointmentDetail from "../../../components/patient/appointment.detail";
+import HistoryDetail from "../../../components/patient/history.patient";
+import MedicineDetail from "../../../components/patient/medicine.patient";
+import SettingDetail from "../../../components/patient/setting.patient";
 
-import { getUserDetail } from "../../../services/_user.service";
+import { getUserDetail, getAppointmentList } from "../../../services/user.service";
 
 import useCallApi from "../../../hooks/useCallApi";
-import type { ProfileDetailResponse, AccountDetailResponse, AppointmentDetailResponse } from "../../../responses/_user.response";
+import type { ProfileDetailResponse, UserDetailResponse } from "../../../responses/user.response";
+import AccountPatient from "../../../components/patient/account.patient";
+import type { AppointmentResponse } from "../../../responses/appointment.response";
+import AppointmentPatient from "../../../components/patient/appointment.patient";
 
 const AccountPage = () => {
     const { execute } = useCallApi();
     const [activeTab, setActiveTab] = useState<string>("profile");
 
-    const [accountDetail, setAccountDetail] = useState<AccountDetailResponse>({} as AccountDetailResponse);
+    const [userDetail, setUserDetail] = useState<UserDetailResponse>({} as UserDetailResponse);
     const [profileDetail, setProfileDetail] = useState<ProfileDetailResponse>({} as ProfileDetailResponse);
-    const [appointmentDetails, setAppointmentDetails] = useState<AppointmentDetailResponse[]>([]);
+    const [appointment, setAppointment] = useState<AppointmentResponse[]>([]);
 
     const [name, setName] = useState<string>("");
     const [email, setEmail] = useState<string>("");
@@ -26,22 +27,30 @@ const AccountPage = () => {
     const handleGetUserDetail = async () => {
         const restResponse = await execute(getUserDetail());
         if (restResponse?.result) {
-            const data: AccountDetailResponse = restResponse.data;
-            setAccountDetail(data);
-            setProfileDetail(data.profileDetail);
-            setAppointmentDetails(data.appointmentDetails);
+            const data: ProfileDetailResponse = restResponse.data;
+            setUserDetail(data.profile);
+            setProfileDetail(data);
         }
     };
 
+    const handleGetAppointmentList = async () => {
+        const restResponse = await execute(getAppointmentList());
+        if (restResponse?.result) {
+            const data: AppointmentResponse[] = restResponse.data;
+            setAppointment(data);
+        }
+    }
+
     useEffect(() => {
         handleGetUserDetail();
+        handleGetAppointmentList();
     }, []);
 
     useEffect(() => {
-        setEmail(accountDetail.email);
-        setRole(accountDetail.role);
-        setName(profileDetail.fullName);
-    }, [accountDetail, profileDetail]);
+        setEmail(profileDetail.email);
+        setRole(profileDetail.role);
+        setName(userDetail.fullName);
+    }, [profileDetail, userDetail]);
 
     const menuItems = [
         {
@@ -79,9 +88,9 @@ const AccountPage = () => {
     const renderContent = () => {
         switch (activeTab) {
             case "profile":
-                return (<AccountDetail profileDetail={profileDetail} email={email} onSuccess={handleGetUserDetail} />)
+                return (<AccountPatient userDetail={userDetail} email={email} onSuccess={handleGetUserDetail} />)
             case "appointments":
-                return (<AppointmentDetail appointmentDetails={appointmentDetails} />);
+                return (<AppointmentPatient appointments={appointment} />);
             case "history":
                 return (<HistoryDetail />)
             case "medicine":

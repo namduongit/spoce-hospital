@@ -4,24 +4,26 @@ import AccountDetail from "../details/account.detail";
 
 import type { AccountResponse } from "../../../responses/account.response";
 
-import { deleteAccount, updateAccount } from "../../../services/account.service";
+import { updateAccount } from "../../../services/account.service";
 
 import useCallApi from "../../../hooks/useCallApi";
+import EditAccount from "../edits/account.edit";
 
-type AccountTable = {
+type AccountTableProps = {
     accounts: AccountResponse[];
     onSuccess?: () => void;
 }
 
-const AccountTable = (props: AccountTable) => {
+const AccountTable = (props: AccountTableProps) => {
     const { accounts, onSuccess } = props;
 
-    const { execute, notify, doFunc } = useCallApi();
+    const { execute, notify } = useCallApi();
 
     const [page, setPage] = useState<number>(1);
     const [row, setRow] = useState<number>(5);
 
     const [showDetail, setShowDetail] = useState<boolean>(false);
+    const [showEdit, setShowEdit] = useState<boolean>(false);
     const [accountSelect, setAccountSelect] = useState<AccountResponse>({} as AccountResponse);
 
     const handleShow = (accountSelect: AccountResponse) => {
@@ -29,24 +31,17 @@ const AccountTable = (props: AccountTable) => {
         setShowDetail(true);
     }
 
-    const handleDelete = async (accountSelect: AccountResponse) => {
-        const restResponse = await execute(deleteAccount(accountSelect.id));
-        notify(restResponse!, "Xóa tài khoản thành công");
-        doFunc(() => {
-            if (restResponse?.result) {
-                onSuccess?.();
-            }
-        });
+    const handleEdit = (accountSelect: AccountResponse) => {
+        setAccountSelect(accountSelect);
+        setShowEdit(true);
     }
 
     const handleChangeStatus = async (accountSelect: AccountResponse, status: string) => {
         const restResponse = await execute(updateAccount(accountSelect.id, { status }));
         notify(restResponse!, status === "INACTIVE" ? "Khóa tài khoản thành công" : "Mở khóa tài khoản thành công");
-        doFunc(() => {
-            if (restResponse?.result) {
-                onSuccess?.();
-            }
-        });
+        if (restResponse?.result) {
+            onSuccess?.();
+        }
     }
 
     return (
@@ -88,43 +83,36 @@ const AccountTable = (props: AccountTable) => {
                                     </button>
 
                                     <button className="px-0.75 py-0.75 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50"
-                                        onClick={() => handleDelete(account)}
-                                    >
-                                        <i className="fa-solid fa-trash"></i>
+                                        onClick={() => handleEdit(account)}>
+                                        <i className="fa-solid fa-wrench"></i>
                                     </button>
 
-                                    {account.status === "ACTIVE" ? (
-                                        <button className="px-0.75 py-0.75 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50"
-                                            onClick={() => {
-                                                handleChangeStatus(account, "INACTIVE")
-                                            }}
-                                        >
-                                            <i className="fa-solid fa-lock"></i>
-                                        </button>
-                                    ) : (
-                                        <button className="px-0.75 py-0.75 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50"
-                                            onClick={() => {
-                                                handleChangeStatus(account, "ACTIVE")
-                                            }}>
-                                            <i className="fa-solid fa-lock-open"></i>
-                                        </button>
-                                    )}
+                                    <button className="px-0.75 py-0.75 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50"
+                                        onClick={() => {
+                                            handleChangeStatus(account, account.status === "ACTIVE" ? "INACTIVE" : "ACTIVE")
+                                        }}
+                                    >
+                                        <i className={`fa-solid ${account.status === "ACTIVE" ? "fa-lock" : "fa-lock-open"}`}></i>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
                     )) : (
                         <tr>
-                            <td colSpan={5} className="px-4 py-3 text-sm text-gray-600 text-center">
-                                <div className="flex justify-center items-center gap-3">
-                                    <i className="fa-solid fa-inbox"></i>
-                                    <span>Không tìm thấy dữ liệu</span>
+                            <td colSpan={5} className="px-4 py-8 text-center text-gray-500">
+                                <div className="flex flex-col items-center">
+                                    <i className="fa-solid fa-users text-4xl mb-3 text-gray-300"></i>
+                                    <p className="text-lg font-medium">Không có tài khoản nào</p>
+                                    <p className="text-sm mt-1">Chưa có dữ liệu để hiển thị</p>
                                 </div>
                             </td>
-                        </tr>)}
+                        </tr>
+                    )}
                 </tbody>
             </table>
             <TablePagination array={props.accounts} page={page} row={row} setPage={setPage} setRow={setRow} />
             {(showDetail && accountSelect) && (<AccountDetail accountSelect={accountSelect} setShowDetail={setShowDetail} onSuccess={onSuccess} />)}
+            {(showEdit && accountSelect) && (<EditAccount accountSelect={accountSelect} setShowEdit={setShowEdit} onSuccess={onSuccess} />)}
         </>
     )
 }

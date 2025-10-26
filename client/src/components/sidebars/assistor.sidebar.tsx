@@ -3,11 +3,33 @@ import { useState } from 'react';
 const navLinks = [
     {
         href: "/assistor",
-        label: "Trang chủ"
+        label: "Trang chủ",
+        icon: "fa-solid fa-house"
     },
     {
         href: "/assistor/appointments",
-        label: "Lịch hẹn"
+        label: "Lịch hẹn",
+        icon: "fa-solid fa-calendar-days"
+    },
+    {
+        href: "/assistor/prescription-invoices",
+        label: "Hóa đơn kê thuốc",
+        icon: "fa-solid fa-receipt"
+    },
+    {
+        href: "/assistor/service-invoices",
+        label: "Hóa đơn dịch vụ",
+        icon: "fa-solid fa-file-invoice"
+    },
+    {
+        href: "/assistor/medicines",
+        label: "Quản lý thuốc",
+        icon: "fa-solid fa-pills"
+    },
+    {
+        href: "/assistor/medical-packages",
+        label: "Gói dịch vụ",
+        icon: "fa-solid fa-box-open"
     }
 ];
 
@@ -29,7 +51,8 @@ const AssistorSidebar = () => {
             <aside className="hidden md:flex flex-col justify-between w-64 bg-white border-r border-gray-200 p-4 min-h-full">
                 <nav className="flex flex-col gap-2">
                     {navLinks.map(link => (
-                        <a key={link.href} href={link.href} className="text-gray-700 font-semibold hover:text-blue-600 hover:bg-blue-50 rounded px-3 py-2 transition">
+                        <a key={link.href} href={link.href} className="text-gray-700 font-semibold hover:text-blue-600 hover:bg-blue-50 rounded px-3 py-2 transition flex items-center">
+                            <i className={`${link.icon} me-3 w-4`}></i>
                             {link.label}
                         </a>
                     ))}
@@ -58,9 +81,10 @@ const AssistorSidebar = () => {
                                 <a
                                     key={link.href}
                                     href={link.href}
-                                    className="text-gray-700 font-semibold hover:text-blue-600 hover:bg-blue-50 rounded px-3 py-2 transition"
+                                    className="text-gray-700 font-semibold hover:text-blue-600 hover:bg-blue-50 rounded px-3 py-2 transition flex items-center"
                                     onClick={() => setIsOpen(false)}
                                 >
+                                    <i className={`${link.icon} me-3 w-4`}></i>
                                     {link.label}
                                 </a>
                             ))}

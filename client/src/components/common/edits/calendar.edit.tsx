@@ -4,19 +4,19 @@ import { timeSlots, weekDate } from "../../../constants/day.constant";
 import { updateDoctor } from "../../../services/doctor.service";
 
 import useCallApi from "../../../hooks/useCallApi";
+import type { DoctorResponse } from "../../../responses/doctor.response";
 
 type EditCalendarModal = {
+    doctorSelect: DoctorResponse,
     setShowCalendar: (setShowCalendar: boolean) => void,
-    setShowDetail: (setShowDetail: boolean) => void,
-    workDay: string, // Day; [time1, time2, ...]
-    doctorId: number,
     onSuccess?: () => void
 }
 
 const EditCalendarModal = (props: EditCalendarModal) => {
-    const { setShowCalendar, setShowDetail, workDay, doctorId, onSuccess } = props;
+    const { doctorSelect, setShowCalendar, onSuccess } = props;
 
-    const { execute, notify, doFunc, loading } = useCallApi();
+    const { execute, notify, loading } = useCallApi();
+    const workDay = doctorSelect.workDay ?? "";
 
     const [editMode, setEditMode] = useState<boolean>(false);
     const [schedule, setSchedule] = useState<{ [key: string]: string[] }>({});
@@ -57,13 +57,12 @@ const EditCalendarModal = (props: EditCalendarModal) => {
     }
 
     const handleSubmit = async () => {
-        const restResponse = await execute(updateDoctor(doctorId, { workDay: handleConcatSchedule() }));
+        const restResponse = await execute(updateDoctor(doctorSelect.id, { workDay: handleConcatSchedule() }));
         notify(restResponse!, "Cập nhật lịch làm việc thành công");
-        doFunc(() => {
+        if (restResponse?.result) {
             setShowCalendar(false);
-            setShowDetail(false);
             onSuccess?.();
-        });
+        }
     }
 
     useEffect(() => {

@@ -1,5 +1,4 @@
-import { motion } from "motion/react";
-import type { AccountResponse } from "../../../responses/account.response";
+import type { AccountResponse } from "../../../responses/account-detail.response";
 
 type AccountDetail = {
     accountSelect: AccountResponse,
@@ -25,59 +24,72 @@ const AccountDetail = (props: AccountDetail) => {
     };
 
     return (
-        <div className="fixed top-0 start-0 bg-gray-400/60 w-full h-full z-10">
-            <motion.div
-                initial={{
-                    x: 650
-                }}
-                animate={{
-                    x: 0
-                }}
-                transition={{
-                    duration: 0.5,
-                    type: "spring"
-                }}
-                className="fixed top-0 end-0 w-150 bg-white rounded shadow-2xl h-full">
-                <div className="relative">
-                    <div className="close-btn absolute top-0 start-0 cursor-pointer z-20" onClick={() => setShowDetail(false)}>
-                        <i className="fa-solid fa-angles-right text-xl text-white p-3"></i>
+        <div className="fixed inset-0 bg-gray-500/50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+                <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+                        <i className="fa-solid fa-user-circle text-blue-600"></i>
+                        Chi tiết tài khoản #{accountSelect.id}
+                    </h2>
+                    <button
+                        onClick={() => setShowDetail(false)}
+                        className="text-gray-500 hover:text-gray-700 text-xl"
+                    >
+                        x
+                    </button>
+                </div>
+
+                <div className="space-y-6">
+                    <div className="border border-gray-200 rounded-lg p-4">
+                        <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                            <i className="fa-solid fa-info-circle text-blue-600"></i>
+                            Thông tin cơ bản
+                        </h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-600 mb-1">Email</label>
+                                <p className="text-gray-900">{accountSelect.email}</p>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-600 mb-1">Loại tài khoản</label>
+                                <p className="text-gray-900">{accountSelect.type === 'ACCOUNT' ? 'Tài khoản' : 'Email'}</p>
+                            </div>
+                        </div>
                     </div>
 
-                    <div className="flex items-center px-5 py-5 pt-10 gap-3 bg-indigo-600 text-white">
-                        <div className="admin-detail__icon text-2xl bg-gray-300/50 px-2 py-2 rounded-full">
-                            <i className="fa-solid fa-user-circle"></i>
-                        </div>
-                        <div className="font-bold">
-                            <p className="flex gap-2">ID tài khoản:<span># {accountSelect.id}</span></p>
-                            <p className="flex gap-2">Trạng thái:<span className={`px-2 py-1 rounded text-xs ${getStatusColor(accountSelect.status)}`}>{accountSelect.status === 'INACTIVE' ? 'Bị khóa' : ' Đang hoạt động'}</span></p>
-                        </div>
-                    </div>
-
-                    <div className="px-5 py-5 flex flex-col gap-5">
-                        <div className="flex flex-col gap-5">
-                            <div className="px-3 py-3 bg-gray-100 rounded shadow">
-                                <div className="flex gap-1 items-center font-bold mb-2">
-                                    <i className="fa-solid fa-user-tag text-indigo-600 text-lg"></i>
-                                    <span>Thông tin tài khoản</span>
-                                </div>
-                                <p className="flex justify-between text-gray-600 font-medium mb-1">
-                                    Email: <span className="text-black">{accountSelect.email}</span>
-                                </p>
-                                <p className="flex justify-between text-gray-600 font-medium mb-1">
-                                    Vai trò: <span className={`px-2 py-1 font-semibold ${getRoleColor(accountSelect.role)}`}>
-                                        {accountSelect.role === 'ADMIN' ? 'Quản trị viên' :
-                                            accountSelect.role === 'DOCTOR' ? 'Bác sĩ' :
-                                                accountSelect.role === 'ASSISTOR' ? 'Nhân viên' : 'Khách hàng'}
-                                    </span>
-                                </p>
-                                <p className="flex justify-between text-gray-600 font-medium mb-1">
-                                    Loại tài khoản: <span className="text-black">{accountSelect.type === 'ACCOUNT' ? 'Tài khoản' : 'Email'}</span>
-                                </p>
+                    <div className="border border-gray-200 rounded-lg p-4">
+                        <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                            <i className="fa-solid fa-user-tag text-green-600"></i>
+                            Vai trò và trạng thái
+                        </h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-600 mb-1">Vai trò</label>
+                                <span className={`px-3 py-1 rounded-full text-sm font-medium ${getRoleColor(accountSelect.role)}`}>
+                                    {accountSelect.role === 'ADMIN' ? 'Quản trị viên' :
+                                        accountSelect.role === 'DOCTOR' ? 'Bác sĩ' :
+                                            accountSelect.role === 'ASSISTOR' ? 'Nhân viên' : 'Khách hàng'}
+                                </span>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-600 mb-1">Trạng thái</label>
+                                <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(accountSelect.status)}`}>
+                                    {accountSelect.status === 'INACTIVE' ? 'Bị khóa' : 'Đang hoạt động'}
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
-            </motion.div>
+
+                <div className="flex justify-end mt-6">
+                    <button
+                        onClick={() => setShowDetail(false)}
+                        className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition"
+                    >
+                        Đóng
+                    </button>
+                </div>
+            </div>
         </div>
     )
 }

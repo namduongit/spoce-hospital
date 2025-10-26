@@ -14,8 +14,8 @@ import { getDoctorList } from "../../../services/doctor.service";
 
 import useCallApi from "../../../hooks/useCallApi";
 
-const AdminAppointmentsPage = () => {
-    const { execute, doFunc } = useCallApi();
+const AssistorAppointmentsPage = () => {
+    const { execute } = useCallApi();
 
     const [appointments, setAppointment] = useState<AppointmentResponse[]>([]);
     const [appointmentsFilter, setAppointmentsFilter] = useState<AppointmentResponse[]>([]);
@@ -36,43 +36,35 @@ const AdminAppointmentsPage = () => {
 
     const handleGetAppointmentList = async () => {
         const restResponse = await execute(getAppointmentList());
-        doFunc(() => {
-            if (restResponse?.result) {
-                const data: AppointmentResponse[] = restResponse.data;
-                setAppointment(Array.isArray(data) ? data : []);
-                setAppointmentsFilter(Array.isArray(data) ? data : []);
-            }
-        })
+        if (restResponse?.result) {
+            const data: AppointmentResponse[] = restResponse.data;
+            setAppointment(Array.isArray(data) ? data : []);
+            setAppointmentsFilter(Array.isArray(data) ? data : []);
+        }
     }
 
     const handleGetDepartmentList = async () => {
         const restResponse = await execute(getDepartmentList());
-        doFunc(() => {
-            if (restResponse?.result) {
-                const data: DepartmentResponse[] = restResponse.data;
-                setDepartments(Array.isArray(data) ? data : []);
-            }
-        })
+        if (restResponse?.result) {
+            const data: DepartmentResponse[] = restResponse.data;
+            setDepartments(Array.isArray(data) ? data : []);
+        }
     }
 
     const handleGetRoomList = async () => {
         const restResponse = await execute(getRoomList());
-        doFunc(() => {
-            if (restResponse?.result) {
-                const data: RoomResponse[] = restResponse.data;
-                setRooms(Array.isArray(data) ? data : []);
-            }
-        })
+        if (restResponse?.result) {
+            const data: RoomResponse[] = restResponse.data;
+            setRooms(Array.isArray(data) ? data : []);
+        }
     }
 
     const handleGetDoctorList = async () => {
         const restResponse = await execute(getDoctorList());
-        doFunc(() => {
-            if (restResponse?.result) {
-                const data: DoctorResponse[] = restResponse.data;
-                setDoctors(Array.isArray(data) ? data : []);
-            }
-        })
+        if (restResponse?.result) {
+            const data: DoctorResponse[] = restResponse.data;
+            setDoctors(Array.isArray(data) ? data : []);
+        }
     }
 
     useEffect(() => {
@@ -105,6 +97,18 @@ const AdminAppointmentsPage = () => {
         handleGetDoctorList();
     }, []);
 
+    const stats = {
+        totalAppointments: appointments.length,
+        pendingAppointments: appointments.filter(a => a.status === 'PENDING').length,
+        confirmedAppointments: appointments.filter(a => a.status === 'CONFIRMED').length,
+        cancelledAppointments: appointments.filter(a => a.status === 'CANCELLED').length,
+        completedAppointments: appointments.filter(a => a.status === 'COMPLETED').length,
+        todayAppointments: appointments.filter(a => {
+            const today = new Date().toDateString();
+            return new Date(a.createdAt).toDateString() === today;
+        }).length
+    };
+
     return (
         <main className="appointments-page p-4 sm:p-6">
             <div className="appointments-page__wrap max-w-full">
@@ -113,7 +117,55 @@ const AdminAppointmentsPage = () => {
                         Quản lý lịch hẹn
                     </h3>
                     <div className="text-sm text-gray-600">
-                        Tổng: <span className="font-semibold text-blue-600">{appointments.length}</span> lịch hẹn
+                        <div>Tổng: <span className="font-semibold text-blue-600">{stats.totalAppointments}</span> lịch hẹn</div>
+                        <div>Hôm nay: <span className="font-semibold text-green-600">{stats.todayAppointments}</span></div>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                        <div className="flex items-center">
+                            <div className="p-2 bg-blue-100 rounded-lg">
+                                <i className="fa-solid fa-calendar text-blue-600"></i>
+                            </div>
+                            <div className="ml-3">
+                                <p className="text-sm text-gray-600">Tổng lịch hẹn</p>
+                                <p className="text-lg font-semibold">{stats.totalAppointments}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                        <div className="flex items-center">
+                            <div className="p-2 bg-yellow-100 rounded-lg">
+                                <i className="fa-solid fa-clock text-yellow-600"></i>
+                            </div>
+                            <div className="ml-3">
+                                <p className="text-sm text-gray-600">Chờ xác nhận</p>
+                                <p className="text-lg font-semibold">{stats.pendingAppointments}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                        <div className="flex items-center">
+                            <div className="p-2 bg-green-100 rounded-lg">
+                                <i className="fa-solid fa-check-circle text-green-600"></i>
+                            </div>
+                            <div className="ml-3">
+                                <p className="text-sm text-gray-600">Đã xác nhận</p>
+                                <p className="text-lg font-semibold">{stats.confirmedAppointments}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                        <div className="flex items-center">
+                            <div className="p-2 bg-purple-100 rounded-lg">
+                                <i className="fa-solid fa-calendar-check text-purple-600"></i>
+                            </div>
+                            <div className="ml-3">
+                                <p className="text-sm text-gray-600">Hôm nay</p>
+                                <p className="text-lg font-semibold">{stats.todayAppointments}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -178,4 +230,4 @@ const AdminAppointmentsPage = () => {
     )
 }
 
-export default AdminAppointmentsPage;
+export default AssistorAppointmentsPage;

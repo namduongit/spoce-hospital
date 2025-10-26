@@ -1,8 +1,5 @@
-import { motion } from "motion/react";
 import { formatNumberPhone } from "../../../utils/formatNumber.util";
 import { formatDateVi } from "../../../utils/formatDate.util";
-import { useState } from "react";
-import EditCalendarModal from "../edits/calendar.edit";
 import type { DoctorResponse } from "../../../responses/doctor.response";
 
 type DoctorDetail = {
@@ -12,115 +9,115 @@ type DoctorDetail = {
 }
 
 const DoctorDetail = (props: DoctorDetail) => {
-    const { doctorSelect, setShowDetail, onSuccess } = props;
-    
-    const [showCalendar, setShowCalendar] = useState<boolean>(false);
+    const { doctorSelect, setShowDetail } = props;
 
     const getStatusColor = (status: string) => {
-        return status === 'AVAILABLE' ? 'bg-green-100 text-green-800' :
-            status === 'OFFLINE' ? 'bg-red-100 text-red-800' :
-                status === 'BUSY' ? 'bg-yellow-100 text-yellow-800' : '';
+        switch (status) {
+            case 'AVAILABLE': return 'text-green-800';
+            case 'OFFLINE': return 'text-red-800';
+            case 'BUSY': return 'text-yellow-800';
+            default: return 'text-gray-800';
+        }
+    }
+
+    const getStatusText = (status: string) => {
+        switch (status) {
+            case 'AVAILABLE': return 'Đang làm';
+            case 'OFFLINE': return 'Tạm nghỉ';
+            case 'BUSY': return 'Đang bận';
+            default: return status;
+        }
     }
 
     return (
-        <div className="fixed top-0 start-0 bg-gray-400/60 w-full h-full z-10">
-            <motion.div
-                initial={{
-                    x: 650
-                }}
-                animate={{
-                    x: 0
-                }}
-                transition={{
-                    duration: 0.5,
-                    type: "spring"
-                }}
-                className="fixed top-0 end-0 w-150 bg-white rounded shadow-2xl h-full">
-                <div className="admin-detail__content relative">
-                    <div className="close-btn absolute top-0 start-0 cursor-pointer z-20" onClick={() => setShowDetail(false)}>
-                        <i className="fa-solid fa-angles-right text-xl text-white p-3"></i>
+        <div className="fixed inset-0 bg-gray-500/50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 w-full max-w-3xl mx-4 max-h-[90vh] overflow-y-auto">
+                <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+                        <i className="fa-solid fa-user-doctor text-blue-600"></i>
+                        Chi tiết bác sĩ #{doctorSelect.id}
+                    </h2>
+                    <button
+                        onClick={() => setShowDetail(false)}
+                        className="text-gray-500 hover:text-gray-700 text-xl"
+                    >
+                        x
+                    </button>
+                </div>
+
+                <div className="space-y-6">
+                    <div className="border border-gray-200 rounded-lg p-4">
+                        <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                            <i className="fa-solid fa-user text-blue-600"></i>
+                            Thông tin cá nhân
+                        </h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-600 mb-1">Họ và tên</label>
+                                <p className="text-gray-900">{doctorSelect.fullName || "Chưa cập nhật"}</p>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-600 mb-1">Email</label>
+                                <p className="text-gray-900">{doctorSelect.email || "Chưa cập nhật"}</p>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-600 mb-1">Số điện thoại</label>
+                                <p className="text-gray-900">{doctorSelect.phone ? formatNumberPhone(doctorSelect.phone) : "Chưa cập nhật"}</p>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-600 mb-1">Giới tính</label>
+                                <p className="text-gray-900">
+                                    {doctorSelect.gender === 'MALE' ? 'Nam' :
+                                        doctorSelect.gender === 'FEMALE' ? 'Nữ' : 'Khác'}
+                                </p>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-600 mb-1">Ngày sinh</label>
+                                <p className="text-gray-900">
+                                    {doctorSelect.birthDate ? formatDateVi(new Date(doctorSelect.birthDate)) : "Chưa cập nhật"}
+                                </p>
+                            </div>
+                        </div>
                     </div>
 
-                    <div className="flex items-center px-5 py-5 pt-10 gap-3 bg-indigo-600 text-white">
-                        <div className="text-2xl bg-gray-300/50 px-2 py-2 rounded-full">
-                            <i className="fa-solid fa-user-circle"></i>
-                        </div>
-                        <div className="font-bold">
-                            <p className="flex gap-2">ID bác sĩ:
-                                <span># {doctorSelect.id}</span>
-                            </p>
-                            <p className="flex gap-2">Trạng thái:
-                                <span className={`px-2 py-1 rounded text-xs ${getStatusColor(doctorSelect.status)}`}>
-                                    {doctorSelect.status === 'AVAILABLE' ? 'Đang làm' : ''}
-                                    {doctorSelect.status === 'OFFLINE' ? 'Tạm nghỉ' : ''}
-                                    {doctorSelect.status === 'BUSY' ? 'Đang bận' : ''}
+                    <div className="border border-gray-200 rounded-lg p-4">
+                        <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                            <i className="fa-solid fa-briefcase text-green-600"></i>
+                            Thông tin công việc
+                        </h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-600 mb-1">Bằng cấp</label>
+                                <p className="text-gray-900">{doctorSelect.degree || "Chưa cập nhật"}</p>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-600 mb-1">Khoa</label>
+                                <p className="text-gray-900">{doctorSelect.departmentName || "Chưa cập nhật"}</p>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-600 mb-1">Mã khoa</label>
+                                <p className="text-gray-900">{doctorSelect.departmentId || "Chưa cập nhật"}</p>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-600 mb-1">Trạng thái làm việc</label>
+                                <span className={`font-bold ${getStatusColor(doctorSelect.status)}`}>
+                                    {getStatusText(doctorSelect.status)}
                                 </span>
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="px-5 py-5 flex flex-col gap-5">
-                        <div className="flex flex-col gap-5">
-                            <div className="px-3 py-3 bg-gray-100 rounded shadow">
-                                <div className="flex gap-1 items-center font-bold mb-2">
-                                    <i className="fa-solid fa-user-tag text-indigo-600 text-lg"></i>
-                                    <span>Thông tin bác sĩ</span>
-                                </div>
-                                <p className="flex justify-between text-gray-600 font-medium mb-1">
-                                    Tên bác sĩ: <span className="text-black">{doctorSelect.fullName ?? "Chưa cập nhật"}</span>
-                                </p>
-                                <p className="flex justify-between text-gray-600 font-medium mb-1">
-                                    Ngày sinh: <span className="text-black">{doctorSelect.birthDate ? formatDateVi(new Date(doctorSelect.birthDate)) : "Chưa cập nhật"}</span>
-                                </p>
-                                <p className="flex justify-between text-gray-600 font-medium mb-1">
-                                    Tài khoản: <span className="text-black">{doctorSelect.email ?? "Chưa cập nhật"}</span>
-                                </p>
-                                <p className="flex justify-between text-gray-600 font-medium mb-1">
-                                    Số điện thoại:
-                                    <span className={`font-semibold`}>{doctorSelect.phone ? formatNumberPhone(doctorSelect.phone) : "Chưa cập nhật"}</span>
-                                </p>
-                                <p className="flex justify-between text-gray-600 font-medium mb-1">
-                                    Giới tính: <span className="text-black">{doctorSelect.gender === 'MALE' ? 'Nam' : doctorSelect.gender === 'FEMALE' ? 'Nữ' : 'Khác'}</span>
-                                </p>
                             </div>
-                        </div>
-
-                        <div className="flex flex-col gap-5">
-                            <div className="px-3 py-3 bg-gray-100 rounded shadow">
-                                <div className="flex gap-1 items-center font-bold mb-2">
-                                    <i className="fa-solid fa-calendar-day text-lg text-green-600"></i>
-                                    <span>Thông tin làm việc</span>
-                                </div>
-                                <p className="flex justify-between text-gray-600 font-medium mb-1">
-                                    Bằng cấp: <span className="text-black">{doctorSelect.degree}</span>
-                                </p>
-                                <p className="flex justify-between text-gray-600 font-medium mb-1">
-                                    Mã khoa: <span className="text-black">{doctorSelect.departmentId ?? "Chưa cập nhật"}</span>
-                                </p>
-                                <p className="flex justify-between text-gray-600 font-medium mb-1">
-                                    Tên khoa:
-                                    <span className="text-black">{doctorSelect.departmentName ?? "Chưa cập nhật"}</span>
-                                </p>
-
-                            </div>
-                        </div>
-
-                        <div className="flex gap-2 flex-col">
-                            <button className="w-full px-3 py-2 rounded font-bold text-white bg-blue-600 hover:bg-blue-700 shadow cursor-pointer transition-colors flex items-center justify-center gap-2"
-                            onClick={() => setShowCalendar(true)}
-                            >
-                                <i className="fa-solid fa-calendar-days"></i>
-                                <span>Thông tin lịch làm việc</span>
-                            </button>
-
-                            <button className="w-full px-3 py-2 rounded font-bold text-white bg-green-600 hover:bg-green-700 shadow cursor-pointer transition-colors">
-                                Đổi mật khẩu
-                            </button>
                         </div>
                     </div>
                 </div>
-            </motion.div>
-            {showCalendar && (<EditCalendarModal setShowCalendar={setShowCalendar} setShowDetail={setShowDetail} workDay={doctorSelect.workDay ?? ""} doctorId={doctorSelect.id} onSuccess={onSuccess} />)}
+
+                <div className="flex justify-end mt-6">
+                    <button
+                        onClick={() => setShowDetail(false)}
+                        className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition"
+                    >
+                        Đóng
+                    </button>
+                </div>
+            </div>
         </div>
     )
 };

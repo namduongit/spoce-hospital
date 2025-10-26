@@ -4,14 +4,13 @@ import { useEffect, useState } from "react";
 import AddAccount from "../../../components/common/adds/account.add";
 import AccountTable from "../../../components/common/tables/account.table";
 
-import type { AccountResponse } from "../../../responses/account.response";
-
 import { getAccountList } from "../../../services/account.service";
 
 import useCallApi from "../../../hooks/useCallApi";
+import type { AccountResponse } from "../../../responses/account.response";
 
-const AdminAccountsPage = () => {
-    const { execute, doFunc } = useCallApi();
+const AdminAccountPage = () => {
+    const { execute } = useCallApi();
 
     const [accounts, setAccounts] = useState<AccountResponse[]>([]);
     const [accountsFilter, setAccountsFilter] = useState<AccountResponse[]>([]);
@@ -30,13 +29,11 @@ const AdminAccountsPage = () => {
 
     const handleGetAccountList = async () => {
         const restResponse = await execute(getAccountList());
-        doFunc(() => {
-            if (restResponse?.result) {
-                const data: AccountResponse[] = restResponse.data;
-                setAccounts(data);
-                setAccountsFilter(data);
-            }
-        });
+        if (restResponse?.result) {
+            const data: AccountResponse[] = restResponse.data;
+            setAccounts(data);
+            setAccountsFilter(data);
+        }
     }
 
     useEffect(() => {
@@ -62,6 +59,16 @@ const AdminAccountsPage = () => {
         handleGetAccountList();
     }, []);
 
+    const stats = {
+        totalAccounts: accounts.length,
+        activeAccounts: accounts.filter(a => a.status === 'ACTIVE').length,
+        inactiveAccounts: accounts.filter(a => a.status === 'INACTIVE').length,
+        adminAccounts: accounts.filter(a => a.role === 'ADMIN').length,
+        doctorAccounts: accounts.filter(a => a.role === 'DOCTOR').length,
+        assistorAccounts: accounts.filter(a => a.role === 'ASSISTOR').length,
+        patientAccounts: accounts.filter(a => a.role === 'USER').length,
+    };
+
     return (
         <main className="p-4 sm:p-6">
             <div className="max-w-full">
@@ -70,13 +77,72 @@ const AdminAccountsPage = () => {
                         Quản lý tài khoản
                     </h3>
                     <div className="text-sm text-gray-600">
-                        Tổng: <span className="font-semibold text-blue-600">{accounts.length}</span> tài khoản
+                        <div>Tổng: <span className="font-semibold text-blue-600">{stats.totalAccounts}</span> tài khoản</div>
+                        <div>Hoạt động: <span className="font-semibold text-green-600">{stats.activeAccounts}</span></div>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
+                    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                        <div className="flex items-center">
+                            <div className="p-2 bg-blue-100 rounded-lg">
+                                <i className="fa-solid fa-users text-blue-600"></i>
+                            </div>
+                            <div className="ml-3">
+                                <p className="text-sm text-gray-600">Tổng tài khoản</p>
+                                <p className="text-lg font-semibold">{stats.totalAccounts}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                        <div className="flex items-center">
+                            <div className="p-2 bg-green-100 rounded-lg">
+                                <i className="fa-solid fa-check-circle text-green-600"></i>
+                            </div>
+                            <div className="ml-3">
+                                <p className="text-sm text-gray-600">Hoạt động</p>
+                                <p className="text-lg font-semibold">{stats.activeAccounts}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                        <div className="flex items-center">
+                            <div className="p-2 bg-purple-100 rounded-lg">
+                                <i className="fa-solid fa-user-md text-purple-600"></i>
+                            </div>
+                            <div className="ml-3">
+                                <p className="text-sm text-gray-600">Bác sĩ</p>
+                                <p className="text-lg font-semibold">{stats.doctorAccounts}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                        <div className="flex items-center">
+                            <div className="p-2 bg-orange-100 rounded-lg">
+                                <i className="fa-solid fa-user text-orange-600"></i>
+                            </div>
+                            <div className="ml-3">
+                                <p className="text-sm text-gray-600">Nhân viên</p>
+                                <p className="text-lg font-semibold">{stats.assistorAccounts}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                        <div className="flex items-center">
+                            <div className="p-2 bg-red-100 rounded-lg">
+                                <i className="fa-solid fa-user text-red-600"></i>
+                            </div>
+                            <div className="ml-3">
+                                <p className="text-sm text-gray-600">Bệnh nhân</p>
+                                <p className="text-lg font-semibold">{stats.patientAccounts}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6 grid gap-4 grid-cols-1 lg:grid-cols-2">
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:space-x-3">
-                        <div className="relative flex-1">
+                        <div className="appointments__filter__item relative flex-1">
                             <i className="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
                             <input
                                 value={searchForm.input}
@@ -117,7 +183,7 @@ const AdminAccountsPage = () => {
                             </select>
                         </div>
                     </div>
-                    <div className="flex justify-end items-center">
+                    <div className="flex justify-end items-center gap-2">
                         <button className="font-semibold bg-blue-600 text-white hover:text-blue-600 hover:bg-white hover:ring-3 hover:ring-blue-600 px-4 py-2 rounded shadow cursor-pointer flex items-center"
                             onClick={() => setIsOpenCreateAccount(true)}>
                             <i className="fa-solid fa-plus me-2"></i>
@@ -144,4 +210,4 @@ const AdminAccountsPage = () => {
     )
 }
 
-export default AdminAccountsPage;
+export default AdminAccountPage;

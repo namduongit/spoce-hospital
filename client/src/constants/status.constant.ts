@@ -30,7 +30,7 @@ export const appointmentStatus = [
     {
         id: 4,
         name: "Đã hủy",
-        value: "CANCELED"
+        value: "CANCELLED"
     }
 ];
 
@@ -82,3 +82,101 @@ export const dayStatus = [
         value: "ASC"
     }
 ];
+
+export const moneyStatus = [
+    {
+        id: 1,
+        name: "Giá cao đến thấp",
+        value: "DESC"
+    },
+    {
+        id: 2,
+        name: "Giá thấp đến cao",
+        value: "ASC"
+    }
+];
+
+export const medicalPackageStatus = [
+    {
+        id: 1,
+        name: "Hoạt động",
+        value: "ACTIVE"
+    },
+    {
+        id: 2,
+        name: "Ngừng hoạt động",
+        value: "INACTIVE"
+    }
+];
+
+export const inventoryTransactionStatus = [
+    {
+        id: 1,
+        name: "Chờ xử lý",
+        value: "PENDING"
+    },
+    {
+        id: 2,
+        name: "Đã hoàn thành",
+        value: "COMPLETED"
+    },
+    {
+        id: 3,
+        name: "Đã hủy",
+        value: "CANCELLED"
+    }
+];
+
+export const inventoryTransactionType = [
+    {
+        id: 1,
+        name: "Nhập kho",
+        value: "IMPORT"
+    },
+    {
+        id: 2,
+        name: "Xuất kho",
+        value: "EXPORT"
+    },
+    {
+        id: 3,
+        name: "Điều chỉnh",
+        value: "ADJUSTMENT"
+    }
+];
+
+export const prescriptionInvoiceStatus = [
+    {
+        id: 1,
+        name: "Chờ xử lý",
+        value: "PENDING"
+    },
+    {
+        id: 2,
+        name: "Đã hoàn thành",
+        value: "COMPLETED"
+    },
+    {
+        id: 3,
+        name: "Đã hủy",
+        value: "CANCELLED"
+    }
+];
+
+export const serviceInvoiceStatus = [
+    {
+        id: 1,
+        name: "Chờ xử lý",
+        value: "PENDING"
+    },
+    {
+        id: 2,
+        name: "Đã hoàn thành",
+        value: "COMPLETED"
+    },
+    {
+        id: 3,
+        name: "Đã hủy",
+        value: "CANCELLED"
+    }
+]

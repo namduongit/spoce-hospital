@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { validImageFile } from "../../../utils/valid.util";
-import { useToast } from "../../../contexts/toastContext";
+import { useToast } from "../../../contexts/toast.context";
 import { genders } from "../../../constants/gender.constant";
 
 import type { DepartmentResponse } from "../../../responses/department.response";
@@ -9,13 +9,13 @@ import { createDoctor } from "../../../services/doctor.service";
 
 import useCallApi from "../../../hooks/useCallApi";
 
-type AddDoctor = {
+type AddDoctorProps = {
     setIsOpenCreateDoctor: (isOpenCreateDoctor: boolean) => void,
     departments: DepartmentResponse[]
     onSuccess?: () => void;
 }
 
-const AddDoctor = (props: AddDoctor) => {
+const AddDoctor = (props: AddDoctorProps) => {
     const { setIsOpenCreateDoctor, departments, onSuccess } = props;
 
     const { execute, notify, loading } = useCallApi();
@@ -84,7 +84,7 @@ const AddDoctor = (props: AddDoctor) => {
                         onClick={handleClose}
                         className="text-gray-500 hover:text-gray-700 text-xl w-8 h-8 flex items-center justify-center"
                     >
-                        ×
+                        x
                     </button>
                 </div>
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -106,7 +106,7 @@ const AddDoctor = (props: AddDoctor) => {
                                             }}
                                             className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600 transition-colors"
                                         >
-                                            ×
+                                            x
                                         </button>
                                     </div>
                                 ) : (

@@ -12,6 +12,9 @@ public class DepartmentResponse {
 
     private List<AppointmentResponse> appointments;
 
+    public DepartmentResponse() {
+    }
+
     public Long getId() {
         return id;
     }

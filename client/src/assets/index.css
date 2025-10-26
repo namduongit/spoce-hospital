@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* width */
+::-webkit-scrollbar {
+  width: 0px;
+}
+
+
 /* Disable eye input type password */
 /* Edge browser */
 input[type="password"]::-ms-reveal,

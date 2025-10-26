@@ -1,22 +1,32 @@
 package com.appointmenthostpital.server.dtos.admin;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 public class AdminAppointmentDTO {
     public static class UpdateAppointmentRequest {
+        @NotNull(message = "Yêu cầu nhập số điện thoại")
         @NotBlank(message = "Số điện thoại không được để trống")
         private String phone;
+
+        @NotNull(message = "Yêu cầu nhập thời gian")
         @NotBlank(message = "Thời gian không được để trống")
         private String time;
+
+        @NotNull(message = "Yêu cầu nhập ghi chú")
         @NotBlank(message = "Ghi chú không được để trống")
         private String note;
-        @NotBlank(message = "Trạng thái không được để trống")
-        @Pattern(regexp = "PENDING|CONFIRMED|CANCELED|COMPLETED", message = "Trạng thái không đúng")
+
+        @NotNull(message = "Yêu cầu nhập trạng thái")
+        @Pattern(regexp = "PENDING|CONFIRMED|CANCELLED|COMPLETED", message = "Trạng thái không đúng")
         private String status;
 
+        @NotNull(message = "Yêu cầu nhập khoa")
         private Long departmentId;
+        @NotNull(message = "Yêu cầu nhập bác sĩ")
         private Long doctorId;
+        @NotNull(message = "Yêu cầu nhập phòng")
         private Long roomId;
 
         public String getPhone() {
@@ -73,6 +83,20 @@ public class AdminAppointmentDTO {
 
         public void setRoomId(Long roomId) {
             this.roomId = roomId;
+        }
+    }
+
+    public static class ChangeStatusRequest {
+        @NotNull(message = "Yêu cầu nhập trạng thái")
+        @Pattern(regexp = "PENDING|CONFIRMED|CANCELLED|COMPLETED", message = "Trạng thái không đúng")
+        private String status;
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
         }
     }
 }

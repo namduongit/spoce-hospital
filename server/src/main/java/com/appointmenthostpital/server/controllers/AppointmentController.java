@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,31 +27,21 @@ public class AppointmentController {
     @Autowired
     private AppointmentService appointmentService;
 
-    /**
-     * Get list of appointments
-     * 
-     * @return
-     */
     @GetMapping("")
     public ResponseEntity<RestResponse<List<AppointmentResponse>>> handleGetAppointmentList() {
-        List<AppointmentResponse> appointmentModels = this.appointmentService.handleGetAppointmentList();
-        return ResponseEntity.ok().body(new RestResponse<List<AppointmentResponse>>(HttpStatusResponse.OK, true,
-                appointmentModels, HttpStatusResponse.SUCCESS_MESSAGE, null));
+        List<AppointmentResponse> response = this.appointmentService.handleGetAppointmentList();
+        return ResponseEntity.status(HttpStatusResponse.OK)
+                .body(new RestResponse<List<AppointmentResponse>>(HttpStatusResponse.OK, true,
+                        response, HttpStatusResponse.SUCCESS_MESSAGE, null));
     }
 
-    /**
-     * Update appointment by id
-     * 
-     * @param id
-     * @param request
-     * @return
-     */
     @PutMapping("/{id}")
     public ResponseEntity<RestResponse<AppointmentResponse>> handleUpdateAppointment(
             @PathVariable(name = "id", required = true) Long id,
             @Valid @RequestBody AdminAppointmentDTO.UpdateAppointmentRequest request) {
+
         AppointmentResponse response = this.appointmentService.handleUpdateAppointment(id, request);
-        return ResponseEntity.ok().body(new RestResponse<AppointmentResponse>(
+        return ResponseEntity.status(HttpStatusResponse.OK).body(new RestResponse<AppointmentResponse>(
                 HttpStatusResponse.OK,
                 true,
                 response,
@@ -58,12 +49,6 @@ public class AppointmentController {
                 null));
     }
 
-    /**
-     * Delete appointment by id
-     * 
-     * @param id
-     * @return
-     */
     @DeleteMapping("/{id}")
     public ResponseEntity<RestResponse<?>> handleDeleteAppointment(
             @PathVariable(name = "id", required = true) Long id) {
@@ -72,6 +57,36 @@ public class AppointmentController {
                 HttpStatusResponse.OK,
                 true,
                 null,
+                HttpStatusResponse.SUCCESS_MESSAGE,
+                null));
+    }
+
+    /** 
+     * @Controller used by doctor to get all confirmed appointments
+     */
+    @GetMapping("/doctor")
+    public ResponseEntity<RestResponse<List<AppointmentResponse>>> handleGetAppointmentsByDoctorAndStatus(
+            Authentication authentication) {
+        List<AppointmentResponse> response = this.appointmentService
+                .handleGetAppointmentsByDoctorAndStatus(authentication, "CONFIRMED");
+        return ResponseEntity.status(HttpStatusResponse.OK)
+                .body(new RestResponse<List<AppointmentResponse>>(HttpStatusResponse.OK, true,
+                        response, HttpStatusResponse.SUCCESS_MESSAGE, null));
+    }
+    
+    /**
+     * @Controller used by doctor to change status appointment
+     */
+    @PutMapping("/{id}/status")
+    public ResponseEntity<RestResponse<AppointmentResponse>> handleChangeStatusAppointment(
+        @PathVariable(name = "id", required = true) Long id,
+        @Valid @RequestBody AdminAppointmentDTO.ChangeStatusRequest request) {
+
+        AppointmentResponse response = this.appointmentService.handleChangeStatusAppointment(id, request);
+        return ResponseEntity.status(HttpStatusResponse.OK).body(new RestResponse<AppointmentResponse>(
+                HttpStatusResponse.OK,
+                true,
+                response,
                 HttpStatusResponse.SUCCESS_MESSAGE,
                 null));
     }

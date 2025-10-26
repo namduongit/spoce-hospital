@@ -18,7 +18,13 @@ public class DataIntegrityViolationExceptionHandler {
         restResponse.setResult(false);
         restResponse.setData(null);
         restResponse.setMessage(HttpStatusResponse.BAD_MESSAGE);
-        restResponse.setErrorMessage(HttpStatusResponse.EXISTS_RESOURCE);
+        System.out.println("Exception: " + exception.getMessage());
+        if (exception.getMessage().contains("Cannot delete or update a parent row")) {
+            restResponse.setErrorMessage("Lỗi xóa có dữ liệu tham chiếu");
+        }
+        if (exception.getMessage().contains("Duplicate entry")) {
+            restResponse.setErrorMessage("Dữ liệu đã tồn tại");
+        }
 
         return ResponseEntity.status(HttpStatusResponse.BAD_REQUEST).body(restResponse);
     }

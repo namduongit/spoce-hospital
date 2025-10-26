@@ -8,10 +8,8 @@ type CreateUserParams = {
 }
 
 type UpdateUserParams = {
-    email?: string,
     password?: string,
     role?: string,
-    type?: string,
     status?: string
 }
 

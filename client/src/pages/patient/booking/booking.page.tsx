@@ -4,7 +4,7 @@ import DateSection from "../../../components/sections/date.section";
 import { times } from "../../../constants/time.constant";
 import { formatDateVi } from "../../../utils/formatDate.util";
 import useCallApi from "../../../hooks/useCallApi";
-import { createAppointment } from "../../../services/_user.service";
+import { createAppointment } from "../../../services/user.service";
 import { useNavigate } from "react-router-dom";
 
 const navBars = [

@@ -1,12 +1,19 @@
-export interface DoctorProfileModel {
-    userId: number,
+import type { AccountModel } from "./AccountModel.model"
+import type { DepartmentModel } from "./Department.model"
+
+type DoctorProfileModel = {
+    id: number,
     image: string,
-    fullName: string,
     gender: 'MALE' | 'FEMALE' | 'OTHER',
     phone: string,
     birthDate: string,
     degree: string,
-    workDate: string,
+    workDay: string,
     status: 'AVAILABLE' | 'BUSY' | 'OFFLINE',
-    departmentId: number,
+
+    accountModel: AccountModel,
+    departmentModel: DepartmentModel,
+
 }
+
+export type { DoctorProfileModel };

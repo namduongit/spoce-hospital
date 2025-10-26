@@ -26,30 +26,30 @@ public class AppointmentModel {
     @Column(nullable = false)
     private String time;
     private String note;
-    @Column(columnDefinition = "enum('PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELED') default 'PENDING'")
+    @Column(columnDefinition = "enum('PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELLED') default 'PENDING'")
     private String status = "PENDING";
     
     private Timestamp createdAt = new Timestamp(System.currentTimeMillis());
 
     @ManyToOne
+    @JoinColumn(name = "account_id")
     @JsonBackReference
-    @JoinColumn(name = "user_id")
-    private UserModel userModel;
+    private AccountModel accountModel;
 
     @ManyToOne
-    @JsonBackReference
     @JoinColumn(name = "department_id")
+    @JsonBackReference
     private DepartmentModel departmentModel;
 
     @ManyToOne
-    @JsonBackReference
     @JoinColumn(name = "room_id")
+    @JsonBackReference
     private RoomModel roomModel;
 
     @ManyToOne
-    @JsonBackReference
     @JoinColumn(name = "doctor_id")
-    private UserModel doctorModel;
+    @JsonBackReference
+    private AccountModel doctorModel;
 
     public Long getId() {
         return id;
@@ -107,12 +107,12 @@ public class AppointmentModel {
         this.createdAt = createdAt;
     }
 
-    public UserModel getUserModel() {
-        return userModel;
+    public AccountModel getAccountModel() {
+        return accountModel;
     }
 
-    public void setUserModel(UserModel userModel) {
-        this.userModel = userModel;
+    public void setAccountModel(AccountModel accountModel) {
+        this.accountModel = accountModel;
     }
 
     public DepartmentModel getDepartmentModel() {
@@ -131,19 +131,11 @@ public class AppointmentModel {
         this.roomModel = roomModel;
     }
 
-    public UserModel getDoctorModel() {
+    public AccountModel getDoctorModel() {
         return doctorModel;
     }
 
-    public void setDoctorModel(UserModel doctorModel) {
+    public void setDoctorModel(AccountModel doctorModel) {
         this.doctorModel = doctorModel;
-    }
-
-    @Override
-    public String toString() {
-        return "AppointmentModel [id=" + id + ", fullName=" + fullName + ", phone=" + phone + ", time=" + time
-                + ", note=" + note + ", status=" + status + ", createdAt=" + createdAt + ", userModel=" + userModel
-                + ", departmentModel=" + departmentModel + ", roomModel=" + roomModel + ", doctorModel=" + doctorModel
-                + "]";
     }
 }

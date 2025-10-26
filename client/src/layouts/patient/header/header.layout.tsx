@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import PatientScheduleButton from "../../../components/buttons/schedule.button";
 import HeaderMenu from "../../../components/common/others/menu";
 import OptionButton from "../../../components/common/others/option";
 
 const HeaderLayout = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
     `relative px-2 py-1 block text-gray-700 hover:text-blue-600 transition ${
@@ -13,6 +15,29 @@ const HeaderLayout = () => {
         ? "font-bold text-blue-600 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-full after:bg-blue-600"
         : ""
     }`;
+
+  const scrollToSection = (sectionId: string) => {
+    if (location.pathname !== '/') {
+      navigate('/');
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      }, 100);
+    } else {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    }
+  };
 
   return (
     <header className="header-layout w-full bg-white shadow sticky top-0 start-0 z-10">
@@ -27,18 +52,30 @@ const HeaderLayout = () => {
           <NavLink to="/" end className={navLinkClass}>
             Trang chủ
           </NavLink>
-          <NavLink to="/page/services" className={navLinkClass}>
+          <button 
+            className="relative px-2 py-1 text-gray-700 hover:text-blue-600 transition"
+            onClick={() => scrollToSection('service-section')}
+          >
             Dịch vụ
-          </NavLink>
-          <NavLink to="/page/doctors" className={navLinkClass}>
+          </button>
+          <button 
+            className="relative px-2 py-1 text-gray-700 hover:text-blue-600 transition"
+            onClick={() => scrollToSection('package-section')}
+          >
+            Gói khám
+          </button>
+          <button 
+            className="relative px-2 py-1 text-gray-700 hover:text-blue-600 transition"
+            onClick={() => scrollToSection('doctor-section')}
+          >
             Bác sĩ
-          </NavLink>
-          <NavLink to="/page/about" className={navLinkClass}>
-            Giới thiệu
-          </NavLink>
-          <NavLink to="/page/contact" className={navLinkClass}>
+          </button>
+          <button 
+            className="relative px-2 py-1 text-gray-700 hover:text-blue-600 transition"
+            onClick={() => scrollToSection('contact-section')}
+          >
             Liên hệ
-          </NavLink>
+          </button>
           <PatientScheduleButton />
           <OptionButton />
         </nav>

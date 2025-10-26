@@ -1,28 +1,30 @@
 package com.appointmenthostpital.server.dtos.user;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class UserUpdateDTO {
     public static class UpdateProfileRequest {
+        @NotNull(message = "Nhập họ và tên của bạn")
         @NotBlank(message = "Họ và tên không được để trống")
-        @Size(min = 2, max = 100, message = "Họ và tên phải từ 2-100 ký tự")
+        @Size(max = 50, message = "Họ và tên tối đa 50 ký tự")
         private String fullName;
 
+        @NotNull(message = "Nhập số điện thoại của bạn")
         @NotBlank(message = "Số điện thoại không được để trống")
         @Pattern(regexp = "^[0-9]{10,11}$", message = "Số điện thoại không hợp lệ")
         private String phone;
 
-        @Size(max = 500, message = "Địa chỉ không được quá 500 ký tự")
+        @NotNull(message = "Nhập địa chỉ của bạn")
+        @Size(max = 100, message = "Địa chỉ không được quá 100 ký tự")
         private String address;
 
+        @NotNull(message = "Nhập ngày sinh của bạn")
         @NotBlank(message = "Ngày sinh không được để trống")
         @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = "Ngày sinh phải có định dạng yyyy-MM-dd")
         private String birthDate;
-
-        public UpdateProfileRequest() {
-        }
 
         public UpdateProfileRequest(String fullName, String phone, String address, String birthDate) {
             this.fullName = fullName;

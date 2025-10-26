@@ -25,14 +25,14 @@ public class RoomModel {
     @Column(nullable = false)
     private String name;
     @Column(columnDefinition = "enum ('EMPTY', 'FULL', 'REPAIR') default 'EMPTY'", nullable = false)
-    private String status;
+    private String status = "EMPTY";
     
     @ManyToOne
     @JoinColumn(name = "department_id")
     @JsonBackReference
     private DepartmentModel departmentModel;
 
-    @OneToMany(mappedBy = "roomModel", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "roomModel", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<AppointmentModel> appointmentModels;
 
@@ -86,11 +86,5 @@ public class RoomModel {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        return "RoomModel [id=" + id + ", name=" + name + ", status=" + status + ", departmentModel=" + departmentModel
-                + ", appointmentModels=" + appointmentModels + "]";
     }
 }

@@ -11,7 +11,7 @@ public class JwtAuthConverterConfig {
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter converter = new JwtGrantedAuthoritiesConverter();
         converter.setAuthoritiesClaimName("role");      // Get role from "role" claim
-        converter.setAuthorityPrefix("ROLE_");               // Spring requires prefix ROLE_
+        converter.setAuthorityPrefix("ROLE_");               // Add prefix "ROLE_" to role name. Auto prefix is "SCOPE_"
 
         JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
         jwtConverter.setJwtGrantedAuthoritiesConverter(converter);

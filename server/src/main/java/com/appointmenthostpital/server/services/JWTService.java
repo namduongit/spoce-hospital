@@ -28,10 +28,9 @@ public class JWTService {
                 .issuedAt(now)
                 .expiresAt(expiry)
                 .subject(authentication.getName())
-                .claim("role", role) // get first role
+                .claim("role", role) 
                 .build();
 
-        // String token = this.jwtConfig.jwtEncoder().encode(JwtEncoderParameters.from(claims)).getTokenValue();  -- Will error because no alg in header
         String token = this.jwtConfig.jwtEncoder().encode(JwtEncoderParameters.from(JwsHeader.with(this.jwtConfig.getJwtAlgorithm()).build(), claims)).getTokenValue();
 
         return new JWTResponse(token, role, (int) now.getEpochSecond(), (int) expiry.getEpochSecond());

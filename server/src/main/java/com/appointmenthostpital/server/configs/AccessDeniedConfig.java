@@ -7,6 +7,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 
 import com.appointmenthostpital.server.dtos.RestResponse;
+import com.appointmenthostpital.server.utils.HttpStatusResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.ServletException;
@@ -18,14 +19,15 @@ public class AccessDeniedConfig implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,
             AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+
+        response.setStatus(HttpStatusResponse.FORBIDDEN);
         response.setContentType("application/json;charset=UTF-8");
         RestResponse<Object> restResponse = new RestResponse<>(
-                HttpServletResponse.SC_FORBIDDEN,
+                HttpStatusResponse.FORBIDDEN,
                 false,
                 null,
-                null,
-                accessDeniedException.getMessage());
+                HttpStatusResponse.BAD_MESSAGE,
+                HttpStatusResponse.ACCESS_DENIED_MESSAGE);
 
         response.getWriter().write(new ObjectMapper().writeValueAsString(restResponse));
     }

@@ -121,6 +121,7 @@ const EditRoom = (props: EditRoom) => {
                         <button
                             type="button"
                             className="flex-1 px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50 transition"
+                            onClick={() => setShowEdit(false)}
                         >
                             Hủy
                         </button>

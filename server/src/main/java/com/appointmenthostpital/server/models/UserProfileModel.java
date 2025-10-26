@@ -21,9 +21,9 @@ public class UserProfileModel {
 
     @OneToOne
     @MapsId
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "account_id")
     @JsonBackReference
-    UserModel userModel;
+    AccountModel accountModel;
 
     public Long getId() {
         return id;
@@ -65,17 +65,11 @@ public class UserProfileModel {
         this.birthDate = birthDate;
     }
 
-    public UserModel getUserModel() {
-        return userModel;
+    public AccountModel getAccountModel() {
+        return accountModel;
     }
 
-    public void setUserModel(UserModel userModel) {
-        this.userModel = userModel;
-    }
-
-    @Override
-    public String toString() {
-        return "UserProfileModel [id=" + id + ", fullName=" + fullName + ", phone=" + phone + ", address=" + address
-                + ", birthDate=" + birthDate + ", userModel=" + userModel + "]";
+    public void setAccountModel(AccountModel accountModel) {
+        this.accountModel = accountModel;
     }
 }

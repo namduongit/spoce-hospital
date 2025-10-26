@@ -1,17 +1,20 @@
 package com.appointmenthostpital.server.responses;
 
-import java.util.List;
-
 public class AccountResponse {
     private Long id;
     private String email;
     private String role;
     private String type;
     private String status;
-
-    private DetailResponse.ProfileDetail profileDetail;
-    private List<DetailResponse.AppointmentDetail> appointmentDetails;
     
+    public AccountResponse(Long id, String email, String role, String type, String status) {
+        this.id = id;
+        this.email = email;
+        this.role = role;
+        this.type = type;
+        this.status = status;
+    }
+
     public Long getId() {
         return id;
     }
@@ -50,21 +53,5 @@ public class AccountResponse {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public DetailResponse.ProfileDetail getProfileDetail() {
-        return profileDetail;
-    }
-
-    public void setProfileDetail(DetailResponse.ProfileDetail profileDetail) {
-        this.profileDetail = profileDetail;
-    }
-
-    public List<DetailResponse.AppointmentDetail> getAppointmentDetails() {
-        return appointmentDetails;
-    }
-
-    public void setAppointmentDetails(List<DetailResponse.AppointmentDetail> appointmentDetails) {
-        this.appointmentDetails = appointmentDetails;
     }
 }

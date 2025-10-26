@@ -1,12 +1,14 @@
 import type { AppointmentModel } from "./Appointment.model";
 import type { DoctorProfileModel } from "./DoctorProfile.model";
-import type { RoomModel } from "./Room.model";
+import type { RoomModel } from "./RoomModel.model";
 
-export interface DepartmentModel {
+type DepartmentModel = {
     id: number,
     name: string,
 
+    doctorProfileModels: DoctorProfileModel[],
     roomModels: RoomModel[],
-    appointmentModels: AppointmentModel[],
-    doctorProfileModels: DoctorProfileModel[]
+    appointmentModels: AppointmentModel[]
 }
+
+export type { DepartmentModel };

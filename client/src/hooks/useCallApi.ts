@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { RestResponse } from "../api/api";
-import { useToast } from "../contexts/toastContext";
+import { useToast } from "../contexts/toast.context";
 
 const useCallApi = () => {
     const { showToast } = useToast();
@@ -10,10 +10,18 @@ const useCallApi = () => {
         try {
             setLoading(true);
             const restResponse = await apiCall;
+            const statusCode = restResponse?.statusCode || 500;
+            if (statusCode === 401) {
+                showToast("Cảnh báo", "Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại", "error");
+            }
+            if (statusCode === 403) {
+                showToast("Cảnh báo", "Bạn không có quyền truy cập tài nguyên này", "error");
+            }
             return restResponse;
         } catch (error: any) {
-            console.error("API call error:", error);
+            console.error("API call error:", error.message);
             showToast("Cảnh báo", "Máy chủ không phản hồi", "error");
+            return { result: false, statusCode: 500, data: null, message: "", errorMessage: ["Máy chủ không phản hồi"] } as RestResponse;
         } finally {
             setLoading(false);
         }

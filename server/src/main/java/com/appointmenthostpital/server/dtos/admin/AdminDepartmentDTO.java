@@ -1,9 +1,11 @@
 package com.appointmenthostpital.server.dtos.admin;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class AdminDepartmentDTO {
     public static class CreateDepartmentRequest {
+        @NotNull(message = "Yêu cầu nhập tên khoa")
         @NotBlank(message = "Tên khoa không được để trống")
         private String name;
 
@@ -16,17 +18,10 @@ public class AdminDepartmentDTO {
         }
     }
 
-    public static class CreateDepartmentResponse {
-        private Long id;
+    public static class UpdateDepartmentRequest {
+        @NotNull(message = "Yêu cầu nhập tên khoa")
+        @NotBlank(message = "Tên khoa không được để trống")
         private String name;
-
-        public Long getId() {
-            return id;
-        }
-
-        public void setId(Long id) {
-            this.id = id;
-        }
 
         public String getName() {
             return name;

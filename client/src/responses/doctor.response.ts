@@ -3,8 +3,7 @@ type DoctorResponse = {
     email: string,
 
     image: string,
-    fullName: string,  
-
+    fullName: string,
     gender: string,
     phone: string,
     birthDate: string,

@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import DoctorHeaderLayout from "./header/header.layout";
 import DoctorFooterLayout from "./footer/footer.layout";
-import DoctorSidebar from "../../components/doctor/doctor.sidebar";
+import DoctorSidebar from "../../components/sidebars/doctor.sidebar";
 
 const DoctorLayout = () => {
     return (

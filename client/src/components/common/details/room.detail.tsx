@@ -1,4 +1,3 @@
-import { motion } from "motion/react";
 import type { RoomResponse } from "../../../responses/room.response";
 
 type RoomDetail = {
@@ -10,75 +9,77 @@ const RoomDetail = (props: RoomDetail) => {
     const { roomSelect, setShowDetail } = props;
 
     const getStatusColor = (status: string) => {
-        return status === 'EMPTY' ? 'bg-green-100 text-green-800' :
-            status === 'FULL' ? 'bg-blue-100 text-blue-700' :
-                status === 'REPAIR' ? 'bg-yellow-100 text-yellow-800' : '';
+        switch (status) {
+            case 'EMPTY': return 'text-green-800';
+            case 'FULL': return 'text-blue-700';
+            case 'REPAIR': return 'text-yellow-800';
+            default: return 'text-gray-800';
+        }
+    }
+
+    const getStatusText = (status: string) => {
+        switch (status) {
+            case 'EMPTY': return 'Còn trống';
+            case 'FULL': return 'Đã đầy';
+            case 'REPAIR': return 'Đang sửa chữa';
+            default: return status;
+        }
     }
 
     return (
-        <div className="admin-detail-account fixed top-0 start-0 bg-gray-400/60 w-full h-full z-10">
-            <motion.div
-                initial={{
-                    x: 650
-                }}
-                animate={{
-                    x: 0
-                }}
-                transition={{
-                    duration: 0.5,
-                    type: "spring"
-                }}
-                className="admin-detail__wrap fixed top-0 end-0 w-150 bg-white rounded shadow-2xl h-full">
-                <div className="admin-detail__content relative">
-                    <div className="close-btn absolute top-0 start-0 cursor-pointer z-20" onClick={() => setShowDetail(false)}>
-                        <i className="fa-solid fa-angles-right text-xl text-white p-3"></i>
-                    </div>
+        <div className="fixed inset-0 bg-gray-500/50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+                <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+                        <i className="fa-solid fa-door-open text-blue-600"></i>
+                        Chi tiết phòng khám #{roomSelect.id}
+                    </h2>
+                    <button
+                        onClick={() => setShowDetail(false)}
+                        className="text-gray-500 hover:text-gray-700 text-xl"
+                    >
+                        x
+                    </button>
+                </div>
 
-                    <div className="admin-detail__header flex items-center px-5 py-5 pt-10 gap-3 bg-indigo-600 text-white">
-                        <div className="admin-detail__icon text-2xl bg-gray-300/50 px-2 py-2 rounded-full">
-                            <i className="fa-solid fa-user-circle"></i>
-                        </div>
-                        <div className="admin-detail__tag font-bold">
-                            <p className="flex gap-2">ID phòng khám:
-                                <span># {roomSelect.id}</span>
-                            </p>
-                            <p className="flex gap-2">Trạng thái:
-                                <span className={`px-2 py-1 rounded text-xs ${getStatusColor(roomSelect.status)}`}>
-                                    {roomSelect.status === 'EMPTY' ? 'Còn trống' : ''}
-                                    {roomSelect.status === 'FULL' ? 'Đã đầy' : ''}
-                                    {roomSelect.status === 'REPAIR' ? 'Đang sửa chữa' : ''}
-                                </span>
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="admin-detail__body px-5 py-5 flex flex-col gap-5">
-                        <div className="admin-detail__list flex flex-col gap-5">
-                            <div className="admin-detail__item px-3 py-3 bg-gray-100 rounded shadow">
-                                <div className="admin-detail__icon flex gap-1 items-center font-bold mb-2">
-                                    <i className="fa-solid fa-user-tag text-indigo-600 text-lg"></i>
-                                    <span>Thông tin phòng khám</span>
-                                </div>
-                                <p className="flex justify-between text-gray-600 font-medium mb-1">
-                                    Tên phòng: <span className="text-black">{roomSelect.name}</span>
-                                </p>
-                                <p className="flex justify-between text-gray-600 font-medium mb-1">
-                                    Mã khoa:
-                                    <span className={`text-black`}>{roomSelect.departmentId}</span>
-                                </p>
-                                <p className="flex justify-between text-gray-600 font-medium mb-1">
-                                    Tên khoa:
-                                    <span className={`text-black`}>{roomSelect.departmentName}</span>
-                                </p>
+                <div className="space-y-6">
+                    <div className="border border-gray-200 rounded-lg p-4">
+                        <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                            <i className="fa-solid fa-info-circle text-blue-600"></i>
+                            Thông tin phòng khám
+                        </h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-600 mb-1">Tên phòng</label>
+                                <p className="text-gray-900 font-medium">{roomSelect.name}</p>
                             </div>
-                        </div>
-
-                        <div className="admin-detail__button flex gap-2">
-
+                            <div>
+                                <label className="block text-sm font-medium text-gray-600 mb-1">Mã khoa</label>
+                                <p className="text-gray-900">{roomSelect.departmentId}</p>
+                            </div>
+                            <div className="md:col-span-2">
+                                <label className="block text-sm font-medium text-gray-600 mb-1">Tên khoa</label>
+                                <p className="text-gray-900">{roomSelect.departmentName}</p>
+                            </div>
+                            <div className="text-left md:col-span-2">
+                                <label className="block text-sm font-medium text-gray-600 mb-1">Trạng thái</label>
+                                <span className={`font-bold ${getStatusColor(roomSelect.status)}`}>
+                                    {getStatusText(roomSelect.status)}
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </motion.div>
+
+                <div className="flex justify-end mt-6">
+                    <button
+                        onClick={() => setShowDetail(false)}
+                        className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition"
+                    >
+                        Đóng
+                    </button>
+                </div>
+            </div>
         </div>
     )
 }

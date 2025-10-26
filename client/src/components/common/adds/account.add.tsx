@@ -1,17 +1,15 @@
 import { useState } from "react";
 import { roles } from "../../../constants/role.constant";
-
 import { createAccount } from "../../../services/account.service";
 
 import useCallApi from "../../../hooks/useCallApi";
 
-
-type AddAccount = {
+type AddAccountProps = {
     setIsOpenCreateAccount: (isOpenCreateAccount: boolean) => void,
     onSuccess?: () => void
 }
 
-const AddAccount = (props: AddAccount) => {
+const AddAccount = (props: AddAccountProps) => {
     const { setIsOpenCreateAccount, onSuccess } = props;
 
     const { execute, notify, loading } = useCallApi();
@@ -20,7 +18,7 @@ const AddAccount = (props: AddAccount) => {
         email: "",
         password: "",
         passwordConfirm: "",
-        role: "USER"
+        role: ""
     });
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
@@ -133,6 +131,7 @@ const AddAccount = (props: AddAccount) => {
                             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
                         >
+                            <option value="">Chọn vai trò</option>
                             {roles.map(role => (
                                 <option key={role.id} value={role.value}>{role.name}</option>
                             ))}
@@ -145,7 +144,7 @@ const AddAccount = (props: AddAccount) => {
                             onClick={handleClose}
                             className="flex-1 px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50 transition"
                         >
-                            Đóng
+                            Hủy
                         </button>
                         <button
                             type="submit"

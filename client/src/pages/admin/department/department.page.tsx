@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { roomStatus } from "../../../constants/status.constant";
 import AddDepartment from "../../../components/common/adds/department.add";
-import DepartmentTable from "../../../components/common/tables/department.table"; 
+import DepartmentTable from "../../../components/common/tables/department.table";
 import RoomTable from "../../../components/common/tables/room.table";
 import AddRoom from "../../../components/common/adds/room.add";
 
@@ -15,7 +15,7 @@ import { getRoomList } from "../../../services/room.service";
 import useCallApi from "../../../hooks/useCallApi";
 
 const AdminDepartmentPage = () => {
-    const { execute, doFunc } = useCallApi();
+    const { execute } = useCallApi();
 
     const [select, setSelect] = useState<string>("department");
 
@@ -34,32 +34,25 @@ const AdminDepartmentPage = () => {
     });
 
     const handleSearchFormChange = (field: keyof typeof searchForm, value: string) => {
-        setSearchForm(prev => ({
-            ...prev,
-            [field]: value
-        }));
+        setSearchForm(prev => ({ ...prev, [field]: value }));
     }
 
     const handleGetDepartmentList = async () => {
         const restResponse = await execute(getDepartmentList());
-        doFunc(() => {
-            if (restResponse?.result) {
-                const data: DepartmentResponse[] = restResponse.data;
-                setDepartments(Array.isArray(data) ? data : []);
-                setDepartmentsFilter(Array.isArray(data) ? data : []);
-            }
-        });
+        if (restResponse?.result) {
+            const data: DepartmentResponse[] = restResponse.data;
+            setDepartments(Array.isArray(data) ? data : []);
+            setDepartmentsFilter(Array.isArray(data) ? data : []);
+        }
     }
 
     const handleGetRoomList = async () => {
         const restResponse = await execute(getRoomList());
-        doFunc(() => {
-            if (restResponse?.result) {
-                const data: RoomResponse[] = restResponse.data;
-                setRooms(Array.isArray(data) ? data : []);
-                setRoomsFilter(Array.isArray(data) ? data : []);
-            }
-        });
+        if (restResponse?.result) {
+            const data: RoomResponse[] = restResponse.data;
+            setRooms(Array.isArray(data) ? data : []);
+            setRoomsFilter(Array.isArray(data) ? data : []);
+        }
     }
 
     useEffect(() => {
@@ -98,6 +91,15 @@ const AdminDepartmentPage = () => {
         handleGetRoomList();
     }, []);
 
+    // Tính toán thống kê
+    const stats = {
+        totalDepartments: departments.length,
+        totalRooms: rooms.length,
+        activeRooms: rooms.filter(r => r.status === 'EMPTY').length,
+        inactiveRooms: rooms.filter(r => r.status === 'FULL').length,
+        maintenanceRooms: rooms.filter(r => r.status === 'REPAIR').length,
+    };
+
     return (
         <main className="p-4 sm:p-6">
             <div className="max-w-full">
@@ -106,8 +108,66 @@ const AdminDepartmentPage = () => {
                         Quản lý phòng khám & khoa khám
                     </h3>
                     <div className="text-sm text-gray-600">
-                        <div>Tổng: <span className="font-semibold text-blue-600">{rooms.length}</span> phòng khám</div>
-                        <div>Tổng: <span className="font-semibold text-blue-600">{departments.length}</span> khoa khám</div>
+                        <div>Tổng: <span className="font-semibold text-blue-600">{stats.totalRooms}</span> phòng khám</div>
+                        <div>Tổng: <span className="font-semibold text-blue-600">{stats.totalDepartments}</span> khoa khám</div>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
+                    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                        <div className="flex items-center">
+                            <div className="p-2 bg-blue-100 rounded-lg">
+                                <i className="fa-solid fa-building text-blue-600"></i>
+                            </div>
+                            <div className="ml-3">
+                                <p className="text-sm text-gray-600">Tổng khoa</p>
+                                <p className="text-lg font-semibold">{stats.totalDepartments}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                        <div className="flex items-center">
+                            <div className="p-2 bg-green-100 rounded-lg">
+                                <i className="fa-solid fa-door-open text-green-600"></i>
+                            </div>
+                            <div className="ml-3">
+                                <p className="text-sm text-gray-600">Tổng phòng</p>
+                                <p className="text-lg font-semibold">{stats.totalRooms}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                        <div className="flex items-center">
+                            <div className="p-2 bg-purple-100 rounded-lg">
+                                <i className="fa-solid fa-check-circle text-purple-600"></i>
+                            </div>
+                            <div className="ml-3">
+                                <p className="text-sm text-gray-600">Phòng hoạt động</p>
+                                <p className="text-lg font-semibold">{stats.activeRooms}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                        <div className="flex items-center">
+                            <div className="p-2 bg-orange-100 rounded-lg">
+                                <i className="fa-solid fa-circle-xmark text-orange-600"></i>
+                            </div>
+                            <div className="ml-3">
+                                <p className="text-sm text-gray-600">Phòng hết chỗ</p>
+                                <p className="text-lg font-semibold">{stats.inactiveRooms}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                        <div className="flex items-center">
+                            <div className="p-2 bg-red-100 rounded-lg">
+                                <i className="fa-solid fa-tools text-red-600"></i>
+                            </div>
+                            <div className="ml-3">
+                                <p className="text-sm text-gray-600">Bảo trì</p>
+                                <p className="text-lg font-semibold">{stats.maintenanceRooms}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -130,7 +190,7 @@ const AdminDepartmentPage = () => {
                                 disabled={select === "department"}
                                 value={searchForm.status}
                                 onChange={(event) => handleSearchFormChange("status", event.target.value)}
-                                >
+                            >
                                 <option value="">Chọn trạng thái</option>
                                 {roomStatus.map((status) => (
                                     <option key={status.id} value={status.value}>
@@ -166,7 +226,7 @@ const AdminDepartmentPage = () => {
 
                 <div className="hidden lg:block bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
                     <div className="overflow-x-auto">
-                        {select === "department" && <DepartmentTable departments={departmentsFilter} />}
+                        {select === "department" && <DepartmentTable departments={departmentsFilter} onSuccess={handleGetDepartmentList} />}
                         {select === "room" && <RoomTable rooms={roomsFilter} departments={departments} onSuccess={handleGetRoomList} />}
                     </div>
                 </div>

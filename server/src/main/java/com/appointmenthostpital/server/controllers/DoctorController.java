@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,61 +24,39 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/doctors")
 public class DoctorController {
         @Autowired
-        DoctorService doctorService;
+        private DoctorService doctorService;
 
-        /**
-         * Get list of doctors
-         * 
-         * @return
-         */
         @GetMapping("")
         public ResponseEntity<RestResponse<List<DoctorResponse>>> handleGetDoctorList() {
-                List<DoctorResponse> doctorModels = this.doctorService.handleGetDoctorList();
-                return ResponseEntity.ok().body(new RestResponse<List<DoctorResponse>>(200, true,
-                                doctorModels, HttpStatusResponse.SUCCESS_MESSAGE, null));
+                List<DoctorResponse> responses = this.doctorService.handleGetDoctorList();
+                return ResponseEntity.status(HttpStatusResponse.OK).body(new RestResponse<List<DoctorResponse>>(HttpStatusResponse.OK, true,
+                                responses, HttpStatusResponse.SUCCESS_MESSAGE, null));
         }
 
-        /**
-         * Create a new doctor
-         * 
-         * @param request
-         * @return
-         */
         @PostMapping("")
         public ResponseEntity<RestResponse<DoctorResponse>> handleCreateDoctor(
                         @Valid @RequestBody AdminDoctorDTO.CreateDoctorRequest request) {
 
                 DoctorResponse response = doctorService.handleCreateDoctor(request);
-                return ResponseEntity.ok(new RestResponse<DoctorResponse>(200, true,
+                return ResponseEntity.status(HttpStatusResponse.CREATED).body(new RestResponse<DoctorResponse>(HttpStatusResponse.CREATED, true,
                                 response, HttpStatusResponse.SUCCESS_MESSAGE, null));
         }
 
-        /**
-         * Update a doctor
-         * 
-         * @param id
-         * @param request
-         * @return
-         */
         @PutMapping("/{id}")
         public ResponseEntity<RestResponse<DoctorResponse>> handleUpdateDoctor(
                         @PathVariable(name = "id", required = true) Long id,
-                        @RequestBody AdminDoctorDTO.UpdateDoctorRequest request) {
+                        @Valid @RequestBody AdminDoctorDTO.UpdateDoctorRequest request) {
                 DoctorResponse response = doctorService.handleUpdateDoctor(id, request);
-                return ResponseEntity.ok(new RestResponse<DoctorResponse>(200, true,
+                return ResponseEntity.status(HttpStatusResponse.OK).body(new RestResponse<DoctorResponse>(HttpStatusResponse.OK, true,
                                 response, HttpStatusResponse.SUCCESS_MESSAGE, null));
         }
 
-        /**
-         * Delete a doctor
-         * 
-         * @param id
-         * @return
-         */
-        @DeleteMapping("/{id}")
-        public ResponseEntity<RestResponse<?>> handleDeleteDoctor(@PathVariable(name = "id", required = true) Long id) {
-                this.doctorService.handleDeleteDoctor(id);
-                return ResponseEntity.ok(new RestResponse<>(200, true,
-                                null, HttpStatusResponse.SUCCESS_MESSAGE, null));
+        @PutMapping("/work-day/{id}")
+        public ResponseEntity<RestResponse<DoctorResponse>> handleUpdateDoctorWorkDay(@PathVariable(name = "id", required = true) Long id,
+                        @Valid @RequestBody AdminDoctorDTO.UpdateDoctorWorkDayRequest request) {
+
+                DoctorResponse response = doctorService.handleUpdateDoctorWorkDay(id, request);
+                return ResponseEntity.status(HttpStatusResponse.OK).body(new RestResponse<DoctorResponse>(HttpStatusResponse.OK, true,
+                                response, HttpStatusResponse.SUCCESS_MESSAGE, null));
         }
 }

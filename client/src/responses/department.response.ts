@@ -5,11 +5,9 @@ import type { RoomResponse } from "./room.response";
 type DepartmentResponse = {
     id: number,
     name: string,
-
+    
     rooms: RoomResponse[],
-
     doctors: DoctorResponse[],
-
     appointments: AppointmentResponse[]
 }
 

@@ -1,77 +1,70 @@
-import avatar from '../../assets/images/doctor/avatar.png'
+import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import NurseSection from './nurse.section';
+import { getDoctorList } from '../../services/doctor.service';
+import useCallApi from '../../hooks/useCallApi';
+import type { DoctorResponse } from '../../responses/doctor.response';
 
 const TeamSection = () => {
+    const { execute } = useCallApi();
+    const [doctors, setDoctors] = useState<DoctorResponse[]>([]);
 
-    const nurses = [
-        {
-            id: 1,
-            image: avatar,
-            name: "BS Nguyễn Spoce Tech",
-            position: "Trưởng khoa Spoce Tech",
-            detail: "TS Đa khoa – Đại học Y Dược TP. Hồ Chí Minh",
-        },
-        {
-            id: 2,
-            image: avatar,
-            name: "BS Trần Văn Minh",
-            position: "Bác sĩ Nội tổng quát",
-            detail: "Thạc sĩ Y học – Đại học Y Hà Nội",
-        },
-        {
-            id: 3,
-            image: avatar,
-            name: "BS Lê Thị Hương",
-            position: "Bác sĩ Nhi khoa",
-            detail: "Chuyên khoa I – Bệnh viện Nhi Đồng 1",
-        },
-        {
-            id: 4,
-            image: avatar,
-            name: "BS Phạm Quang Huy",
-            position: "Bác sĩ Ngoại khoa",
-            detail: "TS Phẫu thuật – Đại học Y Dược TP. Hồ Chí Minh",
-        },
-        {
-            id: 5,
-            image: avatar,
-            name: "BS Đỗ Thị Mai",
-            position: "Bác sĩ Sản phụ khoa",
-            detail: "Thạc sĩ Y khoa – Bệnh viện Từ Dũ",
-        },
-        {
-            id: 6,
-            image: avatar,
-            name: "BS Vũ Ngọc Tuấn",
-            position: "Bác sĩ Tim mạch",
-            detail: "Chuyên khoa II – Viện Tim TP. Hồ Chí Minh",
-        },
-        {
-            id: 7,
-            image: avatar,
-            name: "BS Nguyễn Thị Thu Hà",
-            position: "Bác sĩ Da liễu",
-            detail: "Thạc sĩ Y học – Đại học Y khoa Phạm Ngọc Thạch",
-        },
-        {
-            id: 8,
-            image: avatar,
-            name: "BS Bùi Văn Phúc",
-            position: "Bác sĩ Tai Mũi Họng",
-            detail: "Chuyên khoa I – Bệnh viện Tai Mũi Họng TP. HCM",
-        },
-    ];
+    useEffect(() => {
+        loadDoctors();
+    }, []);
 
+    const loadDoctors = async () => {
+        const response = await execute(getDoctorList());
+        if (response?.result) {
+            const data: DoctorResponse[] = response.data;
+            setDoctors(data);
+        }
+    };
 
     return (
-        <div className="nurse-team px-4 lg:px-20 pt-5 pb-10">
+        <div id="doctor-section" className="nurse-team px-4 lg:px-20 pt-5 pb-10">
             <div className="nurse-team__wrap">
-                <div className="nurse-team__title font-bold text-2xl text-blue-600 text-left lg:text-center my-5">Đội ngũ bác sĩ kinh nghiệm</div>
-                <div className="nurse-nurses grid grid-cols-2 lg:grid-cols-4 gap-4">
-                    {nurses && nurses.slice(0, 4).map((nurse, id) => (
-                        <NurseSection key={id} {...nurse} />
+                <motion.div 
+                    className="font-bold text-2xl text-blue-600 text-left lg:text-center my-5"
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    viewport={{ once: true }}
+                >
+                    Đội ngũ bác sĩ kinh nghiệm
+                </motion.div>
+                
+                <motion.div 
+                    className="grid grid-cols-2 lg:grid-cols-4 gap-4"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-100px" }}
+                >
+                    {doctors.map((doctor, idx) => (
+                        <motion.div
+                            key={idx}
+                            variants={{
+                                hidden: { 
+                                    opacity: 0, 
+                                    y: 60,
+                                    scale: 0.8
+                                },
+                                visible: { 
+                                    opacity: 1, 
+                                    y: 0,
+                                    scale: 1,
+                                    transition: {
+                                        duration: 0.6,
+                                        delay: idx * 0.15,
+                                        ease: "easeOut"
+                                    }
+                                }
+                            }}
+                        >
+                            <NurseSection {...doctor} />
+                        </motion.div>
                     ))}
-                </div>
+                </motion.div>
             </div>
         </div>
     )

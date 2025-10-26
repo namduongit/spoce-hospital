@@ -1,5 +1,6 @@
 package com.appointmenthostpital.server.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -8,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,34 +24,50 @@ public class MedicineModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
     @Column(nullable = false)
     private String name;
+    
     private String description;
-
+    
+    @Column(nullable = false)
+    private String unit;
+    
+    @Column(nullable = false)
+    private Long price;
+    
+    private String manufacturer;
+    
+    @Column(columnDefinition = "enum('ACTIVE', 'INACTIVE', 'OUT_OF_STOCK') default 'ACTIVE'")
+    private String status = "ACTIVE";
+    
+    @Column(nullable = false)
+    private Integer currentStock = 0; 
+    
+    @Column(nullable = false)
+    private Integer minStock = 0;
+    
+    @Column(nullable = false)
+    private Integer maxStock = 1000; 
+    
     @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
     @JsonBackReference
-    @JoinColumn(name = "category_id")
-    private CategoryModel categoryModel;
+    private MedicineCategoryModel categoryModel;
 
-    @OneToMany(mappedBy = "medicineModel", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "medicine", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
-    private List<UnitModel> medicineUnitModels;
+    private List<ImportTicketItemModel> importTicketItems = new ArrayList<>();
 
-    @OneToMany(mappedBy = "medicineModel", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "medicine", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
-    private List<DetailModel> detailModels;
+    private List<ExportTicketItemModel> exportTicketItems = new ArrayList<>();
+
+    @OneToMany(mappedBy = "medicineModel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<PrescriptionInvoiceDetailModel> prescriptionInvoiceDetails = new ArrayList<>();
 
     public MedicineModel() {
-    }
-
-    public MedicineModel(Long id, String name, String description, CategoryModel categoryModel,
-            List<UnitModel> medicineUnitModels, List<DetailModel> detailModels) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.categoryModel = categoryModel;
-        this.medicineUnitModels = medicineUnitModels;
-        this.detailModels = detailModels;
     }
 
     public Long getId() {
@@ -76,33 +94,91 @@ public class MedicineModel {
         this.description = description;
     }
 
-    public CategoryModel getCategoryModel() {
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
+    }
+
+    public String getManufacturer() {
+        return manufacturer;
+    }
+
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Integer getCurrentStock() {
+        return currentStock;
+    }
+
+    public void setCurrentStock(Integer currentStock) {
+        this.currentStock = currentStock;
+    }
+
+    public Integer getMinStock() {
+        return minStock;
+    }
+
+    public void setMinStock(Integer minStock) {
+        this.minStock = minStock;
+    }
+
+    public Integer getMaxStock() {
+        return maxStock;
+    }
+
+    public void setMaxStock(Integer maxStock) {
+        this.maxStock = maxStock;
+    }
+
+    public MedicineCategoryModel getCategoryModel() {
         return categoryModel;
     }
 
-    public void setCategoryModel(CategoryModel categoryModel) {
+    public void setCategoryModel(MedicineCategoryModel categoryModel) {
         this.categoryModel = categoryModel;
     }
 
-    public List<UnitModel> getMedicineUnitModels() {
-        return medicineUnitModels;
+    public List<ImportTicketItemModel> getImportTicketItems() {
+        return importTicketItems;
     }
 
-    public void setMedicineUnitModels(List<UnitModel> medicineUnitModels) {
-        this.medicineUnitModels = medicineUnitModels;
+    public void setImportTicketItems(List<ImportTicketItemModel> importTicketItems) {
+        this.importTicketItems = importTicketItems;
     }
 
-    public List<DetailModel> getDetailModels() {
-        return detailModels;
+    public List<ExportTicketItemModel> getExportTicketItems() {
+        return exportTicketItems;
     }
 
-    public void setDetailModels(List<DetailModel> detailModels) {
-        this.detailModels = detailModels;
+    public void setExportTicketItems(List<ExportTicketItemModel> exportTicketItems) {
+        this.exportTicketItems = exportTicketItems;
     }
 
-    @Override
-    public String toString() {
-        return "MedicineModel [id=" + id + ", name=" + name + ", description=" + description + ", categoryModel="
-                + categoryModel + ", medicineUnitModels=" + medicineUnitModels + ", detailModels=" + detailModels + "]";
+    public List<PrescriptionInvoiceDetailModel> getPrescriptionInvoiceDetails() {
+        return prescriptionInvoiceDetails;
+    }
+
+    public void setPrescriptionInvoiceDetails(List<PrescriptionInvoiceDetailModel> prescriptionInvoiceDetails) {
+        this.prescriptionInvoiceDetails = prescriptionInvoiceDetails;
     }
 }

@@ -13,10 +13,10 @@ type AppointmentResponse = {
     departmentName: string,
 
     doctorId: number,
-    doctorName: string,
+    doctorName: string
 
     roomId: number,
-    roomName: string,
+    roomName: string
 }
 
 export type { AppointmentResponse };

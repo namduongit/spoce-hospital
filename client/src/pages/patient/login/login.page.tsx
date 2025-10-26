@@ -4,8 +4,8 @@ import { NavLink, useNavigate } from "react-router-dom";
 import thumbnail from "../../../assets/images/auth/thumbnail.png";
 import person from "../../../assets/images/auth/person.png";
 import useCallApi from "../../../hooks/useCallApi";
-import { useAuth } from "../../../contexts/authContext";
-import { login } from "../../../services/_auth.service";
+import { useAuth } from "../../../contexts/auth.context";
+import { login } from "../../../services/auth.service";
 
 
 const LoginPage = () => {
@@ -13,13 +13,17 @@ const LoginPage = () => {
     const auth = useAuth();
 
     const navigate = useNavigate();
-    const [email, setEmail] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
+
+    const [submitData, setSubmitData] = useState({ email: "", password: "" });
+
+    const handleChangeSubmit = (field: keyof typeof submitData, value: string) => {
+        setSubmitData(prev => ({ ...prev, [field]: value }));
+    }
 
     const [showPassword, setShowPassword] = useState<boolean>(false);
 
     async function handleLogin() {
-        const restResponse = await execute(login(email, password));
+        const restResponse = await execute(login(submitData));
         notify(restResponse!, "Đăng nhập thành công");
         if (restResponse?.result) {
             auth.setAuth(restResponse.data);
@@ -37,25 +41,25 @@ const LoginPage = () => {
                     </div>
 
                     <div className="space-y-4">
-                        <div className="relative flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500">
+                        <div className="relative flex items-center ring-1 focus:ring-blue-500 focus-within:ring-2 focus-within:ring-blue-500 rounded-lg px-3 py-2">
                             <i className="fa-solid fa-envelope-circle-check text-gray-400 mr-2"></i>
                             <input
                                 type="email"
                                 placeholder="email@example.com"
                                 className="flex-1 outline-none bg-transparent"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                value={submitData.email}
+                                onChange={(e) => handleChangeSubmit("email", e.target.value)}
                             />
                         </div>
 
-                        <div className="relative flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500">
+                        <div className="relative flex items-center ring-1 focus:ring-blue-500 focus-within:ring-2 focus-within:ring-blue-500 rounded-lg px-3 py-2">
                             <i className="fa-solid fa-lock text-gray-400 mr-2"></i>
                             <input
                                 type={showPassword ? "text" : "password"}
                                 placeholder="••••••••"
                                 className="flex-1 outline-none bg-transparent"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                value={submitData.password}
+                                onChange={(e) => handleChangeSubmit("password", e.target.value)}
                             />
                             <i
                                 className={`fa-solid ${showPassword ? "fa-eye" : "fa-eye-slash"
@@ -64,7 +68,7 @@ const LoginPage = () => {
                             ></i>
                         </div>
 
-                        <div className="relative flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500">
+                        <div className="relative flex items-center ring-1 focus:ring-blue-500 focus-within:ring-2 focus-within:ring-blue-500 rounded-lg px-3 py-2">
                             <i className="fa-solid fa-key text-gray-400 mr-2"></i>
                             <input
                                 type="text"

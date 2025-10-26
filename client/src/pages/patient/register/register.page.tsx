@@ -2,7 +2,7 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import thumbnail from "../../../assets/images/auth/thumbnail.png";
 import person from "../../../assets/images/auth/person.png";
-import { register } from "../../../services/_auth.service";
+import { register } from "../../../services/auth.service";
 import useCallApi from "../../../hooks/useCallApi";
 
 const RegisterPage = () => {
@@ -43,7 +43,7 @@ const RegisterPage = () => {
                     </div>
 
                     <div className="space-y-4">
-                        <div className="relative flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500">
+                        <div className="relative flex items-center ring-1 focus:ring-blue-500 focus-within:ring-2 focus-within:ring-blue-500 rounded-lg px-3 py-2">
                             <i className="fa-solid fa-envelope-circle-check text-gray-400 mr-2"></i>
                             <input
                                 type="email"
@@ -54,7 +54,7 @@ const RegisterPage = () => {
                             />
                         </div>
 
-                        <div className="relative flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500">
+                        <div className="relative flex items-center ring-1 focus:ring-blue-500 focus-within:ring-2 focus-within:ring-blue-500 rounded-lg px-3 py-2">
                             <i className="fa-solid fa-lock text-gray-400 mr-2"></i>
                             <input
                                 type={showPassword ? "text" : "password"}
@@ -70,7 +70,7 @@ const RegisterPage = () => {
                             ></i>
                         </div>
 
-                        <div className="relative flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500">
+                        <div className="relative flex items-center ring-1 focus:ring-blue-500 focus-within:ring-2 focus-within:ring-blue-500 rounded-lg px-3 py-2">
                             <i className="fa-solid fa-lock text-gray-400 mr-2"></i>
                             <input
                                 type={showConfirmPasssword ? "text" : "password"}
@@ -91,7 +91,7 @@ const RegisterPage = () => {
                                 * Mật khẩu xác nhận phải giống với mật khẩu đăng ký
                             </span>
                         )}
-                        <div className="relative flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500">
+                        <div className="relative flex items-center ring-1 focus:ring-blue-500 focus-within:ring-2 focus-within:ring-blue-500 rounded-lg px-3 py-2">
                             <i className="fa-solid fa-key text-gray-400 mr-2"></i>
                             <input
                                 type="text"

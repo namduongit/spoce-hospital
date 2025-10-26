@@ -1,0 +1,8 @@
+services:
+  client:
+    build: 
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: client-spoce-hostpital
+    ports:
+      - "3000:3000"

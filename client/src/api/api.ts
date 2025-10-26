@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { UserAuth } from "../contexts/authContext";
+import type { UserAuth } from "../contexts/auth.context";
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
@@ -20,6 +20,9 @@ api.interceptors.response.use(
     return response;
   },
   (error: any) => {
+    if (!error.response) {
+      throw new Error("Network Error");
+    }
     return error.response;
   }
 );

@@ -6,13 +6,13 @@ import { createDepartment } from "../../../services/department.service";
 
 import useCallApi from "../../../hooks/useCallApi";
 
-type AddDepartment = {
+type AddDepartmentProps = {
     setIsOpenCreateDepartment: (isOpenCreateDepartment: boolean) => void,
     departments: DepartmentResponse[],
     onSuccess?: () => void
 }
 
-const AddDepartment = (props: AddDepartment) => {
+const AddDepartment = (props: AddDepartmentProps) => {
     const { departments, setIsOpenCreateDepartment, onSuccess } = props;
 
     const { execute, notify, loading } = useCallApi();

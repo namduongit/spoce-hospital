@@ -24,11 +24,6 @@ public class DepartmentController {
     @Autowired
     private DepartmentService departmentService;
 
-    /**
-     * Get list of departments
-     * 
-     * @return
-     */
     @GetMapping("")
     public ResponseEntity<RestResponse<List<DepartmentResponse>>> handleGetDepartmentList() {
         List<DepartmentResponse> response = this.departmentService.handleGetDepartmentList();
@@ -36,12 +31,6 @@ public class DepartmentController {
                 response, HttpStatusResponse.SUCCESS_MESSAGE, null));
     }
 
-    /**
-     * Create new department
-     * 
-     * @param createDepartmentRequest
-     * @return
-     */
     @PostMapping("")
     public ResponseEntity<RestResponse<DepartmentResponse>> handleCreateDepartment(
             @Valid @RequestBody AdminDepartmentDTO.CreateDepartmentRequest request) {

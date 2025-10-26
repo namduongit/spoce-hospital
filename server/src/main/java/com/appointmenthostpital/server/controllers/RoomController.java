@@ -27,29 +27,18 @@ public class RoomController {
     @Autowired
     private RoomService roomService;
 
-    /**
-     * Get list of rooms
-     * 
-     * @return
-     */
     @GetMapping("")
     public ResponseEntity<RestResponse<List<RoomResponse>>> handleGetRoomList() {
-        List<RoomResponse> roomResponses = this.roomService.handleGetRoomList();
-        return ResponseEntity.ok().body(new RestResponse<List<RoomResponse>>(200, true,
-                roomResponses, HttpStatusResponse.SUCCESS_MESSAGE, null));
+        List<RoomResponse> responses = this.roomService.handleGetRoomList();
+        return ResponseEntity.status(HttpStatusResponse.OK).body(new RestResponse<List<RoomResponse>>(200, true,
+                responses, HttpStatusResponse.SUCCESS_MESSAGE, null));
     }
 
-    /**
-     * Create a new room
-     * 
-     * @param request
-     * @return
-     */
     @PostMapping("")
     public ResponseEntity<RestResponse<RoomResponse>> handleCreateRoom(
             @Valid @RequestBody AdminRoomDTO.CreateRoomRequest request) {
         RoomResponse response = this.roomService.handleCreateRoom(request);
-        return ResponseEntity.ok().body(new RestResponse<RoomResponse>(
+        return ResponseEntity.status(HttpStatusResponse.CREATED).body(new RestResponse<RoomResponse>(
                 HttpStatusResponse.CREATED,
                 true,
                 response,
@@ -57,13 +46,6 @@ public class RoomController {
                 null));
     }
 
-    /**
-     * Update a room
-     * 
-     * @param roomId
-     * @param request
-     * @return
-     */
     @PutMapping("/{id}")
     public ResponseEntity<RestResponse<RoomResponse>> handleUpdateRoom(
             @PathVariable(name = "id", required = true) Long id,
@@ -77,12 +59,6 @@ public class RoomController {
                 null));
     }
 
-    /**
-     * Delete a room
-     * 
-     * @param roomId
-     * @return
-     */
     @DeleteMapping("/{id}")
     public ResponseEntity<RestResponse<?>> handleDeleteRoom(
             @PathVariable(name = "id", required = true) Long id) {

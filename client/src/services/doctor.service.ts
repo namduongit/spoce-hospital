@@ -14,17 +14,18 @@ type CreateDoctorParams = {
 }
 
 type UpdateDoctorParams = {
-    image?: string,
-    fullName?: string,
-    gender?: string,
-    phone?: string,
-    birthDate?: string,
-    workDay?: string,
+    image: string,
+    fullName: string,
+    gender: string,
+    phone: string,
+    birthDate: string,
+    
+    workDate?: string,
 
-    degree?: string,
-    status?: string,
+    degree: string,
+    status: string,
 
-    departmentId?: number,
+    departmentId: string,
 }
 
 export const getDoctorList = async () => {
@@ -47,6 +48,30 @@ export const updateDoctor = async (id: number, params: UpdateDoctorParams) => {
 
 export const deleteDoctor = async (id: number) => {
     const response = await api.delete(`/api/doctors/${id}`);
+    const restResponse: RestResponse = await response.data;
+    return restResponse;
+}
+
+export const getDoctorProfile = async () => {
+    const response = await api.get('/api/doctors/profile');
+    const restResponse: RestResponse = await response.data;
+    return restResponse;
+}
+
+export const updateDoctorProfile = async (params: UpdateDoctorParams) => {
+    const response = await api.put('/api/doctors/profile', params);
+    const restResponse: RestResponse = await response.data;
+    return restResponse;
+}
+
+export const updateDoctorWorkDate = async (workDate: string) => {
+    const response = await api.put('/api/doctors/profile/work-date', { workDate });
+    const restResponse: RestResponse = await response.data;
+    return restResponse;
+}
+
+export const getDoctorSchedule = async () => {
+    const response = await api.get('/api/doctors/schedule');
     const restResponse: RestResponse = await response.data;
     return restResponse;
 }

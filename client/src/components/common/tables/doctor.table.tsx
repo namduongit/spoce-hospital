@@ -5,27 +5,23 @@ import EditDoctor from "../edits/doctor.edit";
 
 import type { DoctorResponse } from "../../../responses/doctor.response";
 import type { DepartmentResponse } from "../../../responses/department.response";
+import EditCalendarModal from "../edits/calendar.edit";
 
-import { deleteDoctor } from "../../../services/doctor.service";
-
-import useCallApi from "../../../hooks/useCallApi";
-
-type DoctorTable = {
+type DoctorTableProps = {
     doctors: DoctorResponse[],
     departments: DepartmentResponse[],
     onSuccess?: () => void,
 }
 
-const DoctorTable = (props: DoctorTable) => {
+const DoctorTable = (props: DoctorTableProps) => {
     const { doctors, departments, onSuccess } = props;
-
-    const { execute, notify, doFunc } = useCallApi();
 
     const [page, setPage] = useState<number>(1);
     const [row, setRow] = useState<number>(5);
 
     const [showDetail, setShowDetail] = useState<boolean>(false);
     const [showEdit, setShowEdit] = useState<boolean>(false);
+    const [showWorkCalendar, setShowWorkCalendar] = useState<boolean>(false);
 
     const [doctorSelect, setDoctorSelect] = useState<DoctorResponse>({} as DoctorResponse);
 
@@ -39,12 +35,9 @@ const DoctorTable = (props: DoctorTable) => {
         setShowEdit(true);
     }
 
-    const handleDelete = async (doctorSelect: DoctorResponse) => {
-        const restResponse = await execute(deleteDoctor(doctorSelect.id));
-        notify(restResponse!, "Xóa bác sĩ thành công");
-        doFunc(() => {
-            onSuccess?.();
-        });
+    const handleShowWorkCalendar = (doctorSelect: DoctorResponse) => {
+        setDoctorSelect(doctorSelect);
+        setShowWorkCalendar(true);
     }
 
     return (
@@ -58,7 +51,6 @@ const DoctorTable = (props: DoctorTable) => {
                         <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Thuộc khoa</th>
                         <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Trạng thái</th>
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-700">Hành động</th>
-
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
@@ -66,8 +58,8 @@ const DoctorTable = (props: DoctorTable) => {
                         <tr key={doctor.id} className={`${idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-blue-50 transition-colors`}>
                             <td className="px-4 py-3 text-sm text-gray-700 font-medium"># {doctor.id}</td>
                             <td className="px-4 py-3 text-sm text-gray-700 font-medium">{doctor.email}</td>
-                            <td className={`px-4 py-3 text-sm text-gray-700 font-medium ${!doctor.fullName && 'italic'}`}>{doctor.fullName ?? "Chưa cập nhật"}</td>
-                            <td className={`px-4 py-3 text-sm text-gray-700 font-medium ${!doctor.departmentName && 'italic'}`}>{doctor.departmentName ? doctor.departmentName : "Chưa có khoa"}</td>
+                            <td className={`px-4 py-3 text-sm text-gray-700 font-medium ${!doctor.fullName && 'italic'}`}>{(doctor.fullName && doctor.fullName !== "") ? doctor.fullName : "Chưa cập nhật"}</td>
+                            <td className={`px-4 py-3 text-sm text-gray-700 font-medium ${!doctor.departmentName && 'italic'}`}>{(doctor.departmentName && doctor.departmentName !== "") ? doctor.departmentName : "Chưa có khoa"}</td>
                             <td className="px-4 py-3 text-sm text-gray-700 font-medium">
                                 {doctor.status === 'AVAILABLE' && <span className="px-2 py-1 rounded-full bg-green-100 text-green-800 text-xs font-semibold">Đang làm</span>}
                                 {doctor.status === 'OFFLINE' && <span className="px-2 py-1 rounded-full bg-red-100 text-red-800 text-xs font-semibold">Tạm nghỉ</span>}
@@ -81,23 +73,25 @@ const DoctorTable = (props: DoctorTable) => {
                                     </button>
 
                                     <button className="px-0.75 py-0.75 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50"
-                                        onClick={() => handleEdit(doctor)}>
-                                        <i className="fa-solid fa-wrench"></i>
+                                        onClick={() => handleShowWorkCalendar(doctor)}
+                                    >
+                                        <i className="fa-solid fa-calendar-days"></i>
                                     </button>
 
                                     <button className="px-0.75 py-0.75 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50"
-                                        onClick={() => handleDelete(doctor)}>
-                                        <i className="fa-solid fa-trash"></i>
+                                        onClick={() => handleEdit(doctor)}>
+                                        <i className="fa-solid fa-wrench"></i>
                                     </button>
                                 </div>
                             </td>
                         </tr>
                     )) : (
                         <tr>
-                            <td colSpan={5} className="px-4 py-3 text-sm text-gray-600 text-center">
-                                <div className="flex justify-center items-center gap-3">
-                                    <i className="fa-solid fa-inbox"></i>
-                                    <span>Không tìm thấy dữ liệu</span>
+                            <td colSpan={6} className="px-4 py-8 text-center text-gray-500">
+                                <div className="flex flex-col items-center">
+                                    <i className="fa-solid fa-user-doctor text-4xl mb-3 text-gray-300"></i>
+                                    <p className="text-lg font-medium">Không có bác sĩ nào</p>
+                                    <p className="text-sm mt-1">Chưa có dữ liệu để hiển thị</p>
                                 </div>
                             </td>
                         </tr>
@@ -107,6 +101,7 @@ const DoctorTable = (props: DoctorTable) => {
             <TablePagination array={props.doctors} page={page} row={row} setPage={setPage} setRow={setRow} />
             {(showDetail && doctorSelect) && (<DoctorDetail doctorSelect={doctorSelect} setShowDetail={setShowDetail} onSuccess={onSuccess} />)}
             {(showEdit && doctorSelect) && <EditDoctor doctorSelect={doctorSelect} departments={departments} onSuccess={onSuccess} setShowEdit={setShowEdit} />}
+            {(showWorkCalendar && doctorSelect) && (<EditCalendarModal doctorSelect={doctorSelect} setShowCalendar={setShowWorkCalendar} onSuccess={onSuccess}  />)}
         </>
     )
 }

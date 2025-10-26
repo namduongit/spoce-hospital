@@ -1,15 +1,23 @@
 package com.appointmenthostpital.server.dtos.user;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class UserAppointmentDTO {
     public static class CreateAppointmentRequest {
+        @NotNull(message = "Nhập họ tên người khám")
         @NotBlank(message = "Họ và tên không được để trống")
         private String fullName;
+
+        @NotNull(message = "Nhập số điện thoại người khám")
         @NotBlank(message = "Số điện thoại không được để trống")
         private String phone;
+
+        @NotNull(message = "Nhập ngày hẹn")
         @NotBlank(message = "Ngày hẹn không được để trống")
         private String date;
+
+        @NotNull(message = "Nhập giờ hẹn")
         @NotBlank(message = "Giờ hẹn không được để trống")
         private String time;
         private String note;

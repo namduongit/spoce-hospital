@@ -22,7 +22,9 @@ type EditAppointment = {
 const EditAppointment = (props: EditAppointment) => {
     const { appointmentSelect, setShowEdit, departments, rooms, doctors, onSuccess } = props;
 
-    const { execute, notify, doFunc, loading } = useCallApi();
+    const { execute, notify, loading } = useCallApi();
+
+    const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
     const [submitData, setSubmitData] = useState({
         phone: "",
@@ -42,22 +44,38 @@ const EditAppointment = (props: EditAppointment) => {
         e.preventDefault();
         const restResponse = await execute(updateAppointment(appointmentSelect.id, submitData));
         notify(restResponse!, "Cập nhật lịch khám thành công");
-        doFunc(() => {
+        if (restResponse?.result) {
             onSuccess?.();
             setShowEdit(false);
+        }
+    }
+
+    const handleClose = () => {
+        setSubmitData({
+            phone: "",
+            departmentId: "",
+            doctorId: "",
+            roomId: "",
+            time: "",
+            note: "",
+            status: ""
         });
+        setShowEdit(false);
     }
 
     useEffect(() => {
         setSubmitData({
             phone: appointmentSelect.phone,
+
             departmentId: appointmentSelect.departmentId?.toString(),
             doctorId: appointmentSelect.doctorId?.toString(),
             roomId: appointmentSelect.roomId?.toString(),
+
             time: appointmentSelect.time,
             note: appointmentSelect.note,
             status: appointmentSelect.status
         });
+        setIsSuccess(appointmentSelect.status == "COMPLETED" || appointmentSelect.status == "CANCELLED");
     }, [appointmentSelect]);
 
     return (
@@ -66,7 +84,7 @@ const EditAppointment = (props: EditAppointment) => {
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-bold text-gray-800">Sửa lịch khám - # {appointmentSelect.id}</h2>
                     <button
-                        onClick={() => setShowEdit(false)}
+                        onClick={handleClose}
                         className="text-gray-500 hover:text-gray-700 text-xl"
                     >
                         x
@@ -94,8 +112,9 @@ const EditAppointment = (props: EditAppointment) => {
                             <div className="relative">
                                 <input
                                     type="text"
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    required
+                                    className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500
+                                    ${isSuccess ? "bg-gray-50" : "bg-white"}`}
+                                    disabled={isSuccess}
                                     value={submitData.phone}
                                     onChange={(e) => handleFormChange("phone", e.target.value)}
                                 />
@@ -106,12 +125,13 @@ const EditAppointment = (props: EditAppointment) => {
                     <div className="flex gap-2">
                         <div className="flex-1">
                             <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Khoa khám *
+                                Khoa khám
                             </label>
                             <select
                                 name="role"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                required
+                                className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500
+                                    ${isSuccess ? "bg-gray-50" : "bg-white"}`}
+                                disabled={isSuccess}
                                 value={submitData.departmentId}
                                 onChange={(e) => handleFormChange("departmentId", e.target.value)}
                             >
@@ -125,12 +145,13 @@ const EditAppointment = (props: EditAppointment) => {
                         </div>
                         <div className="flex-1">
                             <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Trạng thái *
+                                Trạng thái
                             </label>
                             <select
                                 name="role"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                required
+                                className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500
+                                    ${isSuccess ? "bg-gray-50" : "bg-white"}`}
+                                disabled={isSuccess}
                                 value={submitData.status}
                                 onChange={(e) => handleFormChange("status", e.target.value)}
                             >
@@ -147,12 +168,13 @@ const EditAppointment = (props: EditAppointment) => {
                     <div className="flex gap-2">
                         <div className="flex-1">
                             <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Bác sĩ *
+                                Bác sĩ
                             </label>
                             <select
                                 name="role"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                required
+                                className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500
+                                    ${isSuccess ? "bg-gray-50" : "bg-white"}`}
+                                disabled={isSuccess}
                                 value={submitData.doctorId}
                                 onChange={(e) => handleFormChange("doctorId", e.target.value)}
                             >
@@ -166,12 +188,13 @@ const EditAppointment = (props: EditAppointment) => {
                         </div>
                         <div className="flex-1">
                             <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Phòng khám *
+                                Phòng khám
                             </label>
                             <select
                                 name="role"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                required
+                                className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500
+                                    ${isSuccess ? "bg-gray-50" : "bg-white"}`}
+                                disabled={isSuccess}
                                 value={submitData.roomId}
                                 onChange={(e) => handleFormChange("roomId", e.target.value)}
                             >
@@ -191,8 +214,9 @@ const EditAppointment = (props: EditAppointment) => {
                         </label>
                         <div className="relative">
                             <input
-                                className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                required
+                                className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500
+                                    ${isSuccess ? "bg-gray-50" : "bg-white"}`}
+                                disabled={isSuccess}
                                 value={submitData.time}
                                 onChange={(e) => handleFormChange("time", e.target.value)}
                             />
@@ -204,9 +228,9 @@ const EditAppointment = (props: EditAppointment) => {
                             Ghi chú
                         </label>
                         <textarea
-                            className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            required
-                            rows={3}
+                            className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500
+                                    ${isSuccess ? "bg-gray-50" : "bg-white"}`}
+                            disabled={isSuccess} rows={3}
                             value={submitData.note}
                             onChange={(e) => handleFormChange("note", e.target.value)}
                         >
@@ -219,6 +243,7 @@ const EditAppointment = (props: EditAppointment) => {
                         <button
                             type="button"
                             className="flex-1 px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50 transition"
+                            onClick={handleClose}
                         >
                             Hủy
                         </button>

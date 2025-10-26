@@ -8,6 +8,9 @@ public class RoomResponse {
     private Long departmentId;
     private String departmentName;
 
+    public RoomResponse() {
+    }
+
     public Long getId() {
         return id;
     }
