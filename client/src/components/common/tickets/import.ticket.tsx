@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { ImportTicketResponse } from "../../../responses/import-ticket.response";
-import { formatPriceVND } from "../../../utils/formatNumber.util";
+import { formatPriceVND } from "../../../utils/format-number.util";
 import useCallApi from "../../../hooks/useCallApi";
 import { changeStatusImportTicket } from "../../../services/import-ticket.service";
 

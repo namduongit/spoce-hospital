@@ -1,6 +1,6 @@
 import type { ImportTicketResponse } from "../../../responses/import-ticket.response";
-import { formatDateToHourAndDay } from "../../../utils/formatDate.util";
-import { formatPriceVND } from "../../../utils/formatNumber.util";
+import { formatDateToHourAndDay } from "../../../utils/format-date.util";
+import { formatPriceVND } from "../../../utils/format-number.util";
 
 type ImportTicketDetail = {
     importTicketSelect: ImportTicketResponse,

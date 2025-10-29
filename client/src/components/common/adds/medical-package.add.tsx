@@ -3,7 +3,7 @@ import { useState } from "react";
 import useCallApi from "../../../hooks/useCallApi";
 import { createMedicalPackage } from "../../../services/medical-package.service";
 import { medicalPackageStatus } from "../../../constants/status.constant";
-import { formatPriceVND } from "../../../utils/formatNumber.util";
+import { formatPriceVND } from "../../../utils/format-number.util";
 
 
 type AddMedicalPackageProps = {

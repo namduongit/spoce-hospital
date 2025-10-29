@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 import useCallApi from "../../../hooks/useCallApi";
 import type { MedicineResponse } from "../../../responses/medicine.response";
-import { formatDateVi, formatDateEn } from "../../../utils/formatDate.util";
+import { formatDateVi, formatDateEn } from "../../../utils/format-date.util";
 import { createExportTicket } from "../../../services/export-ticket.service";
 
 type ExportItem = {

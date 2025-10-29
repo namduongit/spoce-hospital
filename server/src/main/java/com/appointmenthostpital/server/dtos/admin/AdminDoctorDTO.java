@@ -128,10 +128,6 @@ public class AdminDoctorDTO {
     }
 
     public static class UpdateDoctorRequest {
-        @NotNull(message = "Yêu cầu nhập ảnh đại diện")
-        // @NotBlank(message = "Không được để trống ảnh đại diện")
-        private String image;
-
         @NotNull(message = "Yêu cầu nhập họ và tên")
         @NotBlank(message = "Không được để trống họ và tên")
         private String fullName;
@@ -158,14 +154,6 @@ public class AdminDoctorDTO {
 
         @NotNull(message = "Không được để trống khoa")
         private Long departmentId;
-
-        public String getImage() {  
-            return image;
-        }
-
-        public void setImage(String image) {
-            this.image = image;
-        }
 
         public String getFullName() {
             return fullName;

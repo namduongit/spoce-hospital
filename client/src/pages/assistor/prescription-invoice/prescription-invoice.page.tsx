@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getPrescriptionInvoiceList } from "../../../services/prescription-invoice.service";
-import { formatDateVi } from "../../../utils/formatDate.util";
+import { formatDateVi } from "../../../utils/format-date.util";
 import useCallApi from "../../../hooks/useCallApi";
 import { prescriptionInvoiceStatus } from "../../../constants/status.constant";
 import type { PrescriptionInvoiceResponse } from "../../../responses/prescription-invoice.response";

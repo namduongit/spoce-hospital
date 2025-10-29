@@ -1,5 +1,5 @@
 import type { ExportTicketResponse } from "../../../responses/export-ticket.response";
-import { formatDateToHourAndDay } from "../../../utils/formatDate.util";
+import { formatDateToHourAndDay } from "../../../utils/format-date.util";
 
 type ExportTicketDetail = {
     exportTicketSelect: ExportTicketResponse,

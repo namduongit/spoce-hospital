@@ -1,5 +1,5 @@
-import { formatNumberPhone } from "../../../utils/formatNumber.util";
-import { formatDateVi } from "../../../utils/formatDate.util";
+import { formatNumberPhone } from "../../../utils/format-number.util";
+import { formatDateVi } from "../../../utils/format-date.util";
 import type { DoctorResponse } from "../../../responses/doctor.response";
 
 type DoctorDetail = {

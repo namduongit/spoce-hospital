@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { type Day, getDaysInMonth } from "../../../utils/day.util";
 import DateSection from "../../../components/sections/date.section";
 import { times } from "../../../constants/time.constant";
-import { formatDateVi } from "../../../utils/formatDate.util";
+import { formatDateVi } from "../../../utils/format-date.util";
 import useCallApi from "../../../hooks/useCallApi";
 import { createAppointment } from "../../../services/user.service";
 import { useNavigate } from "react-router-dom";

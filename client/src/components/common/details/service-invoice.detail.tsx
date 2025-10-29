@@ -1,8 +1,8 @@
 import useCallApi from "../../../hooks/useCallApi";
 import type { ServiceInvoiceResponse } from "../../../responses/service-nvoice.response";
 import { changeServiceInvoiceStatus } from "../../../services/service-invoice.service";
-import { formatDateToHourAndDay } from "../../../utils/formatDate.util";
-import { formatNumberPhone } from "../../../utils/formatNumber.util";
+import { formatDateToHourAndDay } from "../../../utils/format-date.util";
+import { formatNumberPhone } from "../../../utils/format-number.util";
 import { useState } from "react";
 
 type ServiceInvoiceDetailProps = {

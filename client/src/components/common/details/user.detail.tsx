@@ -1,6 +1,6 @@
 import type { ProfileDetailResponse } from "../../../responses/user.response";
-import { formatNumberPhone } from "../../../utils/formatNumber.util";
-import { formatDateVi } from "../../../utils/formatDate.util";
+import { formatNumberPhone } from "../../../utils/format-number.util";
+import { formatDateVi } from "../../../utils/format-date.util";
 
 type UserDetail = {
     userSelect: ProfileDetailResponse,

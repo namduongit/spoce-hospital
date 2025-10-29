@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.appointmenthostpital.server.converts.DoctorConvert;
 import com.appointmenthostpital.server.dtos.admin.AdminDoctorDTO;
@@ -29,6 +30,9 @@ public class DoctorService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private FirebaseStorageService firebaseStorageService;
 
     public DoctorProfileModel getDoctorById(Long id) {
         return this.doctorProfileRepository.findById(id).orElseThrow(() -> new NotFoundResourceException("Không tìm thấy bác sĩ"));
@@ -69,7 +73,17 @@ public class DoctorService {
     public DoctorResponse handleUpdateDoctorWorkDay(Long id, AdminDoctorDTO.UpdateDoctorWorkDayRequest request) {
         DoctorProfileModel doctorProfileModel = this.getDoctorById(id);
 
-        DoctorConvert.convertFromWorkDayRequest(doctorProfileModel, request);
+        DoctorConvert.convertFromUpdateWorkDayRequest(doctorProfileModel, request);
+        doctorProfileModel = this.doctorProfileRepository.save(doctorProfileModel);
+        return DoctorConvert.convertToResponse(doctorProfileModel);
+    }
+
+    public DoctorResponse handleUpdateDoctorImageAvatar(Long id, MultipartFile file) {
+        DoctorProfileModel doctorProfileModel = this.getDoctorById(id);
+
+        String imageUrl = firebaseStorageService.uploadImage(file);
+        doctorProfileModel.setImage(imageUrl);
+
         doctorProfileModel = this.doctorProfileRepository.save(doctorProfileModel);
         return DoctorConvert.convertToResponse(doctorProfileModel);
     }

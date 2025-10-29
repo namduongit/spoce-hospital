@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 import useCallApi from "../../../hooks/useCallApi";
 import type { MedicineCategoryResponse } from "../../../responses/medicine-category.response";
-import { formatPriceVND } from "../../../utils/formatNumber.util";
+import { formatPriceVND } from "../../../utils/format-number.util";
 import { createMedicine } from "../../../services/medicine.service";
 
 type AddMedicineModalProps = {

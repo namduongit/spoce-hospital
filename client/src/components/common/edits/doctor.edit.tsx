@@ -4,7 +4,7 @@ import { doctorStatus } from "../../../constants/status.constant";
 import type { DoctorResponse } from "../../../responses/doctor.response";
 import type { DepartmentResponse } from "../../../responses/department.response";
 
-import { updateDoctor } from "../../../services/doctor.service";
+import { updateDoctor, updateDoctorImage } from "../../../services/doctor.service";
 
 import useCallApi from "../../../hooks/useCallApi";
 import { validImageFile } from "../../../utils/valid.util";
@@ -24,7 +24,6 @@ const EditDoctor = (props: EditDoctor) => {
     const { showToast } = useToast();
 
     const [submitData, setSubmitData] = useState({
-        image: "",
         fullName: "",
         gender: "",
         phone: "",
@@ -33,28 +32,27 @@ const EditDoctor = (props: EditDoctor) => {
         degree: "",
         status: "",
 
-        departmentId: "",
+        departmentId: 0,
     });
+
+    const [selectedImage, setSelectedImage] = useState<string>("");
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
     const handleChangeSubmit = (field: keyof typeof submitData, value: string) => {
         setSubmitData(prev => ({ ...prev, [field]: value }));
     }
 
-    useEffect(() => {
-        setSubmitData({
-            image: doctorSelect.image ?? "",
-            fullName: doctorSelect.fullName ?? "",
-            gender: doctorSelect.gender ?? "",
-            phone: doctorSelect.phone ?? "",
-            birthDate: doctorSelect.birthDate ?? "",
-            degree: doctorSelect.degree ?? "",
-            status: doctorSelect.status ?? "",
-            departmentId: doctorSelect.departmentId != null ? String(doctorSelect.departmentId) : "",
-        });
-    }, [doctorSelect]);
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (selectedFile) {
+            const imageResponse = await execute(updateDoctorImage(doctorSelect.id, selectedFile));
+            if (!imageResponse?.result) {
+                showToast("Lỗi", "Không thể cập nhật ảnh đại diện", "error");
+                return;
+            }
+        }
+
         const restResponse = await execute(updateDoctor(doctorSelect.id, submitData));
         notify(restResponse!, "Cập nhật bác sĩ thành công");
         if (restResponse?.result) {
@@ -63,25 +61,39 @@ const EditDoctor = (props: EditDoctor) => {
         }
     }
 
-    const [selectedImage, setSelectedImage] = useState<string>("");
-
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        const validFile = validImageFile(file!);
+
+        if (!file) return;
+
+        const validFile = validImageFile(file);
         if (!validFile.isValid) {
             showToast("Cảnh báo", validFile.errorMessage, "warning");
             return;
         }
-        if (file && validFile.isValid) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                setSelectedImage(event.target?.result as string);
-                setSubmitData(prev => ({ ...prev, image: event.target?.result as string }));
-            };
-            reader.readAsDataURL(file);
-            handleChangeSubmit("image", file as unknown as string);
-        }
+        setSelectedFile(file);
+        // Preview image before upload
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            setSelectedImage(event.target?.result as string);
+        };
+        reader.readAsDataURL(file);
     };
+
+    useEffect(() => {
+        setSubmitData({
+            fullName: doctorSelect.fullName ?? "",
+            gender: doctorSelect.gender ?? "",
+            phone: doctorSelect.phone ?? "",
+            birthDate: doctorSelect.birthDate ?? "",
+            degree: doctorSelect.degree ?? "",
+            status: doctorSelect.status ?? "",
+            departmentId: doctorSelect.departmentId != null ? doctorSelect.departmentId : 0
+        });
+
+        setSelectedImage(doctorSelect.image ?? "");
+        setSelectedFile(null);
+    }, [doctorSelect]);
 
     return (
         <div className="fixed top-0 start-0 bg-gray-400/60 w-full h-full z-10 flex justify-center items-center">
@@ -98,10 +110,10 @@ const EditDoctor = (props: EditDoctor) => {
                 <form className="flex gap-10 items-center" onSubmit={handleSubmit} >
                     <div className="flex-3">
                         <div className="flex justify-center relative">
-                            {(selectedImage || submitData.image) ? (
+                            {(selectedImage) ? (
                                 <div className="relative">
                                     <img
-                                        src={selectedImage || submitData.image}
+                                        src={selectedImage}
                                         alt="Preview"
                                         className="w-40 h-40 object-cover rounded-md border border-gray-300"
                                     />
@@ -109,7 +121,7 @@ const EditDoctor = (props: EditDoctor) => {
                                         type="button"
                                         onClick={() => {
                                             setSelectedImage("");
-                                            setSubmitData(prev => ({ ...prev, image: "" }));
+                                            setSelectedFile(null);
                                         }}
                                         className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600 transition-colors"
                                     >

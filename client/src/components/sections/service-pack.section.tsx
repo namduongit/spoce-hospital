@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { getMedicalPackageList } from '../../services/medical-package.service';
 import useCallApi from '../../hooks/useCallApi';
 import type { MedicalPackageModel } from '../../models/MedicalPackageModel.model';
-import { formatPriceVND } from '../../utils/formatNumber.util';
+import { formatPriceVND } from '../../utils/format-number.util';
 
 const ServicePackSection = () => {
     const { execute, loading } = useCallApi();

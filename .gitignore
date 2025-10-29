@@ -4,6 +4,7 @@
 !.vscode/extensions.json
 .vscode
 application.properties
+firebase-service-account.json
 .env
 .env
 .env.local
@@ -26,6 +27,7 @@ build/
 .gradle/
 **/target/
 **/build/
+**/bin/
 **/.idea
 
 # Wrapper 

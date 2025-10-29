@@ -33,7 +33,6 @@ public class DoctorConvert {
     }
 
     public static void convertFromUpdateRequest(DoctorProfileModel model, AdminDoctorDTO.UpdateDoctorRequest request) {
-        model.setImage(request.getImage());
         model.setFullName(request.getFullName());
         model.setBirthDate(request.getBirthDate());
         model.setGender(request.getGender());
@@ -42,7 +41,7 @@ public class DoctorConvert {
         model.setStatus(request.getStatus());
     }
 
-    public static void convertFromWorkDayRequest(DoctorProfileModel model, AdminDoctorDTO.UpdateDoctorWorkDayRequest request) {
+    public static void convertFromUpdateWorkDayRequest(DoctorProfileModel model, AdminDoctorDTO.UpdateDoctorWorkDayRequest request) {
         model.setWorkDay(request.getWorkDay());
     }
 }

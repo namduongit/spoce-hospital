@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getServiceInvoiceList } from "../../../services/service-invoice.service";
-import { formatDateVi } from "../../../utils/formatDate.util";
+import { formatDateVi } from "../../../utils/format-date.util";
 import useCallApi from "../../../hooks/useCallApi";
 import { serviceInvoiceStatus } from "../../../constants/status.constant";
 import type { ServiceInvoiceResponse } from "../../../responses/service-nvoice.response";

@@ -3,7 +3,7 @@ import TablePagination from "../others/pagination";
 
 import type { MedicalPackageResponse } from "../../../responses/medical-package.response";
 import EditMedicalPackage from "../edits/medical-package.edit";
-import { formatPriceVND } from "../../../utils/formatNumber.util";
+import { formatPriceVND } from "../../../utils/format-number.util";
 import MedicalPackageDetail from "../details/medical-package.detail";
 import { changeMedicalPackageStatus } from "../../../services/medical-package.service";
 import useCallApi from "../../../hooks/useCallApi";

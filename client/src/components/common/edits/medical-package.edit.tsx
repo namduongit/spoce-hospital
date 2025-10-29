@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import useCallApi from "../../../hooks/useCallApi";
 import type { MedicalPackageResponse } from "../../../responses/medical-package.response";
 import { updateMedicalPackage } from "../../../services/medical-package.service";
-import { formatPriceVND } from "../../../utils/formatNumber.util";
+import { formatPriceVND } from "../../../utils/format-number.util";
 
 type EditMedicalPackage = {
     medicalPackageSelect: MedicalPackageResponse;

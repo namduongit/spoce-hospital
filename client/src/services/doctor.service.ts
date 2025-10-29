@@ -14,18 +14,15 @@ type CreateDoctorParams = {
 }
 
 type UpdateDoctorParams = {
-    image: string,
     fullName: string,
     gender: string,
     phone: string,
     birthDate: string,
-    
-    workDate?: string,
 
     degree: string,
     status: string,
 
-    departmentId: string,
+    departmentId: number
 }
 
 export const getDoctorList = async () => {
@@ -46,12 +43,25 @@ export const updateDoctor = async (id: number, params: UpdateDoctorParams) => {
     return restResponse;
 }
 
-export const deleteDoctor = async (id: number) => {
-    const response = await api.delete(`/api/doctors/${id}`);
+export const updateDoctorImage = async (id: number, file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await api.put(`/api/doctors/${id}/image-avatar`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
     const restResponse: RestResponse = await response.data;
     return restResponse;
 }
 
+export const updateDoctorWorkDay = async (id: number, workDay: string) => {
+    const response = await api.put(`/api/doctors/${id}/work-day`, { workDay });
+    const restResponse: RestResponse = await response.data;
+    return restResponse;
+}
+
+/** Doctor account service */
 export const getDoctorProfile = async () => {
     const response = await api.get('/api/doctors/profile');
     const restResponse: RestResponse = await response.data;
@@ -60,18 +70,6 @@ export const getDoctorProfile = async () => {
 
 export const updateDoctorProfile = async (params: UpdateDoctorParams) => {
     const response = await api.put('/api/doctors/profile', params);
-    const restResponse: RestResponse = await response.data;
-    return restResponse;
-}
-
-export const updateDoctorWorkDate = async (workDate: string) => {
-    const response = await api.put('/api/doctors/profile/work-date', { workDate });
-    const restResponse: RestResponse = await response.data;
-    return restResponse;
-}
-
-export const getDoctorSchedule = async () => {
-    const response = await api.get('/api/doctors/schedule');
     const restResponse: RestResponse = await response.data;
     return restResponse;
 }

@@ -3,8 +3,8 @@ import TablePagination from "../others/pagination";
 import AppointmentDetail from "../details/appointment.detail";
 import EditAppointment from "../edits/appointment.edit";
 
-import { formatNumberPhone } from "../../../utils/formatNumber.util";
-import { formatDateVi } from "../../../utils/formatDate.util";
+import { formatNumberPhone } from "../../../utils/format-number.util";
+import { formatDateVi } from "../../../utils/format-date.util";
 import type { AppointmentResponse } from "../../../responses/appointment.response";
 import type { DepartmentResponse } from "../../../responses/department.response";
 import type { RoomResponse } from "../../../responses/room.response";

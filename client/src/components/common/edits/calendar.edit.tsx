@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { timeSlots, weekDate } from "../../../constants/day.constant";
 
-import { updateDoctor } from "../../../services/doctor.service";
+import { updateDoctorWorkDay } from "../../../services/doctor.service";
 
 import useCallApi from "../../../hooks/useCallApi";
 import type { DoctorResponse } from "../../../responses/doctor.response";
@@ -57,7 +57,7 @@ const EditCalendarModal = (props: EditCalendarModal) => {
     }
 
     const handleSubmit = async () => {
-        const restResponse = await execute(updateDoctor(doctorSelect.id, { workDay: handleConcatSchedule() }));
+        const restResponse = await execute(updateDoctorWorkDay(doctorSelect.id, handleConcatSchedule()));
         notify(restResponse!, "Cập nhật lịch làm việc thành công");
         if (restResponse?.result) {
             setShowCalendar(false);

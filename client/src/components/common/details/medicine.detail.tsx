@@ -1,5 +1,5 @@
 import type { MedicineResponse } from "../../../responses/medicine.response";
-import { formatPriceVND } from "../../../utils/formatNumber.util";
+import { formatPriceVND } from "../../../utils/format-number.util";
 
 type MedicineDetail = {
     medicineSelect: MedicineResponse,

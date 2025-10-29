@@ -2,8 +2,8 @@ import { useState } from "react";
 import TablePagination from "../../common/others/pagination";
 import AppointmentDetail from "../../common/details/appointment.detail";
 
-import { formatNumberPhone } from "../../../utils/formatNumber.util";
-import { formatDateVi } from "../../../utils/formatDate.util";
+import { formatNumberPhone } from "../../../utils/format-number.util";
+import { formatDateVi } from "../../../utils/format-date.util";
 import type { AppointmentResponse } from "../../../responses/appointment.response";
 
 import { changeAppointmentStatus } from "../../../services/appointment.service";

@@ -1,8 +1,8 @@
 import useCallApi from "../../../hooks/useCallApi";
 import type { PrescriptionInvoiceResponse } from "../../../responses/prescription-invoice.response";
 import { updatePrescriptionInvoiceStatus } from "../../../services/prescription-invoice.service";
-import { formatDateToHourAndDay } from "../../../utils/formatDate.util";
-import { formatNumberPhone } from "../../../utils/formatNumber.util";
+import { formatDateToHourAndDay } from "../../../utils/format-date.util";
+import { formatNumberPhone } from "../../../utils/format-number.util";
 import { useState } from "react";
 
 type PrescriptionInvoiceDetail = {

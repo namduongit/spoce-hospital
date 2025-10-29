@@ -10,6 +10,7 @@ import com.appointmenthostpital.server.exceptions.DuplicateResourceException;
 import com.appointmenthostpital.server.exceptions.NotAllowedException;
 import com.appointmenthostpital.server.exceptions.NotFoundResourceException;
 import com.appointmenthostpital.server.exceptions.PasswordNotValidException;
+import com.appointmenthostpital.server.exceptions.UploadFileException;
 import com.appointmenthostpital.server.utils.HttpStatusResponse;
 
 @RestControllerAdvice
@@ -19,7 +20,8 @@ public class RuntimeExceptionHandle {
         NotAllowedException.class,
         DuplicateResourceException.class,
         NotFoundResourceException.class,
-        AccountLockedException.class
+        AccountLockedException.class,
+        UploadFileException.class
     })
     public ResponseEntity<RestResponse<?>> serverExceptionHandler(Exception exception) {
 

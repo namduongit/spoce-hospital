@@ -1,5 +1,5 @@
-import { formatNumberPhone } from "../../../utils/formatNumber.util";
-import { formatDateToHourAndDay } from "../../../utils/formatDate.util";
+import { formatNumberPhone } from "../../../utils/format-number.util";
+import { formatDateToHourAndDay } from "../../../utils/format-date.util";
 import type { AppointmentResponse } from "../../../responses/appointment.response";
 
 type AppointmentDetail = {
