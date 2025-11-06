@@ -69,7 +69,10 @@ public class AccountService {
 
     public AccountResponse handleUpdateAccount(Long id, AdminAccountDTO.UpdateAccountRequest request) {
         AccountModel model = this.getUserById(id);
-        model.setPassword(this.passwordEncoder.encode(request.getPassword()));
+        // model.setPassword(this.passwordEncoder.encode(request.getPassword()));
+        if (request.getPassword() != null) {
+            model.setPassword(this.passwordEncoder.encode(request.getPassword()));
+        }
         AccountConvert.convertFromUpdateRequest(model, request);
         model = this.userRepository.save(model);
         return AccountConvert.convertToResponse(model);

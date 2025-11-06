@@ -7,6 +7,7 @@ import useCallApi from "../../../hooks/useCallApi";
 import { useAuth } from "../../../contexts/auth.context";
 import { login } from "../../../services/auth.service";
 
+import ReCAPTCHA from "react-google-recaptcha"
 
 const LoginPage = () => {
     const { execute, notify, loading } = useCallApi();
@@ -77,6 +78,10 @@ const LoginPage = () => {
                             />
                             <span className="text-sm text-gray-500 absolute top-1/2 right-2 lg:right-4 -translate-y-1/2">Captcha</span>
                         </div>
+                    </div>
+                    <div>
+                        <ReCAPTCHA sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY} />
+
                     </div>
                     <div className="flex gap-3 mt-6">
                         <button className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-600 transition cursor-pointer" onClick={handleLogin} disabled={loading}>

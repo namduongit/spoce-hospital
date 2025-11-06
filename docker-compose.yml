@@ -1,8 +1,31 @@
 services:
-  client:
-    build: 
-      context: ./client
-      dockerfile: Dockerfile
-    container_name: client-spoce-hostpital
+  database:
+    image: mysql:lts
+    container_name: database-service
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: NDuong205
+      MYSQL_DATABASE: appointment_hospital
     ports:
-      - "3000:3000"
+      - "3306:3306"
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+  
+  server:
+    image: 
+  
+  client:
+    image: node:lts
+    container_name: client-service
+    working_dir: /app
+    volumes:
+      - ./client:/app
+    environment:
+      - VITE_SERVER_URL=http://localhost:8000
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    ports:
+      - "5173:5173"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - database

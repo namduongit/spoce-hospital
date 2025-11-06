@@ -3,13 +3,13 @@ import { api, type RestResponse } from "../api/api"
 type CreateRoomParams = {
     name: string,
     status: string,
-    departmentId: string
+    departmentId: number
 }
 
 type UpdateRoomParams = {
     name?: string,
     status?: string,
-    departmentId?: string
+    departmentId?: number
 }
 
 export const getRoomList = async () => {

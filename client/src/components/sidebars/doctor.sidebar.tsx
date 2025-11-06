@@ -5,7 +5,7 @@ const navLinks = [
   { href: '/doctor/appointment', label: 'Lịch khám', icon: 'fa-solid fa-calendar-check' },
   { href: '/doctor/create-prescription-invoice', label: 'Kê đơn thuốc', icon: 'fa-solid fa-receipt' },
   { href: '/doctor/create-service-invoice', label: 'Kê đơn dịch vụ', icon: 'fa-solid fa-receipt' },
-  { href: '/doctor/invoice-list', label: 'Danh sách hóa đơn', icon: 'fa-solid fa-file-invoice' },
+  // { href: '/doctor/invoice-list', label: 'Danh sách hóa đơn', icon: 'fa-solid fa-file-invoice' },
   { href: '/doctor/profile', label: 'Cá nhân', icon: 'fa-solid fa-user' },
 ];
 

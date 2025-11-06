@@ -8,8 +8,8 @@ _Backend: Spring Boot | Frontend: React + Vite + TypeScript_
 
 ### 1. Clone the Repository
 ```bash
-git https://github.com/namduongit/spoce-hospital
-cd spoce-hospital
+git clone https://github.com/namduongit/appointments-hospital
+cd appointments-hospital
 ```
 ---
 ### 2. Environment Configuration
