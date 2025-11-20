@@ -10,7 +10,7 @@ description = 'Demo project for Spring Boot'
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
+		languageVersion = JavaLanguageVersion.of(17)
 	}
 }
 
@@ -30,6 +30,10 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("net.sf.jasperreports:jasperreports:7.0.3")
+	implementation("net.sf.jasperreports:jasperreports-fonts:7.0.3")
+	implementation("net.sf.jasperreports:jasperreports-functions:7.0.3")
+	implementation("net.sf.jasperreports:jasperreports-pdf:7.0.3")
 	// implementation("org.springframework.boot:spring-boot-starter-websocket")
 	
 	implementation('org.springframework.boot:spring-boot-starter-oauth2-resource-server')

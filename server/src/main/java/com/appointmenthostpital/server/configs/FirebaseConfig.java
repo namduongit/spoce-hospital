@@ -1,8 +1,10 @@
 package com.appointmenthostpital.server.configs;
 
 import java.io.FileInputStream;
+import java.io.InputStream;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
@@ -14,7 +16,10 @@ import jakarta.annotation.PostConstruct;
 public class FirebaseConfig {
     @PostConstruct
     public void initFirebase() throws Exception {
-        FileInputStream serviceAccount = new FileInputStream("src/main/resources/firebase-service-account.json");
+        // FileInputStream serviceAccount = new FileInputStream("src/main/resources/firebase-service-account.json");    
+        ClassPathResource resource = new ClassPathResource("firebase-service-account.json");
+        InputStream serviceAccount = resource.getInputStream();
+
 
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))

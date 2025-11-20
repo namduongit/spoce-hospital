@@ -3,6 +3,7 @@ import type { ImportTicketResponse } from "../../../responses/import-ticket.resp
 import { formatPriceVND } from "../../../utils/format-number.util";
 import useCallApi from "../../../hooks/useCallApi";
 import { changeStatusImportTicket } from "../../../services/import-ticket.service";
+import { printImportTicket } from "../../../services/report-print.service";
 
 type ImportTicketProps = { importTicket: ImportTicketResponse, onSuccess?: () => void };
 
@@ -56,7 +57,10 @@ const ImportTicket = (props: ImportTicketProps) => {
         }
     }
 
-    const handlePrintTicket = () => {
+    const handlePrintTicket = async () => {
+        const response = await execute(printImportTicket(importTicket.id));
+        notify(response, "In phiếu nhập hàng thành công");
+        if (response?.result) onSuccess?.();
         return;
     }
 
