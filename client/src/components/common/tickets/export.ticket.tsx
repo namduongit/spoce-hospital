@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { ExportTicketResponse } from "../../../responses/export-ticket.response";
 import useCallApi from "../../../hooks/useCallApi";
 import { changeStatusExportTicket } from "../../../services/export-ticket.service";
+import { printExportTicket } from "../../../services/report-print.service";
 
 type ExportTicketProps = { exportTicket: ExportTicketResponse, onSuccess?: () => void };
 
@@ -44,9 +45,12 @@ const ExportTicket = (props: ExportTicketProps) => {
     const statusDisplay = getStatusDisplay(exportTicket.status);
     const totalItems = exportTicket.items.reduce((sum, item) => sum + item.quantity, 0);
 
-    const handlePrintTicket = () => {
-        return;
-        onSuccess?.();
+    const handlePrintTicket = async () => {
+        const response = await execute(printExportTicket(exportTicket.id));
+        notify(response, 'In phiếu xuất hàng thành công');
+        if (response?.result) {
+            onSuccess?.();
+        }
     }
 
     const handleChangeStatus = async (status: string) => {

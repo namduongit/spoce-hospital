@@ -6,9 +6,10 @@ import { serviceInvoiceStatus } from "../../../constants/status.constant";
 import type { ServiceInvoiceResponse } from "../../../responses/service-nvoice.response";
 import ServiceInvoiceDetail from "../../../components/common/details/service-invoice.detail";
 import EditServiceInvoice from "../../../components/common/edits/service-invoice.edit";
+import { printServiceTicket } from "../../../services/report-print.service";
 
 const AdminServiceInvoicePage = () => {
-    const { execute } = useCallApi();
+    const { execute, notify } = useCallApi();
 
     const [serviceInvoices, setServiceInvoices] = useState<ServiceInvoiceResponse[]>([]);
     const [filteredInvoices, setFilteredInvoices] = useState<ServiceInvoiceResponse[]>([]);
@@ -116,6 +117,11 @@ const AdminServiceInvoicePage = () => {
         setSelectedInvoice(invoice);
         setShowEdit(true);
     };
+
+    const handlePrint = async (invoice: ServiceInvoiceResponse) => {
+        const res = await execute(printServiceTicket(invoice.id));
+        notify(res, 'In hóa đơn thành công');
+    }
 
     return (
         <main className="service-invoice-page p-4 sm:p-6">
@@ -306,6 +312,14 @@ const AdminServiceInvoicePage = () => {
                                                     >
                                                         <i className="fa-solid fa-edit mr-1"></i>
                                                         Sửa
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handlePrint(invoice)}
+                                                        className="px-3 py-1 bg-yellow-100 text-yellow-600 rounded hover:bg-yellow-200 transition-colors text-xs font-medium"
+                                                        title="In hóa đơn"
+                                                    >
+                                                        <i className="fa-solid fa-edit mr-1"></i>
+                                                        In hóa đơn
                                                     </button>
                                                 </div>
                                             </td>

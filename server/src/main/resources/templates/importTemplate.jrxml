@@ -1,0 +1,142 @@
+<!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
+<jasperReport name="Spoce_Hospital" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bc0c8032-05f1-4140-8647-8716b7551934">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<dataset name="Dataset1" uuid="85181dd0-5f0e-4bbb-9fdf-e77f740e7de4">
+		<query language="sql"><![CDATA[]]></query>
+		<field name="medicineName" class="java.lang.String"/>
+		<field name="quantity" class="java.lang.Integer"/>
+		<field name="price" class="java.lang.Long"/>
+		<field name="totalPrice" class="java.lang.Long"/>
+	</dataset>
+	<parameter name="name" class="java.lang.String"/>
+	<parameter name="supplierName" class="java.lang.String"/>
+	<parameter name="Dataset1" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+	<parameter name="total" class="java.lang.Long"/>
+	<query language="sql"><![CDATA[]]></query>
+	<background splitType="Stretch"/>
+	<title height="117" splitType="Stretch">
+		<element kind="staticText" uuid="e738c65d-2a01-4ca3-bc76-92137ec0faef" x="207" y="0" width="140" height="30" fontName="DejaVu Sans" fontSize="16.0" bold="true">
+			<text><![CDATA[Spoce Hospital]]></text>
+		</element>
+		<element kind="staticText" uuid="0d377eca-873a-40a7-8ae2-633dd8144494" x="183" y="32" width="190" height="30" fontName="DejaVu Sans" fontSize="19.0" bold="true">
+			<text><![CDATA[Phiếu nhập hàng]]></text>
+		</element>
+		<element kind="textField" uuid="789fc38c-63dc-472a-8c92-c658b4a6b582" x="0" y="75" width="352" height="21" fontName="DejaVu Sans" bold="false">
+			<expression><![CDATA["Người lập phiếu: "+$P{name}]]></expression>
+		</element>
+		<element kind="textField" uuid="ae67fd3a-057b-43d0-8609-5648839e2d8d" x="498" y="72" width="100" height="16" evaluationTime="Report" pattern="dd/MM/yyyy">
+			<expression><![CDATA[new java.util.Date()]]></expression>
+		</element>
+		<element kind="staticText" uuid="bc62b5b7-b1c8-4f38-9f52-3a50f4a4fbe6" x="410" y="74" width="86" height="14" fontName="DejaVu Sans">
+			<text><![CDATA[Ngày in hóa đơn: ]]></text>
+		</element>
+		<element kind="textField" uuid="fb3aa3e8-5d45-4c72-8038-59128c3d22af" x="0" y="96" width="352" height="21" fontName="DejaVu Sans" bold="false">
+			<expression><![CDATA["Nhà cung cấp: "+$P{supplierName}]]></expression>
+		</element>
+	</title>
+	<detail>
+		<band height="82">
+			<element kind="component" uuid="254dddf1-e8a6-4bc9-96b4-58f6b82dcf2b" x="68" y="7" width="420" height="75">
+				<component kind="table">
+					<datasetRun uuid="68ab547f-1b7a-4e08-800b-93b9b895c7ea" subDataset="Dataset1">
+						<dataSourceExpression><![CDATA[$P{Dataset1}]]></dataSourceExpression>
+					</datasetRun>
+					<column kind="single" uuid="eadc431f-e932-49e7-8dd2-89e58e90d03a" width="136">
+						<columnHeader height="30" rowSpan="1" style="Table_CH">
+							<element kind="staticText" uuid="e7ee8f5c-e179-4e0b-b4d3-9f7d676d35f6" x="0" y="0" width="136" height="30" fontName="DejaVu Sans" hTextAlign="Center" vTextAlign="Middle">
+								<text><![CDATA[Tên sản phẩm]]></text>
+							</element>
+						</columnHeader>
+						<detailCell height="30" style="Table_TD">
+							<element kind="textField" uuid="2a578d4c-940b-41e6-b5d8-7da4706f51c0" x="0" y="0" width="136" height="30" fontName="DejaVu Sans" hTextAlign="Center" vTextAlign="Middle">
+								<expression><![CDATA[$F{medicineName}]]></expression>
+							</element>
+						</detailCell>
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
+					</column>
+					<column kind="single" uuid="862c6964-f277-4400-8481-db2dfb736924" width="84">
+						<columnHeader height="30" rowSpan="1" style="Table_CH">
+							<element kind="staticText" uuid="1cb80f47-da3e-4729-972e-b5aac7448b16" x="0" y="0" width="84" height="30" fontName="DejaVu Sans" hTextAlign="Center" vTextAlign="Middle">
+								<text><![CDATA[Số lượng]]></text>
+							</element>
+						</columnHeader>
+						<detailCell height="30" style="Table_TD">
+							<element kind="textField" uuid="a4363d9a-346b-409e-bcdd-2d7049c05202" x="0" y="0" width="84" height="30" fontName="DejaVu Sans" hTextAlign="Center" vTextAlign="Middle">
+								<expression><![CDATA[$F{quantity}]]></expression>
+							</element>
+						</detailCell>
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
+					</column>
+					<column kind="single" uuid="baeef90d-5300-42c9-85b1-0019c4fef7b3" width="90">
+						<columnHeader height="30" rowSpan="1" style="Table_CH">
+							<element kind="staticText" uuid="9bc9056c-151a-42fb-9f4f-972c947ec2b4" x="0" y="0" width="90" height="30" fontName="DejaVu Sans" hTextAlign="Center" vTextAlign="Middle">
+								<text><![CDATA[Đơn giá]]></text>
+							</element>
+						</columnHeader>
+						<detailCell height="30" style="Table_TD">
+							<element kind="textField" uuid="e7cd7e68-a8e6-4256-bf02-aad23f0d5111" x="0" y="0" width="90" height="30" fontName="DejaVu Sans" pattern="#,##0 VND" hTextAlign="Center" vTextAlign="Middle">
+								<expression><![CDATA[$F{price}]]></expression>
+							</element>
+						</detailCell>
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
+					</column>
+					<column kind="single" uuid="37145b40-8dfe-4c2f-8493-9c80d404257b" width="110">
+						<columnHeader height="30" rowSpan="1" style="Table_CH">
+							<element kind="staticText" uuid="a82090bf-ee92-496f-a8db-beafb1948647" x="0" y="0" width="110" height="30" fontName="DejaVu Sans" hTextAlign="Center" vTextAlign="Middle">
+								<text><![CDATA[Thành tiền]]></text>
+							</element>
+						</columnHeader>
+						<detailCell height="30" style="Table_TD">
+							<element kind="textField" uuid="e83931f2-8cba-4f83-be7c-61acc87a1cb0" x="0" y="0" width="110" height="30" fontName="DejaVu Sans" pattern="#,##0 VND" hTextAlign="Center" vTextAlign="Middle">
+								<expression><![CDATA[$F{totalPrice}]]></expression>
+							</element>
+						</detailCell>
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
+					</column>
+				</component>
+				<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+				<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
+				<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
+				<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+			</element>
+		</band>
+	</detail>
+	<summary height="110" splitType="Stretch">
+		<element kind="textField" uuid="0224978b-0887-463f-abca-54c5ddd1953c" x="347" y="10" width="140" height="30" fontName="DejaVu Sans" pattern="Tổng tiền: #,##0 VND" bold="false">
+			<expression><![CDATA[$P{total}]]></expression>
+		</element>
+		<element kind="staticText" uuid="97c74b2c-c4fe-48cc-81b4-3e840b44ad0c" x="364" y="40" width="116" height="20" fontName="DejaVu Sans" fontSize="12.0" bold="true">
+			<text><![CDATA[Người lập phiếu]]></text>
+		</element>
+		<element kind="staticText" uuid="fda09bf2-02ab-48f1-975e-ca25270a8d0d" x="393" y="60" width="56" height="20" fontName="DejaVu Sans" italic="true">
+			<text><![CDATA[(Ký họ tên)]]></text>
+		</element>
+	</summary>
+</jasperReport>
