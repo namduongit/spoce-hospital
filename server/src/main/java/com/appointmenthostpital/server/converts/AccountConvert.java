@@ -49,6 +49,7 @@ public class AccountConvert {
             }
             model.setDoctorProfileModel(null);
         }
+        model.setRole(request.getRole());
         model.setStatus(request.getStatus());
     }
 }

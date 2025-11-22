@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.appointmenthostpital.server.dtos.RestResponse;
 import com.appointmenthostpital.server.dtos.auth.LoginDTO;
 import com.appointmenthostpital.server.dtos.auth.RegisterDTO;
+import com.appointmenthostpital.server.dtos.user.ForgotPasswordDTO;
 import com.appointmenthostpital.server.dtos.auth.AuthConfig;
 import com.appointmenthostpital.server.exceptions.PasswordNotValidException;
 import com.appointmenthostpital.server.services.AuthService;
@@ -24,13 +25,6 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    /**
-     * Register a new user
-     * 
-     * @param registerRequest
-     * @return
-     * @throws PasswordNotValidException
-     */
     @PostMapping("/register")
     public ResponseEntity<RestResponse<RegisterDTO.RegisterResponse>> handleRegister(
             @Valid @RequestBody RegisterDTO.RegisterRequest request) throws PasswordNotValidException {
@@ -46,12 +40,6 @@ public class AuthController {
         return ResponseEntity.status(HttpStatusResponse.CREATED).body(response);
     }
 
-    /**
-     * Login request
-     * 
-     * @param loginRequest
-     * @return
-     */
     @PostMapping("/login")
     public ResponseEntity<RestResponse<LoginDTO.LoginResponse>> handleLogin(
             @Valid @RequestBody LoginDTO.LoginRequest request) {
@@ -67,13 +55,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatusResponse.OK).body(response);
     }
 
-    /**
-     * Valid token request
-     * 
-     * @param authentication
-     * @return
-     */
-    @PostMapping("/authConfig")
+    @PostMapping("/auth-config")
     public ResponseEntity<RestResponse<AuthConfig>> handleValid(Authentication authentication) {
         AuthConfig authConfig = this.authService.handleValid(authentication);
 
@@ -81,6 +63,19 @@ public class AuthController {
                 HttpStatusResponse.OK,
                 true,
                 authConfig,
+                HttpStatusResponse.SUCCESS_MESSAGE,
+                null);
+
+        return ResponseEntity.status(HttpStatusResponse.OK).body(response);
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<RestResponse<String>> handleForgotPassword(@RequestBody ForgotPasswordDTO.ForgotPasswordRequest request) {
+        this.authService.handleForgotPassword(request.getEmail());
+        RestResponse<String> response = new RestResponse<String>(
+                HttpStatusResponse.OK,
+                true,
+                null,
                 HttpStatusResponse.SUCCESS_MESSAGE,
                 null);
 

@@ -23,6 +23,11 @@ api.interceptors.response.use(
     if (!error.response) {
       throw new Error("Network Error");
     }
+    if (error.response.data === "") {
+      error.response.data = {
+        statusCode: error.status
+      } as RestResponse;
+    }
     return error.response;
   }
 );
@@ -35,6 +40,7 @@ api.interceptors.request.use((config) => {
       config.headers.Authorization = `Bearer ${auth.accessToken}`;
     }
   }
+  config.headers['X-Request-Path'] = window.location.pathname;
   return config;
 });
 

@@ -1,9 +1,16 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+import useCallApi from '../../hooks/useCallApi';
+import { sendEmailContact } from '../../services/user.service';
+import { useNavigate } from 'react-router-dom';
 
 const ContactSection = () => {
-    const [formData, setFormData] = useState({
-        name: '',
+    const { execute, notify, loading } = useCallApi();
+
+    const navigate = useNavigate();
+
+    const [submitData, setSubmitData] = useState({
+        fullName: '',
         email: '',
         phone: '',
         subject: '',
@@ -12,16 +19,26 @@ const ContactSection = () => {
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
+        setSubmitData(prev => ({
             ...prev,
             [name]: value
         }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Handle form submission here
-        console.log('Form submitted:', formData);
+        const restResponse = await execute(sendEmailContact(submitData));
+        notify(restResponse, "Gửi tin nhắn thành công");
+        if (restResponse?.result) {
+            navigate("/");
+            setSubmitData({
+                fullName: "",
+                email: "",
+                phone: "",
+                subject: "",
+                message: ""
+            });
+        }
     };
 
     const contactInfo = [
@@ -43,7 +60,7 @@ const ContactSection = () => {
                 </svg>
             ),
             title: "Điện thoại",
-            content: "(+84) 388 853 835 835",
+            content: "(+84) 388 853 835",
             color: "bg-green-100 text-green-600"
         },
         {
@@ -69,7 +86,7 @@ const ContactSection = () => {
     ];
 
     return (
-        <div id="contact-section" className="contact-section px-4 lg:px-20 pt-16 pb-16 bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div id="contact-section" className="contact-section px-4 lg:px-20 pt-16 pb-16 bg-linear-to-br from-blue-50 to-indigo-100">
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-12">
                     <motion.h2
@@ -154,12 +171,12 @@ const ContactSection = () => {
                                     <label className="block text-gray-700 font-medium mb-2">Họ và tên *</label>
                                     <input
                                         type="text"
-                                        name="name"
-                                        value={formData.name}
+                                        name="fullName"
+                                        value={submitData.fullName}
                                         onChange={handleInputChange}
                                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                                         placeholder="Nhập họ và tên"
-                                        required
+                                        
                                     />
                                 </div>
                                 <div>
@@ -167,11 +184,11 @@ const ContactSection = () => {
                                     <input
                                         type="tel"
                                         name="phone"
-                                        value={formData.phone}
+                                        value={submitData.phone}
                                         onChange={handleInputChange}
                                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                                         placeholder="Nhập số điện thoại"
-                                        required
+                                        
                                     />
                                 </div>
                             </div>
@@ -181,11 +198,11 @@ const ContactSection = () => {
                                 <input
                                     type="email"
                                     name="email"
-                                    value={formData.email}
+                                    value={submitData.email}
                                     onChange={handleInputChange}
                                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                                     placeholder="Nhập địa chỉ email"
-                                    required
+                                    
                                 />
                             </div>
 
@@ -194,7 +211,7 @@ const ContactSection = () => {
                                 <input
                                     type="text"
                                     name="subject"
-                                    value={formData.subject}
+                                    value={submitData.subject}
                                     onChange={handleInputChange}
                                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                                     placeholder="Nhập chủ đề"
@@ -205,12 +222,12 @@ const ContactSection = () => {
                                 <label className="block text-gray-700 font-medium mb-2">Tin nhắn *</label>
                                 <textarea
                                     name="message"
-                                    value={formData.message}
+                                    value={submitData.message}
                                     onChange={handleInputChange}
                                     rows={5}
                                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 resize-none"
                                     placeholder="Nhập nội dung tin nhắn..."
-                                    required
+                                    
                                 />
                             </div>
 
@@ -219,11 +236,12 @@ const ContactSection = () => {
                                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2"
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
+                                disabled={loading}
                             >
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                                 </svg>
-                                Gửi tin nhắn
+                                {loading ? "Đang gửi" : "Gửi tin nhắn"}
                             </motion.button>
                         </form>
                     </motion.div>

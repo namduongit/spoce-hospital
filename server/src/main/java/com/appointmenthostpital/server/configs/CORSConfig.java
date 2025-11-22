@@ -6,7 +6,6 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-@SuppressWarnings("null")
 public class CORSConfig implements WebMvcConfigurer {
     @Value("${CLIENT_URL}")
     private String CLIENT_URL;

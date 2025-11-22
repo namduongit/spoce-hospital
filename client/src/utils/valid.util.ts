@@ -3,8 +3,8 @@ export const validNumberPhone = (numberPhone: string) => {
 }
 
 export const validEmail = (email: string) => {
-    
-}
+    console.log(email);
+}   
 
 export const validImageFile = (file: File) => {
     const allowedTypes = ['image/png', 'image/jpg', 'image/jpeg'];

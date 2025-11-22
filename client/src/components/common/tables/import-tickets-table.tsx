@@ -8,7 +8,6 @@ type ImportTicketsTableProps = {
 
 const ImportTicketsTable = ({ importTickets, reload }: ImportTicketsTableProps) => {
     
-
     if (importTickets.length === 0) {
         return (
             <div className="text-center py-12">

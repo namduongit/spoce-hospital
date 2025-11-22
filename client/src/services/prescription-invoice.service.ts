@@ -22,6 +22,13 @@ export const getPrescriptionInvoiceList = async () => {
     const restResponse: RestResponse = response.data;
     return restResponse;
 }
+
+export const getPrescriptionInvoiceById = async (id: number) => {
+    const response = await api.get(`/api/prescription-invoices/${id}`);
+    const restResponse: RestResponse = response.data;
+    return restResponse;
+}
+
 export const createPrescriptionInvoice = async (params: CreatePrescriptionInvoiceParams) => {
     const response = await api.post("/api/prescription-invoices", params);
     const restResponse: RestResponse = response.data;

@@ -5,7 +5,7 @@ import useCallApi from "../../../hooks/useCallApi";
 import { prescriptionInvoiceStatus } from "../../../constants/status.constant";
 import type { PrescriptionInvoiceResponse } from "../../../responses/prescription-invoice.response";
 import PrescriptionInvoiceDetail from "../../../components/common/details/prescription-invoice.detail";
-import EditPrescriptionInvoice from "../../../components/common/edits/prescription-invoice.edit";
+import { formatPriceVND } from "../../../utils/format-number.util";
 
 const AssistorPrescriptionInvoicePage = () => {
     const { execute } = useCallApi();
@@ -13,7 +13,6 @@ const AssistorPrescriptionInvoicePage = () => {
     const [prescriptionInvoices, setPrescriptionInvoices] = useState<PrescriptionInvoiceResponse[]>([]);
     const [filteredInvoices, setFilteredInvoices] = useState<PrescriptionInvoiceResponse[]>([]);
     const [showDetail, setShowDetail] = useState(false);
-    const [showEdit, setShowEdit] = useState(false);
     const [selectedInvoice, setSelectedInvoice] = useState<PrescriptionInvoiceResponse | null>(null);
     
     const [searchForm, setSearchForm] = useState({
@@ -110,12 +109,7 @@ const AssistorPrescriptionInvoicePage = () => {
     const handleShowDetail = (invoice: PrescriptionInvoiceResponse) => {
         setSelectedInvoice(invoice);
         setShowDetail(true);
-    };
-
-    const handleShowEdit = (invoice: PrescriptionInvoiceResponse) => {
-        setSelectedInvoice(invoice);
-        setShowEdit(true);
-    };
+    }
 
     return (
         <main className="prescription-invoice-page p-4 sm:p-6">
@@ -281,7 +275,7 @@ const AssistorPrescriptionInvoicePage = () => {
                                                 </span>
                                             </td>
                                             <td className="px-4 py-3 font-semibold text-blue-600">
-                                                {invoice.totalAmount.toLocaleString('vi-VN')} ₫
+                                                {formatPriceVND(invoice.totalAmount)} 
                                             </td>
                                             <td className="px-4 py-3 text-center">
                                                 <div className="flex items-center justify-center gap-2">
@@ -292,14 +286,6 @@ const AssistorPrescriptionInvoicePage = () => {
                                                     >
                                                         <i className="fa-solid fa-eye mr-1"></i>
                                                         Chi tiết
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleShowEdit(invoice)}
-                                                        className="px-3 py-1 bg-green-100 text-green-600 rounded hover:bg-green-200 transition-colors text-xs font-medium"
-                                                        title="Chỉnh sửa"
-                                                    >
-                                                        <i className="fa-solid fa-edit mr-1"></i>
-                                                        Sửa
                                                     </button>
                                                 </div>
                                             </td>
@@ -321,14 +307,14 @@ const AssistorPrescriptionInvoicePage = () => {
                     </div>
 
                     {filteredInvoices.length > 0 && (
-                        <div className="p-4 border-t-1 border-gray-200 bg-gray-50">
+                        <div className="p-4 border-t border-gray-200 bg-gray-50">
                             <div className="flex items-center justify-between text-sm text-gray-600">
                                 <span>
                                     Hiển thị <span className="font-medium">{filteredInvoices.length}</span> trên tổng số <span className="font-medium">{prescriptionInvoices.length}</span> hóa đơn
                                 </span>
                                 <span>
                                     Tổng giá trị: <span className="font-semibold text-blue-600">
-                                        {filteredInvoices.reduce((sum, invoice) => sum + invoice.totalAmount, 0).toLocaleString('vi-VN')} ₫
+                                        {formatPriceVND(filteredInvoices.reduce((sum, invoice) => sum + invoice.totalAmount, 0))} 
                                     </span>
                                 </span>
                             </div>
@@ -342,14 +328,6 @@ const AssistorPrescriptionInvoicePage = () => {
                     prescriptionInvoiceSelect={selectedInvoice}
                     setShowDetail={setShowDetail}
                     onSuccess={handleGetPrescriptionInvoices}
-                />
-            )}
-
-            {showEdit && selectedInvoice && (
-                <EditPrescriptionInvoice
-                    prescriptionInvoiceSelect={selectedInvoice}
-                    setShowEdit={setShowEdit}
-                    onSuccess={() => handleGetPrescriptionInvoices()}
                 />
             )}
         </main>

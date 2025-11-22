@@ -45,6 +45,14 @@ public class PrescriptionInvoiceController {
                 HttpStatusResponse.CREATED, true, response, HttpStatusResponse.SUCCESS_MESSAGE, null));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<RestResponse<PrescriptionInvoiceResponse>> handleGetPrescriptionInvoiceById(
+            @PathVariable(name = "id", required = true) Long id) {
+        PrescriptionInvoiceResponse response = prescriptionInvoiceService.handleGetPrescriptionInvoiceById(id);
+        return ResponseEntity.status(HttpStatusResponse.OK).body(new RestResponse<PrescriptionInvoiceResponse>(
+                HttpStatusResponse.OK, true, response, HttpStatusResponse.SUCCESS_MESSAGE, null));
+    }
+
     @PutMapping("/{id}/status")
     public ResponseEntity<RestResponse<PrescriptionInvoiceResponse>> handleUpdatePrescriptionInvoiceStatus(
             @PathVariable(name = "id", required = true) Long id,

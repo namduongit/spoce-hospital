@@ -97,7 +97,7 @@ const ExportTicket = (props: ExportTicketProps) => {
                     <div className="flex-1 text-right flex justify-end items-center">
                         <div>
                             <p className="text-sm text-gray-500">Ngày tạo</p>
-                            <p className="font-medium text-gray-900 text-sm">{formatDate(exportTicket.createdAt)}</p>
+                            <p className="font-medium text-gray-900 text-sm">{formatDate(exportTicket.createdAt.toString())}</p>
                             <p className="text-xs text-gray-500">
                                 {totalItems} sản phẩm
                             </p>
@@ -120,7 +120,7 @@ const ExportTicket = (props: ExportTicketProps) => {
                             </div>
                             <div>
                                 <span className="text-gray-500">Ngày cập nhật: </span>
-                                <span className="text-gray-900">{formatDate(exportTicket.updatedAt)}</span>
+                                <span className="text-gray-900">{formatDate(exportTicket.updatedAt.toString())}</span>
                             </div>
                         </div>
                     </div>

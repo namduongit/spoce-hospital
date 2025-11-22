@@ -26,6 +26,7 @@ public class HttpStatusResponse {
     public static final String INTERNAL_MESSAGE = "INTERNAL SERVER ERROR";
 
     public static final String BODY_MISSING = "REQUIRED REQUEST BODY IS MISSING";
+    public static final String INVALID_DATA = "INVALID DATA REQUEST";
 
     public static final String NO_RESOURCE = "NO STATIC RESOURCE API";
     public static final String EXISTS_RESOURCE = "EXIST RESOURCE";

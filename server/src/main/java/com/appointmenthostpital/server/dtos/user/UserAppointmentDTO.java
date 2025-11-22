@@ -20,7 +20,7 @@ public class UserAppointmentDTO {
         @NotNull(message = "Nhập giờ hẹn")
         @NotBlank(message = "Giờ hẹn không được để trống")
         private String time;
-        private String note;
+        private String note = "";
 
         public String getFullName() {
             return fullName;

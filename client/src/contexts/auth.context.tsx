@@ -15,7 +15,7 @@ type AuthResponse = {
   role: string,
   issuedAt: number,
   expiresAt: number
-}
+};
 
 type AuthContext = {
   token: string | null,
@@ -23,6 +23,7 @@ type AuthContext = {
   role: string | null,
   expiresAt: number | null,
   isAuthenticated: boolean,
+  loadingSession: boolean,
   setAuth: (authResponse: UserAuth) => void,
   clearAuth: () => void
 };
@@ -36,44 +37,58 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [role, setRole] = useState<string>("");
   const [expiresAt, setExpiresAt] = useState<number | null>(null);
 
+  const [loadingSession, setLoadingSession] = useState<boolean>(true);
   const { execute } = useCallApi();
 
   useEffect(() => {
     const authSessionStr = sessionStorage.getItem("CURRENT_USER");
-    if (!authSessionStr) return;
-    const authSession: UserAuth = JSON.parse(authSessionStr);
+    if (authSessionStr) {
+      const authSession: UserAuth = JSON.parse(authSessionStr);
+      setToken(authSession.accessToken);
+      setEmail(authSession.email);
+      setRole(authSession.role);
+      setExpiresAt(authSession.expiresAt);
+    }
 
-    const validToken = async () => {
-      const restResponse = await execute(valid());
-      if (!restResponse?.result && restResponse?.statusCode === 401) {
+    setLoadingSession(false);
+  }, []);
+
+  useEffect(() => {
+    if (loadingSession) return; 
+    if (!token) return; 
+
+    const validateToken = async () => {
+      const res = await execute(valid());
+      if (!res?.result && res?.statusCode === 401) {
         clearAuth();
         return;
       }
-      const authResponse: AuthResponse = restResponse.data;
-      setAuth({ ...authSession, email: authResponse.email, role: authResponse.role, issuedAt: authResponse.issuedAt, expiresAt: authResponse.expiresAt });
-    }
 
-    validToken();
-  }, []);
+      const authResponse: AuthResponse = res.data;
+      setEmail(authResponse.email);
+      setRole(authResponse.role);
+      setExpiresAt(authResponse.expiresAt);
+    };
+
+    validateToken();
+  }, [loadingSession, token]);
 
   useEffect(() => {
     if (!token || !expiresAt) return;
 
     const duration = expiresAt * 1000 - Date.now();
-
     if (duration <= 0) {
       clearAuth();
       return;
     }
 
-    const timeOut = window.setTimeout(() => {
+    const timeout = window.setTimeout(() => {
       clearAuth();
     }, duration);
 
-    return () => window.clearTimeout(timeOut);
+    return () => window.clearTimeout(timeout);
   }, [token, expiresAt]);
 
-  // Function clear token
   const clearAuth = () => {
     setToken("");
     setEmail("");
@@ -82,7 +97,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     sessionStorage.removeItem("CURRENT_USER");
   };
 
-  // Function set variable
   const setAuth = (authResponse: UserAuth) => {
     setToken(authResponse.accessToken);
     setEmail(authResponse.email);
@@ -96,10 +110,11 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     email,
     role,
     expiresAt,
-    isAuthenticated: !!token,
+    loadingSession,
+    isAuthenticated: !!token && !!email && !!expiresAt,
     setAuth,
     clearAuth
-  }), [token, expiresAt]);
+  }), [token, email, role, expiresAt, loadingSession]);
 
 
   return (
@@ -117,4 +132,3 @@ const useAuth = () => {
 
 export { AuthProvider, useAuth };
 export type { UserAuth };
-

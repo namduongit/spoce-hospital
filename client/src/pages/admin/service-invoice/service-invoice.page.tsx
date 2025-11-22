@@ -5,7 +5,6 @@ import useCallApi from "../../../hooks/useCallApi";
 import { serviceInvoiceStatus } from "../../../constants/status.constant";
 import type { ServiceInvoiceResponse } from "../../../responses/service-nvoice.response";
 import ServiceInvoiceDetail from "../../../components/common/details/service-invoice.detail";
-import EditServiceInvoice from "../../../components/common/edits/service-invoice.edit";
 import { printServiceTicket } from "../../../services/report-print.service";
 
 const AdminServiceInvoicePage = () => {
@@ -13,10 +12,9 @@ const AdminServiceInvoicePage = () => {
 
     const [serviceInvoices, setServiceInvoices] = useState<ServiceInvoiceResponse[]>([]);
     const [filteredInvoices, setFilteredInvoices] = useState<ServiceInvoiceResponse[]>([]);
-    const [showDetail, setShowDetail] = useState(false);
-    const [showEdit, setShowEdit] = useState(false);
+    const [showDetail, setShowDetail] = useState<boolean>(false);
     const [selectedInvoice, setSelectedInvoice] = useState<ServiceInvoiceResponse | null>(null);
-    
+
     const [searchForm, setSearchForm] = useState({
         input: "",
         status: "",
@@ -74,7 +72,7 @@ const AdminServiceInvoicePage = () => {
         totalAmount: serviceInvoices.reduce((sum, invoice) => sum + (invoice.totalAmount || 0), 0),
         totalPackages: serviceInvoices.reduce((sum, invoice) => sum + (invoice.medicalPackages?.length || 0), 0),
         pendingInvoices: serviceInvoices.filter(invoice => invoice.status === 'PENDING').length,
-        completedInvoices: serviceInvoices.filter(invoice => invoice.status === 'COMPLETED').length,
+        paidInvoices: serviceInvoices.filter(invoice => invoice.status === 'PAID').length,
         cancelledInvoices: serviceInvoices.filter(invoice => invoice.status === 'CANCELLED').length,
         todayInvoices: serviceInvoices.filter(invoice => {
             const today = new Date().toDateString();
@@ -86,7 +84,7 @@ const AdminServiceInvoicePage = () => {
         switch (status) {
             case 'PENDING':
                 return 'text-yellow-600 bg-yellow-100';
-            case 'COMPLETED':
+            case 'PAID':
                 return 'text-green-600 bg-green-100';
             case 'CANCELLED':
                 return 'text-red-600 bg-red-100';
@@ -99,24 +97,19 @@ const AdminServiceInvoicePage = () => {
         switch (status) {
             case 'PENDING':
                 return 'Chờ xử lý';
-            case 'COMPLETED':
+            case 'PAID':
                 return 'Đã hoàn thành';
             case 'CANCELLED':
                 return 'Đã hủy';
             default:
                 return status;
         }
-    };
+    }
 
     const handleShowDetail = (invoice: ServiceInvoiceResponse) => {
         setSelectedInvoice(invoice);
         setShowDetail(true);
-    };
-
-    const handleShowEdit = (invoice: ServiceInvoiceResponse) => {
-        setSelectedInvoice(invoice);
-        setShowEdit(true);
-    };
+    }
 
     const handlePrint = async (invoice: ServiceInvoiceResponse) => {
         const res = await execute(printServiceTicket(invoice.id));
@@ -166,7 +159,7 @@ const AdminServiceInvoicePage = () => {
                             </div>
                             <div className="ml-3">
                                 <p className="text-sm text-gray-600">Đã hoàn thành</p>
-                                <p className="text-lg font-semibold">{stats.completedInvoices}</p>
+                                <p className="text-lg font-semibold">{stats.paidInvoices}</p>
                             </div>
                         </div>
                     </div>
@@ -293,7 +286,7 @@ const AdminServiceInvoicePage = () => {
                                                 </span>
                                             </td>
                                             <td className="px-4 py-3 font-semibold text-blue-600">
-                                                {invoice.totalAmount.toLocaleString('vi-VN')} ₫
+                                                {invoice.totalAmount.toLocaleString('vi-VN')}
                                             </td>
                                             <td className="px-4 py-3 text-center">
                                                 <div className="flex items-center justify-center gap-2">
@@ -305,14 +298,7 @@ const AdminServiceInvoicePage = () => {
                                                         <i className="fa-solid fa-eye mr-1"></i>
                                                         Chi tiết
                                                     </button>
-                                                    <button
-                                                        onClick={() => handleShowEdit(invoice)}
-                                                        className="px-3 py-1 bg-green-100 text-green-600 rounded hover:bg-green-200 transition-colors text-xs font-medium"
-                                                        title="Chỉnh sửa"
-                                                    >
-                                                        <i className="fa-solid fa-edit mr-1"></i>
-                                                        Sửa
-                                                    </button>
+
                                                     <button
                                                         onClick={() => handlePrint(invoice)}
                                                         className="px-3 py-1 bg-yellow-100 text-yellow-600 rounded hover:bg-yellow-200 transition-colors text-xs font-medium"
@@ -341,14 +327,14 @@ const AdminServiceInvoicePage = () => {
                     </div>
 
                     {filteredInvoices.length > 0 && (
-                        <div className="p-4 border-t-1 border-gray-200 bg-gray-50">
+                        <div className="p-4 border-t border-gray-200 bg-gray-50">
                             <div className="flex items-center justify-between text-sm text-gray-600">
                                 <span>
                                     Hiển thị <span className="font-medium">{filteredInvoices.length}</span> trên tổng số <span className="font-medium">{serviceInvoices.length}</span> hóa đơn
                                 </span>
                                 <span>
                                     Tổng giá trị: <span className="font-semibold text-blue-600">
-                                        {filteredInvoices.reduce((sum, invoice) => sum + invoice.totalAmount, 0).toLocaleString('vi-VN')} ₫
+                                        {filteredInvoices.reduce((sum, invoice) => sum + invoice.totalAmount, 0).toLocaleString('vi-VN')}
                                     </span>
                                 </span>
                             </div>
@@ -362,14 +348,6 @@ const AdminServiceInvoicePage = () => {
                     serviceInvoiceSelect={selectedInvoice}
                     setShowDetail={setShowDetail}
                     onSuccess={handleGetServiceInvoices}
-                />
-            )}
-
-            {showEdit && selectedInvoice && (
-                <EditServiceInvoice
-                    serviceInvoiceSelect={selectedInvoice}
-                    setShowEdit={setShowEdit}
-                    onSuccess={() => handleGetServiceInvoices()}
                 />
             )}
         </main>

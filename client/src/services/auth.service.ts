@@ -24,8 +24,14 @@ export const register = async (params: RegisterParams) => {
     return restResponse;
 }
 
-export const valid = async() => {
-    const response = await api.post("/auth/authConfig")
+export const valid = async () => {
+    const response = await api.post("/auth/auth-config")
+    const restResponse: RestResponse = response.data;
+    return restResponse;
+}
+
+export const forgot = async (params: { email: string }) => {
+    const response = await api.post("/auth/forgot-password", params);
     const restResponse: RestResponse = response.data;
     return restResponse;
 }

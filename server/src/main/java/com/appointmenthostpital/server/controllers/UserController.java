@@ -13,24 +13,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.appointmenthostpital.server.dtos.RestResponse;
+import com.appointmenthostpital.server.dtos.user.SendContactDTO;
 import com.appointmenthostpital.server.dtos.user.UserAppointmentDTO;
 import com.appointmenthostpital.server.dtos.user.UserUpdateDTO;
 import com.appointmenthostpital.server.responses.AccountDetail;
 import com.appointmenthostpital.server.responses.AppointmentResponse;
+import com.appointmenthostpital.server.responses.PrescriptionInvoiceResponse;
+import com.appointmenthostpital.server.responses.ServiceInvoiceResponse;
 import com.appointmenthostpital.server.services.UserService;
 import com.appointmenthostpital.server.utils.HttpStatusResponse;
 
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/public")
+@RequestMapping("/api/patient")
 public class UserController {
     @Autowired
     private UserService userService;
 
     @GetMapping("/details")
-    public ResponseEntity<RestResponse<AccountDetail.ProfileDetailResponse>> handleGetAccountDetail(Authentication authentication) {
-    AccountDetail.ProfileDetailResponse response = this.userService.handleGetAccountDetail(authentication);
+    public ResponseEntity<RestResponse<AccountDetail.ProfileDetailResponse>> handleGetAccountDetail(
+            Authentication authentication) {
+        AccountDetail.ProfileDetailResponse response = this.userService.handleGetAccountDetail(authentication);
         return ResponseEntity.status(HttpStatusResponse.OK).body(new RestResponse<AccountDetail.ProfileDetailResponse>(
                 HttpStatusResponse.OK,
                 true,
@@ -40,8 +44,9 @@ public class UserController {
     }
 
     @PutMapping("/details")
-    public ResponseEntity<RestResponse<AccountDetail.ProfileDetailResponse>> handleUpdateProfile(Authentication authentication, 
-    @Valid @RequestBody UserUpdateDTO.UpdateProfileRequest request) {
+    public ResponseEntity<RestResponse<AccountDetail.ProfileDetailResponse>> handleUpdateProfile(
+            Authentication authentication,
+            @Valid @RequestBody UserUpdateDTO.UpdateProfileRequest request) {
         AccountDetail.ProfileDetailResponse response = this.userService.handleUpdateProfile(authentication, request);
         return ResponseEntity.status(HttpStatusResponse.OK).body(new RestResponse<AccountDetail.ProfileDetailResponse>(
                 HttpStatusResponse.OK,
@@ -53,7 +58,7 @@ public class UserController {
 
     @PostMapping("/appointments")
     public ResponseEntity<RestResponse<AppointmentResponse>> handeCreateAppointment(Authentication authentication,
-    @Valid @RequestBody UserAppointmentDTO.CreateAppointmentRequest request) {
+            @Valid @RequestBody UserAppointmentDTO.CreateAppointmentRequest request) {
         AppointmentResponse response = this.userService.handleCreateAppointment(authentication, request);
         return ResponseEntity.status(HttpStatusResponse.CREATED).body(new RestResponse<AppointmentResponse>(
                 HttpStatusResponse.CREATED,
@@ -64,12 +69,48 @@ public class UserController {
     }
 
     @GetMapping("/appointments")
-    public ResponseEntity<RestResponse<List<AppointmentResponse>>> handleGetAppointmentList(Authentication authentication) {
+    public ResponseEntity<RestResponse<List<AppointmentResponse>>> handleGetAppointmentList(
+            Authentication authentication) {
         List<AppointmentResponse> response = this.userService.handleGetAppointmentList(authentication);
         return ResponseEntity.status(HttpStatusResponse.OK).body(new RestResponse<List<AppointmentResponse>>(
                 HttpStatusResponse.OK,
                 true,
                 response,
+                HttpStatusResponse.SUCCESS_MESSAGE,
+                null));
+    }
+
+    @GetMapping("/service-invoices")
+    public ResponseEntity<RestResponse<List<ServiceInvoiceResponse>>> handleGetServiceInvoiceList(
+            Authentication authentication) {
+        List<ServiceInvoiceResponse> response = this.userService.handleGetServiceInvoiceList(authentication);
+        return ResponseEntity.status(HttpStatusResponse.OK).body(new RestResponse<List<ServiceInvoiceResponse>>(
+                HttpStatusResponse.OK,
+                true,
+                response,
+                HttpStatusResponse.SUCCESS_MESSAGE,
+                null));
+    }
+
+    @GetMapping("/prescription-invoices")
+    public ResponseEntity<RestResponse<List<PrescriptionInvoiceResponse>>> handleGetPrescriptionInvoiceList(
+            Authentication authentication) {
+        List<PrescriptionInvoiceResponse> response = this.userService.handleGetPrescriptionInvoiceList(authentication);
+        return ResponseEntity.status(HttpStatusResponse.OK).body(new RestResponse<List<PrescriptionInvoiceResponse>>(
+                HttpStatusResponse.OK,
+                true,
+                response,
+                HttpStatusResponse.SUCCESS_MESSAGE,
+                null));
+    }
+
+    @PostMapping("/send-contact")
+    public ResponseEntity<RestResponse<?>> handleSendContact(@Valid @RequestBody SendContactDTO request) {
+        this.userService.handleSendContact(request);
+        return ResponseEntity.status(HttpStatusResponse.OK).body(new RestResponse<Object>(
+                HttpStatusResponse.OK,
+                true,
+                null,
                 HttpStatusResponse.SUCCESS_MESSAGE,
                 null));
     }

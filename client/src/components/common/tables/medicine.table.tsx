@@ -5,6 +5,7 @@ import EditMedicine from "../edits/medicine.edit";
 
 import type { MedicineResponse } from "../../../responses/medicine.response";
 import type { MedicineCategoryResponse } from "../../../responses/medicine-category.response";
+import { formatPriceVND } from "../../../utils/format-number.util";
 
 type MedicineTableProps = {
     medicines: MedicineResponse[];
@@ -76,7 +77,7 @@ const MedicineTable = (props: MedicineTableProps) => {
                             </td>
                             <td className="px-4 py-3 text-sm text-gray-700 font-medium">{medicine.categoryName}</td>
                             <td className="px-4 py-3 text-sm text-gray-700 font-medium">{medicine.unit}</td>
-                            <td className="px-4 py-3 text-sm font-medium text-green-600">{medicine.price.toLocaleString()}đ</td>
+                            <td className="px-4 py-3 text-sm font-medium text-green-600">{formatPriceVND(medicine.price)}</td>
                             <td className="px-4 py-3 text-sm text-gray-700">
                                 <div>
                                     <p className={`font-medium ${medicine.currentStock < medicine.minStock ? 'text-red-600' : 'text-blue-600'}`}>

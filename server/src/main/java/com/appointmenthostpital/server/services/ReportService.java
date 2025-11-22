@@ -46,7 +46,7 @@ public class ReportService {
     ServiceInvoiceService serviceInvoiceService;
 
     public byte[] printMedicineReport(Long id) throws JRException {
-        InputStream templateStream = getClass().getResourceAsStream("/templates/medicineTemplate.jrxml");
+        InputStream templateStream = getClass().getResourceAsStream("/jasperreports/medicineTemplate.jrxml");
         PrescriptionInvoiceModel pres = prescriptionInvoiceService.getPrescriptionInvoiceById(id);
         
         if (templateStream == null) {
@@ -56,8 +56,9 @@ public class ReportService {
         JasperReport jasperReport = JasperCompileManager.compileReport(templateStream);
 
         Map<String, Object> params = new HashMap<>();
-        params.put("name", pres.getPatientName());
-        params.put("doctorName", pres.getDoctorAccountModel().getDoctorProfileModel().getFullName());
+        params.put("name", pres.getPatientName() );
+        params.put("doctorName", pres.getDoctorAccountModel().getDoctorProfileModel().getFullName() != null ?
+            pres.getDoctorAccountModel().getDoctorProfileModel().getFullName() : "");
         params.put("symptom", pres.getSymptoms());
         params.put("total", pres.getTotalAmount());
 
@@ -75,7 +76,7 @@ public class ReportService {
     }
 
     public byte[] printServiceReport(Long id) throws JRException {
-        InputStream templateStream = getClass().getResourceAsStream("/templates/serviceTemplate.jrxml");
+        InputStream templateStream = getClass().getResourceAsStream("/jasperreports/serviceTemplate.jrxml");
         ServiceInvoiceModel pres = serviceInvoiceService.getServiceInvoiceById(id);
         
         if (templateStream == null) {
@@ -86,7 +87,8 @@ public class ReportService {
 
         Map<String, Object> params = new HashMap<>();
         params.put("name", pres.getPatientName());
-        params.put("doctorName", pres.getDoctorAccountModel().getDoctorProfileModel().getFullName());
+        params.put("doctorName", pres.getDoctorAccountModel().getDoctorProfileModel().getFullName() != null ?
+            pres.getDoctorAccountModel().getDoctorProfileModel().getFullName() : "");
         params.put("total", pres.getTotalAmount());
 
         List<ServicePrescriptionModel> prescriptions = new ArrayList<>();
@@ -103,7 +105,7 @@ public class ReportService {
     }
 
     public byte[] printExportTicket(Long ticketId) throws JRException {
-        InputStream templateStream = getClass().getResourceAsStream("/templates/exportTemplate.jrxml");
+        InputStream templateStream = getClass().getResourceAsStream("/jasperreports/exportTemplate.jrxml");
         ExportTicketModel ticketModel = exportTicketService.getExportTicketById(ticketId);
 
         if (templateStream == null) {
@@ -135,7 +137,7 @@ public class ReportService {
     }
 
     public byte[] printImportTicket(Long ticketId) throws JRException {
-        InputStream templateStream = getClass().getResourceAsStream("/templates/importTemplate.jrxml");
+        InputStream templateStream = getClass().getResourceAsStream("/jasperreports/importTemplate.jrxml");
         ImportTicketModel ticketModel = importTicketService.getImportTicketById(ticketId);
 
         if (templateStream == null) {

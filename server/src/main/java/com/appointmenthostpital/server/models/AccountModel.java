@@ -178,4 +178,28 @@ public class AccountModel {
     public void setPatientServiceInvoices(List<ServiceInvoiceModel> patientServiceInvoices) {
         this.patientServiceInvoices = patientServiceInvoices;
     }
+
+    public List<ServiceInvoiceModel> getDoctorServiceInvoices() {
+        return doctorServiceInvoices;
+    }
+
+    public void setDoctorServiceInvoices(List<ServiceInvoiceModel> doctorServiceInvoices) {
+        this.doctorServiceInvoices = doctorServiceInvoices;
+    }
+
+    public List<PrescriptionInvoiceModel> getPatientPrescriptionInvoices() {
+        return patientPrescriptionInvoices;
+    }
+
+    public void setPatientPrescriptionInvoices(List<PrescriptionInvoiceModel> patientPrescriptionInvoices) {
+        this.patientPrescriptionInvoices = patientPrescriptionInvoices;
+    }
+
+    public List<PrescriptionInvoiceModel> getDoctorPrescriptionInvoices() {
+        return doctorPrescriptionInvoices;
+    }
+
+    public void setDoctorPrescriptionInvoices(List<PrescriptionInvoiceModel> doctorPrescriptionInvoices) {
+        this.doctorPrescriptionInvoices = doctorPrescriptionInvoices;
+    }
 }

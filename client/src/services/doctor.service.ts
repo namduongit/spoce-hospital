@@ -63,7 +63,7 @@ export const updateDoctorWorkDay = async (id: number, workDay: string) => {
 
 /** Doctor account service */
 export const getDoctorProfile = async () => {
-    const response = await api.get('/api/doctors/profile');
+    const response = await api.get('/api/doctors/details');
     const restResponse: RestResponse = await response.data;
     return restResponse;
 }

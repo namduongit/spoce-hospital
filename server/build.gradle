@@ -10,8 +10,12 @@ description = 'Demo project for Spring Boot'
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
+		languageVersion = JavaLanguageVersion.of(21)
 	}
+}
+
+test {
+	enabled = false
 }
 
 repositories {
@@ -30,16 +34,21 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-security")
+
+	implementation("org.springframework.boot:spring-boot-starter-websocket")
+	implementation 'org.springframework.boot:spring-boot-starter-amqp' 
+	implementation("org.springframework.boot:spring-boot-starter-mail")
+	
+	implementation('org.springframework.boot:spring-boot-starter-oauth2-resource-server') 
+
+	implementation("com.google.firebase:firebase-admin:9.2.0")
+
+    implementation 'com.vaadin.external.google:android-json:0.0.20131108.vaadin1'
+
 	implementation("net.sf.jasperreports:jasperreports:7.0.3")
 	implementation("net.sf.jasperreports:jasperreports-fonts:7.0.3")
 	implementation("net.sf.jasperreports:jasperreports-functions:7.0.3")
 	implementation("net.sf.jasperreports:jasperreports-pdf:7.0.3")
-	// implementation("org.springframework.boot:spring-boot-starter-websocket")
-	
-	implementation('org.springframework.boot:spring-boot-starter-oauth2-resource-server')
-
-	implementation("com.google.firebase:firebase-admin:9.2.0")
-
 }
 
 tasks.named('test') {

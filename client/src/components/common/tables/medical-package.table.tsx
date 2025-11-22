@@ -60,7 +60,7 @@ const MedicalPackageTable = (props: MedicalPackageTableProps) => {
                         <tr key={medicalPackage.id} className={`${idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-blue-50 transition-colors`}>
                             <td className="px-4 py-3 text-sm text-gray-700 font-medium"># {medicalPackage.id}</td>
                             <td className="px-4 py-3 text-sm text-gray-700 font-medium">{medicalPackage.name}</td>
-                            <td className="px-4 py-3 text-sm text-gray-700 font-medium">{formatPriceVND(medicalPackage.price)}</td>
+                            <td className="px-4 py-3 text-sm font-medium text-blue-600">{formatPriceVND(medicalPackage.price)}</td>
                             <td className="px-4 py-3 text-sm">
                                 <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium 
                                                                             ${medicalPackage.status === 'INACTIVE' ? 'bg-yellow-100 text-yellow-800' : ''}

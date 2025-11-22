@@ -16,4 +16,12 @@ type DoctorDetail = {
     status: string
 }
 
-export type { UserDetail, DoctorDetail };
+type AccountResponse = {
+    id: number,
+    email: string,
+    role: string,
+    status: string,
+    type: string
+}
+
+export type { UserDetail, DoctorDetail, AccountResponse };

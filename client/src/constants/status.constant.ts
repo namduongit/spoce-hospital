@@ -154,7 +154,7 @@ export const prescriptionInvoiceStatus = [
     {
         id: 2,
         name: "Đã hoàn thành",
-        value: "COMPLETED"
+        value: "PAID"
     },
     {
         id: 3,
@@ -172,7 +172,7 @@ export const serviceInvoiceStatus = [
     {
         id: 2,
         name: "Đã hoàn thành",
-        value: "COMPLETED"
+        value: "PAID"
     },
     {
         id: 3,

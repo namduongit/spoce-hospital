@@ -5,6 +5,20 @@ export type UserDetailResponse = {
     birthDate: string
 }
 
+export type DoctorProfileResponse = {
+    birthDate: string,
+    degree: string,
+    fullName: string,
+    gender: string,
+    image: string,
+    phone: string,
+    status: string,
+    workDay: string,
+
+    departmentId: number,
+    departmentName: string
+}
+
 type ProfileDetailResponse = {
     email: string,
     role: string,
@@ -13,7 +27,15 @@ type ProfileDetailResponse = {
     profile: UserDetailResponse
 }
 
-export type { ProfileDetailResponse };
+type DoctorDetailResponse = {
+     email: string,
+    role: string,
+    type: string,
+    status: string,
+    profile: DoctorProfileResponse
+}
+
+export type { ProfileDetailResponse, DoctorDetailResponse };
 
 /**
  * @description This file contains the type definitions for user profile responses.

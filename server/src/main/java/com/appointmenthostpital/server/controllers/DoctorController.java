@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.appointmenthostpital.server.dtos.RestResponse;
 import com.appointmenthostpital.server.dtos.admin.AdminDoctorDTO;
+import com.appointmenthostpital.server.responses.AccountDetail;
 import com.appointmenthostpital.server.responses.DoctorResponse;
 import com.appointmenthostpital.server.services.DoctorService;
 import com.appointmenthostpital.server.utils.HttpStatusResponse;
@@ -74,6 +76,19 @@ public class DoctorController {
                 DoctorResponse response = this.doctorService.handleUpdateDoctorImageAvatar(id, file);
                 return ResponseEntity.status(HttpStatusResponse.OK)
                                 .body(new RestResponse<DoctorResponse>(HttpStatusResponse.OK, true,
+                                                response, HttpStatusResponse.SUCCESS_MESSAGE, null));
+        }
+
+
+        /**
+         * @Controller used by doctor to get his profile
+         */
+        @GetMapping("/details")
+        public ResponseEntity<RestResponse<AccountDetail.DoctorDetailResponse>> handleGetDoctorProfile(Authentication authentication) {
+                AccountDetail.DoctorDetailResponse response = this.doctorService
+                                .handleGetDoctorProfile(authentication);
+                return ResponseEntity.status(HttpStatusResponse.OK)
+                                .body(new RestResponse<AccountDetail.DoctorDetailResponse>(HttpStatusResponse.OK, true,
                                                 response, HttpStatusResponse.SUCCESS_MESSAGE, null));
         }
 }

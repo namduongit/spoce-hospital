@@ -23,7 +23,7 @@ public class MethodArgumentNotValidExceptionHandler {
         restResponse.setResult(false);
         restResponse.setData(null);
         restResponse.setMessage(HttpStatusResponse.BAD_MESSAGE);
-        restResponse.setErrorMessage(strings.size() > 1 ? strings : strings.get(0));
+        restResponse.setErrorMessage(strings.size() > 1 ? strings : strings.getFirst());
 
         return ResponseEntity.status(HttpStatusResponse.BAD_REQUEST).body(restResponse);
     }

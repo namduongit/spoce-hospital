@@ -1,16 +1,27 @@
 import { useState } from 'react';
+import { useAuth } from '../../contexts/auth.context';
+import { useToast } from '../../contexts/toast.context';
 
 const navLinks = [
-  { href: '/doctor', label: 'Trang chủ', icon: 'fa-solid fa-home' },
   { href: '/doctor/appointment', label: 'Lịch khám', icon: 'fa-solid fa-calendar-check' },
-  { href: '/doctor/create-prescription-invoice', label: 'Kê đơn thuốc', icon: 'fa-solid fa-receipt' },
-  { href: '/doctor/create-service-invoice', label: 'Kê đơn dịch vụ', icon: 'fa-solid fa-receipt' },
-  // { href: '/doctor/invoice-list', label: 'Danh sách hóa đơn', icon: 'fa-solid fa-file-invoice' },
+  { href: '/doctor/prescription-invoice', label: 'Kê đơn thuốc', icon: 'fa-solid fa-receipt' },
+  { href: '/doctor/service-invoice', label: 'Kê đơn dịch vụ', icon: 'fa-solid fa-receipt' },
   { href: '/doctor/profile', label: 'Cá nhân', icon: 'fa-solid fa-user' },
 ];
 
 const DoctorSidebar = () => {
   const [open, setOpen] = useState<boolean>(false);
+
+  const auth = useAuth();
+  const toast = useToast();
+
+  const handleLogout = () => {
+    auth.clearAuth();
+    toast.showToast("Thông báo", "Đăng xuất thành công", "success");
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
+  }
 
   return (
     <div className='sidebar-component'>
@@ -33,7 +44,9 @@ const DoctorSidebar = () => {
             </a>
           ))}
         </nav>
-        <button className="text-gray-700 font-semibold hover:text-blue-600 hover:bg-blue-50 rounded px-3 py-2 cursor-pointer transition text-start">
+        <button className="text-gray-700 font-semibold hover:text-blue-600 hover:bg-blue-50 rounded px-3 py-2 cursor-pointer transition text-start"
+          onClick={handleLogout}
+        >
           <i className="fa-solid fa-right-from-bracket me-2"></i>
           <span>Đăng xuất</span>
         </button>

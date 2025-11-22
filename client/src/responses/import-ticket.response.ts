@@ -9,8 +9,8 @@ type ImportTicketResponse = {
     
     items: ImportTicketItemResponse[],
 
-    createdAt: Date,
-    updatedAt: Date
+    createdAt: string,
+    updatedAt: string
 }
 
 export type { ImportTicketResponse };

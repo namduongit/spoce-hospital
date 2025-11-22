@@ -1,7 +1,12 @@
 const SettingDetail = () => {
     return (
-        <div className="space-y-6">
+        <div className="space-y-4">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Cài đặt tài khoản</h2>
+            
+            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
+                <span className="text-yellow-800">Tính năng chưa phát triển</span>
+            </div>
+
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <div className="space-y-6">
                     <div className="flex items-center justify-between py-4 border-b border-gray-100">

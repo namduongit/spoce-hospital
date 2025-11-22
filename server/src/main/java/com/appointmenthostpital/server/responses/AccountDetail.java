@@ -57,17 +57,8 @@ public class AccountDetail {
         private String workDay;
         private String status;
 
-        public DoctorDetail(String image, String fullName, String gender, String phone, String birthDate, String degree,
-                String workDay, String status) {
-            this.image = image;
-            this.fullName = fullName;
-            this.gender = gender;
-            this.phone = phone;
-            this.birthDate = birthDate;
-            this.degree = degree;
-            this.workDay = workDay;
-            this.status = status;
-        }
+        private Long departmentId;
+        private String departmentName;
 
         public String getImage() {
             return image;
@@ -131,6 +122,22 @@ public class AccountDetail {
 
         public void setStatus(String status) {
             this.status = status;
+        }
+
+        public Long getDepartmentId() {
+            return departmentId;
+        }
+
+        public void setDepartmentId(Long departmentId) {
+            this.departmentId = departmentId;
+        }
+
+        public String getDepartmentName() {
+            return departmentName;
+        }
+
+        public void setDepartmentName(String departmentName) {
+            this.departmentName = departmentName;
         }
     }
 
@@ -201,17 +208,6 @@ public class AccountDetail {
         private String status;
 
         private AccountDetail.DoctorDetail profile;
-
-        public DoctorDetailResponse
-        (String email, String role, String type, String status,
-         String image, String fullName, String gender, String phone, String birthDate,
-         String degree, String workDay, String doctorStatus) {
-            this.email = email;
-            this.role = role;       
-            this.type = type;
-            this.status = status;
-            this.profile = new AccountDetail.DoctorDetail(image, fullName, gender, phone, birthDate,degree, workDay, doctorStatus);
-        }
 
         public String getEmail() {
             return email;

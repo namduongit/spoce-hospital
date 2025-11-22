@@ -29,7 +29,7 @@ const ImportTicketDetail = (props: ImportTicketDetail) => {
     }
 
     const totalItems = importTicketSelect.items?.reduce((sum, item) => sum + item.quantity, 0) || 0;
-    const totalValue = importTicketSelect.items?.reduce((sum, item) => sum + item.totalPrice, 0) || 0;
+    const totalValue = importTicketSelect.items?.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0) || 0;
 
     return (
         <div className="fixed inset-0 bg-gray-500/50 flex items-center justify-center z-50">
@@ -143,7 +143,7 @@ const ImportTicketDetail = (props: ImportTicketDetail) => {
                                                 <td className="py-3 px-4 text-center font-semibold">{item.quantity}</td>
                                                 <td className="py-3 px-4 text-right">{formatPriceVND(item.unitPrice)}</td>
                                                 <td className="py-3 px-4 text-right font-semibold text-green-600">
-                                                    {formatPriceVND(item.totalPrice)}
+                                                    {formatPriceVND(item.unitPrice * item.quantity)}
                                                 </td>
                                             </tr>
                                         ))}

@@ -1,42 +1,37 @@
-# Client & Server
-!**/.vscode/
-!**/.idea/
-!.vscode/extensions.json
-.vscode
+# DO NOT block these files (the ! means exception)
+# !**/.vscode/
+# !**/.idea/
+# !.vscode/extensions.json
+
+
+# Client & Server: Block environment variable 
+# application.properties
+# config.json
+# .env
+
+# IDE & Config
+.vscode/
+.idea/
+.env
 application.properties
-firebase-service-account.json
-.env
-.env
-.env.local
-.env.*.local
+config.json
 
-
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
-
-# Spring (server)
-target/
-build/
-.gradle/
+# Build & Dependencies
 **/target/
 **/build/
 **/bin/
-**/.idea
+.gradle/
+node_modules/
 
-# Wrapper 
+# Lock files
+client/package-lock.json
+client/yarn.lock
+client/pnpm-lock.yaml
+
+# Gradle Wrapper
 server/gradlew
 server/gradlew.bat
 server/gradle/
 
-# Node (client)
-node_modules/
-client/package-lock.json
-client/yarn.lock
-client/pnpm-lock.yaml
+# Database
+mysql_data/

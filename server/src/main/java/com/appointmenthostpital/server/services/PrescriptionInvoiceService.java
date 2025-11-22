@@ -31,6 +31,11 @@ public class PrescriptionInvoiceService {
         return prescriptionInvoiceRepository.findById(id).orElseThrow(() -> new NotFoundResourceException("Không tìm thấy hóa đơn kê thuốc"));
     }
 
+    public PrescriptionInvoiceResponse handleGetPrescriptionInvoiceById(Long id) {
+        PrescriptionInvoiceModel invoiceModel = this.getPrescriptionInvoiceById(id);
+        return PrescriptionInvoiceConvert.convertToResponse(invoiceModel);
+    }
+
     public List<PrescriptionInvoiceResponse> handleGetPrescriptionInvoiceList() {
         return this.prescriptionInvoiceRepository.findAll().stream().map(
             PrescriptionInvoiceConvert::convertToResponse
@@ -102,6 +107,28 @@ public class PrescriptionInvoiceService {
         }
 
         return PrescriptionInvoiceConvert.convertToResponse(invoiceModel);
+    }
+
+    @Transactional
+    public PrescriptionInvoiceResponse handleChangePrescriptionInvoiceState(
+        PrescriptionInvoiceModel invoice) {
+
+        invoice = this.prescriptionInvoiceRepository.save(invoice);
+
+        if (invoice.getStatus().equals("PAID")) {
+            this.updateInventoryFromPrescriptionInvoice(invoice);
+        }
+
+        return PrescriptionInvoiceConvert.convertToResponse(invoice);
+    }
+
+    public boolean checkMedicineStockForPrescriptionInvoice(PrescriptionInvoiceModel invoice) {
+        for (PrescriptionInvoiceDetailModel detail: invoice.getPrescriptionInvoiceDetails()) {
+            if (detail.getMedicineModel().getCurrentStock() < detail.getQuantity()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void updateInventoryFromPrescriptionInvoice(PrescriptionInvoiceModel invoice) {

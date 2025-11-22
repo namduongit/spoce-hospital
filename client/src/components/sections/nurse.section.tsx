@@ -41,7 +41,7 @@ const NurseSection = (props: NurseSectionProps) => {
   };
 
   return (
-    <div className="group nurse-section bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-blue-200">
+    <div className="group nurse-section h-full bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-blue-200">
       <div className="relative">
         <div className="overflow-hidden">
           <img 

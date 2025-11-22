@@ -2,11 +2,6 @@ import { useState } from 'react';
 
 const navLinks = [
     {
-        href: "/assistor",
-        label: "Trang chủ",
-        icon: "fa-solid fa-house"
-    },
-    {
         href: "/assistor/appointments",
         label: "Lịch hẹn",
         icon: "fa-solid fa-calendar-days"

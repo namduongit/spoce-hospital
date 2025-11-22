@@ -43,20 +43,27 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthConverterConfig config) throws Exception {
-        http.csrf(csrf -> csrf.disable()); // Disable CSRF protection for stateless APIs to use Postman
+        // Disable CSRF protection for stateless APIs to use Postman
+        http.csrf(csrf -> csrf.disable());
         http.cors(cors -> {});
         http.authorizeHttpRequests(authz -> authz
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             .requestMatchers("/auth/*").permitAll()
-            .requestMatchers("/api/public/**").authenticated()
+            .requestMatchers("/api/vnpay/**").permitAll()
+            .requestMatchers("/api/payment/momo/**").permitAll()
+            .requestMatchers("/api/public/**").permitAll()
+            .requestMatchers("/ws/**").permitAll()
 
-            .requestMatchers("/api/accounts/**").hasAnyRole("ADMIN", "DOCTOR", "ASSISTOR", "USER")
+            .requestMatchers("/api/accounts/**").hasAnyRole("ADMIN", "DOCTOR")
 
-            .requestMatchers("/api/departments/**").hasAnyRole("ADMIN", "DOCTOR", "ASSISTOR", "USER")
-            .requestMatchers("/api/doctors/**").hasAnyRole("ADMIN", "DOCTOR", "ASSISTOR", "USER")
-            .requestMatchers("/api/rooms/**").hasAnyRole("ADMIN", "DOCTOR", "ASSISTOR", "USER")
+            .requestMatchers("/api/departments/**").hasAnyRole("ADMIN")
+            .requestMatchers("/api/doctors/**").hasAnyRole("ADMIN")
+            .requestMatchers("/api/rooms/**").hasAnyRole("ADMIN")
 
-            .requestMatchers("/api/appointments/**").hasAnyRole("ADMIN", "DOCTOR", "ASSISTOR", "USER")
+            .requestMatchers("/api/appointments/**").hasAnyRole("ADMIN", "DOCTOR", "ASSISTOR")
+            
+            .requestMatchers("/api/medical-packages/**").hasAnyRole("ADMIN", "DOCTOR", "ASSISTOR")
+            .requestMatchers("/api/medicines/**").hasAnyRole("ADMIN", "DOCTOR", "ASSISTOR")
             .anyRequest().authenticated()
         );
         http.oauth2ResourceServer(oauth2r -> oauth2r

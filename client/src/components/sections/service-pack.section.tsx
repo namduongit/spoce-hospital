@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { getMedicalPackageList } from '../../services/medical-package.service';
+
 import useCallApi from '../../hooks/useCallApi';
 import type { MedicalPackageModel } from '../../models/MedicalPackageModel.model';
 import { formatPriceVND } from '../../utils/format-number.util';
+import { getMedicalPackageList } from '../../services/public.service';
 
 const ServicePackSection = () => {
     const { execute, loading } = useCallApi();
@@ -91,7 +92,7 @@ const ServicePackSection = () => {
                                         </span>
                                     </div>
 
-                                    <p className="text-gray-600 mb-6 line-clamp-3 min-h-[4.5rem]">
+                                    <p className="text-gray-600 mb-6 line-clamp-3 min-h-18">
                                         {pkg.description}
                                     </p>
 

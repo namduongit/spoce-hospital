@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import section from '../../assets/images/main/section.png'
-import PatientLogoutButton from '../buttons/logout.button';
 import PatientScheduleButton from '../buttons/schedule.button';
 import HeroSection from './hero.section';
 
@@ -196,7 +195,7 @@ const MainSection = () => {
                         transition={{ duration: 0.6, delay: 1.0 }}
                         viewport={{ once: true }}
                     >
-                        <PatientLogoutButton />
+                        {/* <PatientLogoutButton /> */}
                         <PatientScheduleButton />
                     </motion.div>
                 </motion.div>

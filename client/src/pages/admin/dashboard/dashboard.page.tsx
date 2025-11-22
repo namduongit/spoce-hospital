@@ -37,13 +37,11 @@ const AdminDashboardPage = () => {
     }, []);
 
     const stats = {
-        // Accounts statistics
         totalUsers: accounts.length,
         totalPatients: accounts.filter((a: AccountResponse) => a.role === 'USER').length,
         totalDoctors: accounts.filter((a: AccountResponse) => a.role === 'DOCTOR').length,
         totalAssistors: accounts.filter((a: AccountResponse) => a.role === 'ASSISTOR').length,
 
-        // Appointments statistics
         totalAppointments: appointments.length,
         todayAppointments: appointments.filter((a: AppointmentResponse) => {
             const today = new Date().toDateString();
@@ -52,7 +50,6 @@ const AdminDashboardPage = () => {
         pendingAppointments: appointments.filter((a: AppointmentResponse) => a.status === 'PENDING').length,
         completedAppointments: appointments.filter((a: AppointmentResponse) => a.status === 'COMPLETED').length,
 
-        // Medicine statistics
         totalMedicines: medicines.length,
         activeMedicines: medicines.filter(m => m.status === 'ACTIVE').length,
         lowStockMedicines: medicines.filter(m => m.currentStock <= m.minStock).length,

@@ -39,7 +39,7 @@ const AddDoctor = (props: AddDoctorProps) => {
     }
 
     const [selectedImage, setSelectedImage] = useState<string>("");
-    const [imageFile, setImageFile] = useState<File | null>(null);
+    const [_, setImageFile] = useState<File | null>(null);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];

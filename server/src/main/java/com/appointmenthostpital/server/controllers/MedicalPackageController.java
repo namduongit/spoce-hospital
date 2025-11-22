@@ -29,7 +29,7 @@ public class MedicalPackageController {
     @GetMapping("")
     public ResponseEntity<RestResponse<List<MedicalPackageResponse>>> handleGetMedicalPackageList() {
         List<MedicalPackageResponse> response = this.medicalPackageService.handleGetMedicalPackageList();
-        return ResponseEntity.ok().body(new RestResponse<List<MedicalPackageResponse>>(HttpStatusResponse.OK, true,
+        return ResponseEntity.status(HttpStatusResponse.OK).body(new RestResponse<List<MedicalPackageResponse>>(HttpStatusResponse.OK, true,
                 response, HttpStatusResponse.SUCCESS_MESSAGE, null));
     }
 
@@ -37,7 +37,7 @@ public class MedicalPackageController {
     public ResponseEntity<RestResponse<MedicalPackageResponse>> handleCreateMedicalPackage(
             @Valid @RequestBody AdminMedicalPackageDTO.CreateMedicalPackageRequest request) {
         MedicalPackageResponse response = this.medicalPackageService.handleCreateMedicalPackage(request);
-        return ResponseEntity.ok().body(new RestResponse<MedicalPackageResponse>(
+        return ResponseEntity.status(HttpStatusResponse.CREATED).body(new RestResponse<MedicalPackageResponse>(
                 HttpStatusResponse.CREATED,
                 true,
                 response,
@@ -50,7 +50,7 @@ public class MedicalPackageController {
             @PathVariable(name = "id") Long id,
             @Valid @RequestBody AdminMedicalPackageDTO.UpdateMedicalPackageRequest request) {
         MedicalPackageResponse response = this.medicalPackageService.handleUpdateMedicalPackage(id, request);
-        return ResponseEntity.ok().body(new RestResponse<MedicalPackageResponse>(
+        return ResponseEntity.status(HttpStatusResponse.OK).body(new RestResponse<MedicalPackageResponse>(
                 HttpStatusResponse.OK,
                 true,
                 response,
@@ -63,7 +63,7 @@ public class MedicalPackageController {
             @PathVariable(name = "id") Long id,
             @Valid @RequestBody AdminMedicalPackageDTO.ChangeMedicalPackageStatusRequest request) {
         MedicalPackageResponse response = this.medicalPackageService.handleChangeMedicalPackageStatus(id, request);
-        return ResponseEntity.ok().body(new RestResponse<MedicalPackageResponse>(
+        return ResponseEntity.status(HttpStatusResponse.OK).body(new RestResponse<MedicalPackageResponse>(
                 HttpStatusResponse.OK,
                 true,
                 response,

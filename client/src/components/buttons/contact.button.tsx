@@ -5,15 +5,18 @@ import { useToast } from "../../contexts/toast.context";
 
 const PatientLogoutButton = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
-    const { clearAuth } = useAuth();
-    const { showToast } = useToast();
+    const auth = useAuth();
+    const toast = useToast();
 
     const handleClick = () => setIsOpen(!isOpen);
 
-    const handleLogoutClick = () => {
-        clearAuth();
-        showToast("Thông báo", "Đăng xuất thành công!", "success");
-    };
+    const handleLogout = () => {
+        auth.clearAuth();
+        toast.showToast("Thông báo", "Đăng xuất thành công", "success");
+        setTimeout(() => {
+            window.location.reload();
+        }, 500);
+    }
 
     return (
         <div>
@@ -34,7 +37,7 @@ const PatientLogoutButton = () => {
                            after:border-l-transparent after:border-r-transparent after:border-b-white"
             >
                 <NavLink to="/page/account"><li className="py-3 px-4 cursor-pointer hover:bg-blue-50 hover:text-blue-500">Thông tin tài khoản</li></NavLink>
-                <li className="py-3 px-4 cursor-pointer hover:bg-blue-50 hover:text-blue-500" onClick={handleLogoutClick}>Đăng xuất</li>
+                <li className="py-3 px-4 cursor-pointer hover:bg-blue-50 hover:text-blue-500" onClick={handleLogout}>Đăng xuất</li>
             </ul>)}
         </div>
     );

@@ -1,15 +1,25 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../../contexts/auth.context";
+import { useToast } from "../../../contexts/toast.context";
 
 const OptionButton = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const auth = useAuth();
+    const toast = useToast();
+
+    const handleLogout = () => {
+        auth.clearAuth();
+        toast.showToast("Thông báo", "Đăng xuất thành công", "success");
+        setTimeout(() => {
+            window.location.reload();
+        }, 500);
+    }
 
     return (
         <div className="relative account-button lg:text-white lg:py-2 lg:px-3 lg:rounded-[5px] lg:bg-blue-600 cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
             <i className="!hidden lg:!inline-block fa-regular fa-user"></i>
-            <span className="relative px-2 py-1 block text-gray-700 hover:text-blue-600 ali
+            <span className="relative py-1 block text-gray-700 hover:text-blue-600 ali
             lg:hidden"
             >
                 Tài khoản
@@ -17,7 +27,7 @@ const OptionButton = () => {
             </span>
 
             {isOpen && (
-                <nav className="account-nav bg-white flex flex-col ms-5 lg:!absolute lg:shadow-xl lg:min-w-40 lg:-start-34 lg:mt-5">
+                <nav className="account-nav bg-white flex flex-col ms-1 lg:!absolute lg:shadow-xl lg:min-w-40 lg:-start-34 lg:mt-5">
                     {auth.isAuthenticated ? (
                         <>
                             <NavLink to="/page/account" className="text-gray-700 hover:font-bold hover:bg-gray-100 hover:text-blue-600 px-4 py-1 lg:py-3">
@@ -26,9 +36,9 @@ const OptionButton = () => {
                             <NavLink to="/auth/history" className="text-gray-700 hover:font-bold hover:bg-gray-100 hover:text-blue-600 px-4 py-1 lg:py-3">
                                 Lịch sử
                             </NavLink>
-                            <NavLink to="/auth/logout" className="text-gray-700 hover:font-bold hover:bg-gray-100 hover:text-blue-600 px-4 py-1 lg:py-3">
+                            <button onClick={handleLogout} className="text-start text-gray-700 hover:font-bold hover:bg-gray-100 hover:text-blue-600 px-4 py-1 lg:py-3">
                                 Đăng xuất
-                            </NavLink>
+                            </button>
                         </>
                     ) : (
                         <>

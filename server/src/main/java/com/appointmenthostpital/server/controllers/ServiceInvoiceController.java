@@ -24,32 +24,40 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/service-invoices")
 public class ServiceInvoiceController {
-    @Autowired
-    private ServiceInvoiceService serviceInvoiceService;
+        @Autowired
+        private ServiceInvoiceService serviceInvoiceService;
 
-    @GetMapping("")
-    public ResponseEntity<RestResponse<List<ServiceInvoiceResponse>>> handleGetServiceInvoiceList() {
-        List<ServiceInvoiceResponse> responses = serviceInvoiceService.handleGetServiceInvoiceList();
-        return ResponseEntity.status(HttpStatusResponse.OK).body(new RestResponse<List<ServiceInvoiceResponse>>(
-                HttpStatusResponse.OK, true, responses, HttpStatusResponse.SUCCESS_MESSAGE, null));
-    }
+        @GetMapping("")
+        public ResponseEntity<RestResponse<List<ServiceInvoiceResponse>>> handleGetServiceInvoiceList() {
+                List<ServiceInvoiceResponse> responses = serviceInvoiceService.handleGetServiceInvoiceList();
+                return ResponseEntity.status(HttpStatusResponse.OK).body(new RestResponse<List<ServiceInvoiceResponse>>(
+                                HttpStatusResponse.OK, true, responses, HttpStatusResponse.SUCCESS_MESSAGE, null));
+        }
 
-    @PostMapping("")
-    public ResponseEntity<RestResponse<ServiceInvoiceResponse>> handleCreateServiceInvoice(
-            Authentication authentication, 
-            @Valid @RequestBody DoctorServiceInvoiceDTO.CreateServiceInvoiceRequest request) {
-        ServiceInvoiceResponse response = serviceInvoiceService
-                .handleCreateServiceInvoice(authentication, request);
-        return ResponseEntity.status(HttpStatusResponse.CREATED).body(new RestResponse<ServiceInvoiceResponse>(
-                HttpStatusResponse.CREATED, true, response, HttpStatusResponse.SUCCESS_MESSAGE, null));
-    }
+        @PostMapping("")
+        public ResponseEntity<RestResponse<ServiceInvoiceResponse>> handleCreateServiceInvoice(
+                        Authentication authentication,
+                        @Valid @RequestBody DoctorServiceInvoiceDTO.CreateServiceInvoiceRequest request) {
+                ServiceInvoiceResponse response = serviceInvoiceService
+                                .handleCreateServiceInvoice(authentication, request);
+                return ResponseEntity.status(HttpStatusResponse.CREATED).body(new RestResponse<ServiceInvoiceResponse>(
+                                HttpStatusResponse.CREATED, true, response, HttpStatusResponse.SUCCESS_MESSAGE, null));
+        }
 
-    @PutMapping("/{id}/status")
-    public ResponseEntity<RestResponse<ServiceInvoiceResponse>> handleUpdateServiceInvoiceStatus(
-            @PathVariable(name = "id", required = true) Long id,
-            @Valid @RequestBody DoctorServiceInvoiceDTO.ChangeServiceInvoiceStatusRequest request) {
-        ServiceInvoiceResponse response = serviceInvoiceService.handleUpdateServiceInvoiceStatus(id, request);
-        return ResponseEntity.status(HttpStatusResponse.OK).body(new RestResponse<ServiceInvoiceResponse>(
-                HttpStatusResponse.OK, true, response, HttpStatusResponse.SUCCESS_MESSAGE, null));
-    }
+        @GetMapping("/{id}")
+        public ResponseEntity<RestResponse<ServiceInvoiceResponse>> handleGetServiceInvoiceById(
+                        @PathVariable(name = "id", required = true) Long id) {
+                ServiceInvoiceResponse response = serviceInvoiceService.handleGetServiceInvoiceById(id);
+                return ResponseEntity.status(HttpStatusResponse.OK).body(new RestResponse<ServiceInvoiceResponse>(
+                                HttpStatusResponse.OK, true, response, HttpStatusResponse.SUCCESS_MESSAGE, null));
+        }
+
+        @PutMapping("/{id}/status")
+        public ResponseEntity<RestResponse<ServiceInvoiceResponse>> handleUpdateServiceInvoiceStatus(
+                        @PathVariable(name = "id", required = true) Long id,
+                        @Valid @RequestBody DoctorServiceInvoiceDTO.ChangeServiceInvoiceStatusRequest request) {
+                ServiceInvoiceResponse response = serviceInvoiceService.handleUpdateServiceInvoiceStatus(id, request);
+                return ResponseEntity.status(HttpStatusResponse.OK).body(new RestResponse<ServiceInvoiceResponse>(
+                                HttpStatusResponse.OK, true, response, HttpStatusResponse.SUCCESS_MESSAGE, null));
+        }
 }

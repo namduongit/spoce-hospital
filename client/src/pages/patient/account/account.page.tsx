@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import person from "../../../assets/images/auth/person.png"
-import HistoryDetail from "../../../components/patient/history.patient";
-import MedicineDetail from "../../../components/patient/medicine.patient";
+import ServiceInvoicePatient from "../../../components/patient/service-invoice.patient";
+import PrescriptionInvoicePatient from "../../../components/patient/prescription-invoice.patient";
 import SettingDetail from "../../../components/patient/setting.patient";
 
-import { getUserDetail, getAppointmentList } from "../../../services/user.service";
+import { getUserDetail, getAppointmentList, getServiceInvoiceList, getPrescriptionInvoiceList } from "../../../services/user.service";
 
 import useCallApi from "../../../hooks/useCallApi";
 import type { ProfileDetailResponse, UserDetailResponse } from "../../../responses/user.response";
 import AccountPatient from "../../../components/patient/account.patient";
 import type { AppointmentResponse } from "../../../responses/appointment.response";
 import AppointmentPatient from "../../../components/patient/appointment.patient";
+import type { ServiceInvoiceResponse } from "../../../responses/service-nvoice.response";
+import type { PrescriptionInvoiceResponse } from "../../../responses/prescription-invoice.response";
 
 const AccountPage = () => {
     const { execute } = useCallApi();
@@ -18,7 +20,10 @@ const AccountPage = () => {
 
     const [userDetail, setUserDetail] = useState<UserDetailResponse>({} as UserDetailResponse);
     const [profileDetail, setProfileDetail] = useState<ProfileDetailResponse>({} as ProfileDetailResponse);
-    const [appointment, setAppointment] = useState<AppointmentResponse[]>([]);
+
+    const [appointments, setAppointments] = useState<AppointmentResponse[]>([]);
+    const [serviceInvoices, setServiceInvoices] = useState<ServiceInvoiceResponse[]>([]);
+    const [prescriptionInvoices, setPrescriptionInvoices] = useState<PrescriptionInvoiceResponse[]>([]);
 
     const [name, setName] = useState<string>("");
     const [email, setEmail] = useState<string>("");
@@ -37,13 +42,31 @@ const AccountPage = () => {
         const restResponse = await execute(getAppointmentList());
         if (restResponse?.result) {
             const data: AppointmentResponse[] = restResponse.data;
-            setAppointment(data);
+            setAppointments(data);
+        }
+    }
+
+    const handleGetServiceInvoiceList = async () => {
+        const restResponse = await execute(getServiceInvoiceList());
+        if (restResponse?.result) {
+            const data: ServiceInvoiceResponse[] = restResponse.data;
+            setServiceInvoices(data);
+        }
+    }
+
+    const handleGetPrescriptionInvoiceList = async () => {
+        const restResponse = await execute(getPrescriptionInvoiceList());
+        if (restResponse?.result) {
+            const data: PrescriptionInvoiceResponse[] = restResponse.data;
+            setPrescriptionInvoices(data);
         }
     }
 
     useEffect(() => {
         handleGetUserDetail();
         handleGetAppointmentList();
+        handleGetServiceInvoiceList();
+        handleGetPrescriptionInvoiceList();
     }, []);
 
     useEffect(() => {
@@ -90,11 +113,11 @@ const AccountPage = () => {
             case "profile":
                 return (<AccountPatient userDetail={userDetail} email={email} onSuccess={handleGetUserDetail} />)
             case "appointments":
-                return (<AppointmentPatient appointments={appointment} />);
+                return (<AppointmentPatient appointments={appointments} />);
             case "history":
-                return (<HistoryDetail />)
+                return (<ServiceInvoicePatient serviceInvoices={serviceInvoices} />)
             case "medicine":
-                return (<MedicineDetail />)
+                return (<PrescriptionInvoicePatient prescriptionInvoices={prescriptionInvoices} />)
             case "settings":
                 return (<SettingDetail />)
             default:

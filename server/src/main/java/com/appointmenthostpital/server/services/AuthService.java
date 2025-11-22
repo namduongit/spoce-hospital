@@ -1,5 +1,6 @@
 package com.appointmenthostpital.server.services;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.appointmenthostpital.server.dtos.auth.JWTResponse;
 import com.appointmenthostpital.server.dtos.auth.LoginDTO;
 import com.appointmenthostpital.server.dtos.auth.RegisterDTO;
+import com.appointmenthostpital.server.dtos.user.ForgotPasswordDTO;
 import com.appointmenthostpital.server.dtos.auth.AuthConfig;
 import com.appointmenthostpital.server.exceptions.AccountLockedException;
 import com.appointmenthostpital.server.exceptions.PasswordNotValidException;
@@ -18,6 +20,8 @@ import com.appointmenthostpital.server.models.UserProfileModel;
 import com.appointmenthostpital.server.utils.BCryptPassword;
 
 import com.appointmenthostpital.server.utils.DateCustom;
+import com.appointmenthostpital.server.utils.EmailHelper;
+import com.appointmenthostpital.server.utils.RabbitMQ;
 
 @Service
 public class AuthService {
@@ -32,6 +36,9 @@ public class AuthService {
 
     @Autowired
     private JWTService jwtService;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     public RegisterDTO.RegisterResponse handleRegister(RegisterDTO.RegisterRequest registerRequest) {
         AccountModel accountModel = new AccountModel();
@@ -69,13 +76,27 @@ public class AuthService {
         return new LoginDTO.LoginResponse(jwtResponse.getAccessToken(), request.getEmail(), jwtResponse.getRole(), jwtResponse.getNow(), jwtResponse.getValidity());
     }
 
-    @SuppressWarnings("null")
     public AuthConfig handleValid(Authentication authentication) {
         String email = authentication.getName();
         AccountModel accountModel = this.userService.getUserByEmail(email);
         Jwt jwt = (Jwt)authentication.getPrincipal();
 
         return new AuthConfig(email, accountModel.getRole(), (int)jwt.getIssuedAt().getEpochSecond(), (int)jwt.getExpiresAt().getEpochSecond());
+    }
+
+    public void handleForgotPassword(String email) {
+        String password = EmailHelper.generatePassword(8);
+        AccountModel accountModel = this.userService.getUserByEmail(email);
+        accountModel.setPassword(this.bCryptPassword.passwordEncoder().encode(password));
+        this.userService.saveModel(accountModel);
+        ForgotPasswordDTO.SendNewPasswordRequest dto = new ForgotPasswordDTO.SendNewPasswordRequest();
+        dto.setEmail(email);
+        dto.setNewPassword(password);
+
+        System.out.println("Send to exchange: "+ RabbitMQ.SEND_EMAIL_EXCHANGE);
+        System.out.println("Send with routin key: "+ RabbitMQ.SEND_EMAIL_ROUTING_KEY +".reset-password."+ dto.getEmail());
+        this.rabbitTemplate.convertAndSend(RabbitMQ.SEND_EMAIL_EXCHANGE, RabbitMQ.SEND_EMAIL_ROUTING_KEY +".reset-password."+ dto.getEmail(), dto);
+        System.out.println("Sent to RabbitMQ for processing");
     }
 
 }

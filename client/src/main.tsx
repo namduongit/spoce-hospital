@@ -8,8 +8,10 @@ import PatientLayout from "./layouts/patient/layout";
 import PatientHomePage from "./pages/patient/home/home.page";
 import RotateLoading from "./components/common/others/loading";
 
+import ProtectRoute from "./contexts/_protect-route";
+import AuthDirect from "./contexts/_auth-direct";
+
 const AssistorLayout = lazy(() => import("./layouts/assistor/layout"));
-const AssistorHomePage = lazy(() => import("./pages/assistor/home/home.page"));
 const AssistorAppointmentPage = lazy(() => import("./pages/assistor/appointment/appointment.page"));
 const AssistorPrescriptionInvoicePage = lazy(() => import("./pages/assistor/prescription-invoice/prescription-invoice.page"));
 const AssistorServiceInvoicePage = lazy(() => import("./pages/assistor/service-invoice/service-invoice.page"));
@@ -17,12 +19,10 @@ const AssistorMedicinePage = lazy(() => import("./pages/assistor/medicine/medici
 const AssistorMedicalPackagePage = lazy(() => import("./pages/assistor/medical-package/medical-package.page"));
 
 const DoctorLayout = lazy(() => import("./layouts/doctor/layout"));
-const DoctorHomePage = lazy(() => import("./pages/doctor/home/home.page"));
-const DoctorLoginPage = lazy(() => import("./pages/doctor/login/login.page"));
 const DoctorAppointmentPage = lazy(() => import("./pages/doctor/appointment/appointment.page"));
 const DoctorProfilePage = lazy(() => import("./pages/doctor/profile/profile.page"));
-const CreatePrescriptionInvoicePage = lazy(() => import("./pages/doctor/prescription-invoice/create-prescription-invoice.page"));
-const CreateServiceInvoicePage = lazy(() => import("./pages/doctor/service-invoice/create-service-invoice.page"));
+const CreatePrescriptionInvoicePage = lazy(() => import("./pages/doctor/prescription-invoice/prescription-invoice.page"));
+const CreateServiceInvoicePage = lazy(() => import("./pages/doctor/service-invoice/service-invoice.page"));
 
 const AdminLayout = lazy(() => import("./layouts/admin/layout"));
 const AdminDashboardPage = lazy(() => import("./pages/admin/dashboard/dashboard.page"));
@@ -37,11 +37,19 @@ const AdminMedicalPackagePage = lazy(() => import("./pages/admin/medical-package
 const AdminPrescriptionInvoicePage = lazy(() => import("./pages/admin/prescription-invoice/prescription-invoice.page"));
 const AdminServiceInvoicePage = lazy(() => import("./pages/admin/service-invoice/service-invoice.page"));
 
+const ServiceInvoicePayment = lazy(() => import("./components/common/payments/service-invoice.payment"));
+const PrescriptionInvoicePayment = lazy(() => import("./components/common/payments/prescription-invoice.payment"));
 
-const LoginPage = lazy(() => import("./pages/patient/login/login.page"));
-const RegisterPage = lazy(() => import("./pages/patient/register/register.page"));
+const LoginPage = lazy(() => import("./pages/public/login/login.page"));
+const RegisterPage = lazy(() => import("./pages/public/register/register.page"));
+const ForgotPasswordPage = lazy(() => import("./pages/public/forgot/forgot.page"));
 const AccountPage = lazy(() => import("./pages/patient/account/account.page"));
 const BookingPage = lazy(() => import("./pages/patient/booking/booking.page"));
+
+const VNPayReturnPayment = lazy(() => import("./components/common/payments/vnpay-return.payment"));
+const MomoReturnPayment = lazy(() => import("./components/common/payments/momo-return.payment"));
+
+const NotFoundPage = lazy(() => import("./pages/public/not-found/not-found.page"));
 
 const router = createBrowserRouter([
   {
@@ -51,19 +59,38 @@ const router = createBrowserRouter([
       { index: true, Component: PatientHomePage },
       {
         path: "auth/login",
-        Component: LoginPage,
+        element:
+          <AuthDirect>
+            <LoginPage />
+          </AuthDirect>
       },
       {
         path: "auth/register",
-        Component: RegisterPage,
+        element:
+          <AuthDirect>
+            <RegisterPage />
+          </AuthDirect>
+      },
+      {
+        path: "auth/forgot-password",
+        element:
+          <AuthDirect>
+            <ForgotPasswordPage />
+          </AuthDirect>
       },
       {
         path: "page/account",
-        Component: AccountPage
+        element:
+          <ProtectRoute roles={["ADMIN", "ASSISTOR"]}>
+            <AccountPage />
+          </ProtectRoute>
       },
       {
         path: "page/booking",
-        Component: BookingPage
+        element:
+          <ProtectRoute roles={[]}>
+            <BookingPage />
+          </ProtectRoute>
       }
     ],
   },
@@ -71,26 +98,47 @@ const router = createBrowserRouter([
     path: "/assistor",
     Component: AssistorLayout,
     children: [
-      { index: true, Component: AssistorHomePage },
+      {
+        index: true,
+        element:
+          <ProtectRoute roles={["ASSISTOR"]}>
+            <AssistorAppointmentPage />
+          </ProtectRoute>
+      },
       {
         path: "appointments",
-        Component: AssistorAppointmentPage
+        element:
+          <ProtectRoute roles={["ASSISTOR"]}>
+            <AssistorAppointmentPage />
+          </ProtectRoute>
       },
       {
         path: "prescription-invoices",
-        Component: AssistorPrescriptionInvoicePage
+        element:
+          <ProtectRoute roles={["ASSISTOR"]}>
+            <AssistorPrescriptionInvoicePage />
+          </ProtectRoute>
       },
       {
         path: "service-invoices",
-        Component: AssistorServiceInvoicePage
+        element:
+          <ProtectRoute roles={["ASSISTOR"]}>
+            <AssistorServiceInvoicePage />
+          </ProtectRoute>
       },
       {
         path: "medicines",
-        Component: AssistorMedicinePage
+        element:
+          <ProtectRoute roles={["ASSISTOR"]}>
+            <AssistorMedicinePage />
+          </ProtectRoute>
       },
       {
         path: "medical-packages",
-        Component: AssistorMedicalPackagePage
+        element:
+          <ProtectRoute roles={["ASSISTOR"]}>
+            <AssistorMedicalPackagePage />
+          </ProtectRoute>
       }
     ]
   },
@@ -98,26 +146,40 @@ const router = createBrowserRouter([
     path: "doctor",
     Component: DoctorLayout,
     children: [
-      { index: true, Component: DoctorHomePage },
       {
-        path: "auth/login",
-        Component: DoctorLoginPage
+        index: true,
+        element:
+          <ProtectRoute roles={["DOCTOR"]}>
+            <DoctorAppointmentPage />
+          </ProtectRoute>
       },
       {
         path: "appointment",
-        Component: DoctorAppointmentPage
+        element:
+          <ProtectRoute roles={["DOCTOR"]}>
+            <DoctorAppointmentPage />
+          </ProtectRoute>
       },
       {
-        path: "create-service-invoice",
-        Component: CreateServiceInvoicePage
+        path: "service-invoice",
+        element:
+          <ProtectRoute roles={["DOCTOR"]}>
+            <CreateServiceInvoicePage />
+          </ProtectRoute>
       },
       {
-        path: "create-prescription-invoice",
-        Component: CreatePrescriptionInvoicePage
+        path: "prescription-invoice",
+        element:
+          <ProtectRoute roles={["DOCTOR"]}>
+            <CreatePrescriptionInvoicePage />
+          </ProtectRoute>
       },
       {
         path: "profile",
-        Component: DoctorProfilePage
+        element:
+          <ProtectRoute roles={["DOCTOR"]}>
+            <DoctorProfilePage />
+          </ProtectRoute>
       }
     ]
   },
@@ -125,49 +187,105 @@ const router = createBrowserRouter([
     path: "/admin",
     Component: AdminLayout,
     children: [
-      { index: true, Component: AdminDashboardPage },
+      {
+        index: true,
+        element:
+          <ProtectRoute roles={["ADMIN"]}>
+            <AdminDashboardPage />
+          </ProtectRoute>
+      },
       {
         path: "medicine-dashboard",
-        Component: AdminMedicineDashboardPage
+        element:
+          <ProtectRoute roles={["ADMIN"]}>
+            <AdminMedicineDashboardPage />
+          </ProtectRoute>
       },
       {
         path: "accounts",
-        Component: AdminAccountPage
+        element:
+          <ProtectRoute roles={["ADMIN"]}>
+            <AdminAccountPage />
+          </ProtectRoute>
       },
       {
         path: "doctors-profile",
-        Component: AdminDoctorPage
+        element:
+          <ProtectRoute roles={["ADMIN"]}>
+            <AdminDoctorPage />
+          </ProtectRoute>
       },
       {
         path: "appointments",
-        Component: AdminAppointmentsPage
+        element:
+          <ProtectRoute roles={["ADMIN"]}>
+            <AdminAppointmentsPage />
+          </ProtectRoute>
       },
       {
         path: "department-room",
-        Component: AdminDepartmentPage
+        element:
+          <ProtectRoute roles={["ADMIN"]}>
+            <AdminDepartmentPage />
+          </ProtectRoute>
       },
       {
         path: "medicine",
-        Component: AdminMedicinePage
+        element:
+          <ProtectRoute roles={["ADMIN"]}>
+            <AdminMedicinePage />
+          </ProtectRoute>
       },
       {
         path: "inventory",
-        Component: AdminInventoryPage
+        element:
+          <ProtectRoute roles={["ADMIN"]}>
+            <AdminInventoryPage />
+          </ProtectRoute>
       },
       {
         path: "medical-package",
-        Component: AdminMedicalPackagePage
+        element:
+          <ProtectRoute roles={["ADMIN"]}>
+            <AdminMedicalPackagePage />
+          </ProtectRoute>
       },
       {
         path: "prescription-invoice",
-        Component: AdminPrescriptionInvoicePage
+        element:
+          <ProtectRoute roles={["ADMIN"]}>
+            <AdminPrescriptionInvoicePage />
+          </ProtectRoute>
       },
       {
         path: "service-invoice",
-        Component: AdminServiceInvoicePage
+        element:
+          <ProtectRoute roles={["ADMIN"]}>
+            <AdminServiceInvoicePage />
+          </ProtectRoute>
       }
     ]
   },
+  {
+    path: "payment/service-invoice/:id",
+    Component: ServiceInvoicePayment
+  },
+  {
+    path: "payment/prescription-invoice/:id",
+    Component: PrescriptionInvoicePayment
+  },
+  {
+    path: "api/payment/vnpay-return",
+    Component: VNPayReturnPayment
+  },
+  {
+    path: "api/payment/momo-return",
+    Component: MomoReturnPayment
+  },
+  {
+    path: "*",
+    element: <NotFoundPage />
+  }
 ]);
 
 // Render app

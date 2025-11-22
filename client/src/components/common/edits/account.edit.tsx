@@ -32,6 +32,7 @@ const EditAccount = (props: EditAccount) => {
         const restResponse = await execute(updateAccount(accountSelect.id, submitData));
         notify(restResponse!, "Cập nhật thông tin thành công");
         if (restResponse?.result) {
+            setShowEdit(false);
             onSuccess?.();
         }
     }

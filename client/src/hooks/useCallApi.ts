@@ -38,6 +38,7 @@ const useCallApi = () => {
 
     const notify = (restResponse: RestResponse, successMessage?: string) => {
         if (!restResponse) return;
+        if (!restResponse.message) return;
         const isSuccess = restResponse.result && (restResponse.statusCode == 200 || restResponse.statusCode == 201);
         if (isSuccess) {
             if (successMessage) {
@@ -51,13 +52,32 @@ const useCallApi = () => {
                         showToast("Lưu ý", error, "warning");
                     });
                 } else {
-                    showToast("Lưu ý", apiErrorMessage, "warning");
+                    const message = 
+                    apiErrorMessage === "REQUIRED REQUEST BODY IS MISSING" ? "Yêu cầu nhập đầy đủ thông tin" : 
+                    apiErrorMessage === "INVALID DATA REQUEST" ? "Dữ liệu gửi lên không hợp lệ" : 
+                    apiErrorMessage === "NO STATIC RESOURCE API" ? "Không tìm thấy tài nguyên" : 
+                    apiErrorMessage === "HTTP METHOD NOT ALLOWED" ? "Phương thức không hợp lệ" : apiErrorMessage;
+                    showToast("Lưu ý", message, "warning");
                 }
             }
         }
     }
 
-    return { execute, doFunc, notify, loading };
+    const showError = (restResponse: RestResponse) => {
+        if (!restResponse) return;
+        const apiErrorMessage = restResponse.errorMessage;
+        if (apiErrorMessage) {
+            if (Array.isArray(apiErrorMessage)) {
+                apiErrorMessage.forEach((error: string) => {
+                    showToast("Lưu ý", error, "warning");
+                });
+            } else {
+                showToast("Lưu ý", apiErrorMessage, "warning");
+            }
+        }
+    }
+
+    return { execute, doFunc, notify, showError, loading };
 }
 
 export default useCallApi;
