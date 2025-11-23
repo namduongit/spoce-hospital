@@ -196,9 +196,12 @@ const CreatePrescriptionInvoicePage = () => {
         <main className="create-prescription-invoice-page p-4 sm:p-6">
             <div className="create-prescription-invoice-page__wrap max-w-7xl mx-auto">
                 <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-xl sm:text-2xl font-bold text-blue-700">
-                        Tạo hóa đơn kê thuốc
-                    </h3>
+                    <div>
+                        <h3 className="text-xl sm:text-2xl font-bold text-blue-700">
+                            Tạo hóa đơn kê thuốc
+                        </h3>
+                        <p className="text-sm text-gray-600 mt-1">Kê thuốc theo chỉ định của bác sĩ</p>
+                    </div>
                     <button
                         onClick={() => navigate("/doctor/prescription-invoice")}
                         className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
@@ -323,9 +326,9 @@ const CreatePrescriptionInvoicePage = () => {
                                                 <p className="text-sm text-gray-600">
                                                     Đơn vị: {medicine.unit} | Tồn kho: {medicine.currentStock}
                                                 </p>
-                                                
+
                                                 <p className="text-sm text-gray-600 flex gap-2">
-                                                    Trạng thái: 
+                                                    Trạng thái:
                                                     <span className={`font-semibold ${getMedicineColorStatus(medicine.status)}`}>
                                                         {medicine.status === "ACTIVE" ? "Hoạt động" : medicine.status === "INACTIVE" ? "Không hoạt động" : medicine.status === "OUT_OF_STOCK" ? "Hết hàng" : "Không xác định"}
                                                     </span>
@@ -349,7 +352,7 @@ const CreatePrescriptionInvoicePage = () => {
                                     <div className="text-center py-8 text-gray-500">
                                         <i className="fa-solid fa-search text-3xl mb-2"></i>
                                         <p>
-                                            {searchMedicine 
+                                            {searchMedicine
                                                 ? `Không tìm thấy thuốc nào với từ khóa "${searchMedicine}"`
                                                 : "Không có thuốc nào khả dụng"
                                             }
@@ -379,9 +382,9 @@ const CreatePrescriptionInvoicePage = () => {
                                     submitForm.selectedMedicines.map((selectedMedicine) => {
                                         const medicineDetails = getMedicineDetails(selectedMedicine.medicineId);
                                         if (!medicineDetails) return null;
-                                        
+
                                         const totalPrice = medicineDetails.price * selectedMedicine.quantity;
-                                        
+
                                         return (
                                             <div key={selectedMedicine.medicineId} className="p-4 bg-blue-50 rounded-md">
                                                 <div className="flex items-start justify-between mb-3">
@@ -437,7 +440,7 @@ const CreatePrescriptionInvoicePage = () => {
                                                             Thành tiền
                                                         </label>
                                                         <span className="block py-1 text-sm font-semibold text-blue-600">
-                                                            {totalPrice.toLocaleString('vi-VN')} 
+                                                            {totalPrice.toLocaleString('vi-VN')}
                                                         </span>
                                                     </div>
                                                 </div>

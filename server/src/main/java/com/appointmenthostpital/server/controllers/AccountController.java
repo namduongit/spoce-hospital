@@ -47,8 +47,8 @@ public class AccountController {
 
         @PutMapping("/{id}")
         public ResponseEntity<RestResponse<AccountResponse>> handleUpdateAccount(
-                        @RequestBody AdminAccountDTO.UpdateAccountRequest request,
-                        @Valid @PathVariable(name = "id", required = true) Long id) {
+                        @Valid @RequestBody AdminAccountDTO.UpdateAccountRequest request,
+                        @PathVariable(name = "id", required = true) Long id) {
                 AccountResponse response = this.accountService.handleUpdateAccount(id, request);
                 return ResponseEntity.status(HttpStatusResponse.OK).body(new RestResponse<AccountResponse>(
                                 HttpStatusResponse.OK,

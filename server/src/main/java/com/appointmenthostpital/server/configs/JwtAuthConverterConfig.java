@@ -7,6 +7,13 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 
 @Configuration
 public class JwtAuthConverterConfig {
+
+    /**
+     * Configures JWT authentication converter to extract roles from the "role" claim
+     * and prefix them with "ROLE_".
+     * Example: A JWT with "role": "ADMIN" will be converted to authority "ROLE_ADMIN".
+     * UserDetailService implements UserDetailsService to load user details during authentication.
+     */
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter converter = new JwtGrantedAuthoritiesConverter();

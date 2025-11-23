@@ -7,6 +7,11 @@ const navLinks = [
         icon: "fa-solid fa-calendar-days"
     },
     {
+        href: "/assistor/doctor-schedules",
+        label: "Lịch làm việc bác sĩ",
+        icon: "fa-solid fa-calendar-check"
+    },
+    {
         href: "/assistor/prescription-invoices",
         label: "Hóa đơn kê thuốc",
         icon: "fa-solid fa-receipt"

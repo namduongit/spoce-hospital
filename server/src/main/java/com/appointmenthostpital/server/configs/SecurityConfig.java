@@ -31,9 +31,9 @@ public class SecurityConfig {
 
     /**
      * @Note
-     * - After send request, OPTIONS request (preflight) will ask BE: Can i do
-     * this ? (None AccessToken)
-     * - OPTION success -> then next
+     *       - After send request, OPTIONS request (preflight) will ask BE: Can i do
+     *       this ? (None AccessToken)
+     *       - OPTION success -> then next
      * 
      * @param http
      * @param jwtAuthConverter
@@ -45,44 +45,49 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthConverterConfig config) throws Exception {
         // Disable CSRF protection for stateless APIs to use Postman
         http.csrf(csrf -> csrf.disable());
-        http.cors(cors -> {});
+        http.cors(cors -> {
+        });
         http.authorizeHttpRequests(authz -> authz
-            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-            .requestMatchers("/auth/*").permitAll()
-            .requestMatchers("/api/vnpay/**").permitAll()
-            .requestMatchers("/api/payment/momo/**").permitAll()
-            .requestMatchers("/api/public/**").permitAll()
-            .requestMatchers("/ws/**").permitAll()
+                /**
+                 * .requestMatchers(HttpMethod.GET,"/api/doctors/profile/**").hasAnyRole("DOCTOR")
+                 * 
+                 * @Explanation This endpoint is only accessible to users with the DOCTOR role
+                 *              and method GET
+                 */
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .requestMatchers("/auth/*").permitAll()
+                .requestMatchers("/api/vnpay/**").permitAll()
+                .requestMatchers("/api/payment/momo/**").permitAll()
+                .requestMatchers("/api/public/**").permitAll()
+                .requestMatchers("/ws/**").permitAll()
 
-            .requestMatchers("/api/accounts/**").hasAnyRole("ADMIN", "DOCTOR")
+                .requestMatchers("/api/departments/**").hasAnyRole("ADMIN", "ASSISTOR")
+                .requestMatchers("/api/rooms/**").hasAnyRole("ADMIN", "ASSISTOR")
 
-            .requestMatchers("/api/departments/**").hasAnyRole("ADMIN")
-            .requestMatchers("/api/doctors/**").hasAnyRole("ADMIN")
-            .requestMatchers("/api/rooms/**").hasAnyRole("ADMIN")
+                .requestMatchers("/api/accounts/**").hasAnyRole("ADMIN", "DOCTOR")
+                .requestMatchers("/api/doctors/**").hasAnyRole("ADMIN", "DOCTOR", "ASSISTOR")
 
-            .requestMatchers("/api/appointments/**").hasAnyRole("ADMIN", "DOCTOR", "ASSISTOR")
-            
-            .requestMatchers("/api/medical-packages/**").hasAnyRole("ADMIN", "DOCTOR", "ASSISTOR")
-            .requestMatchers("/api/medicines/**").hasAnyRole("ADMIN", "DOCTOR", "ASSISTOR")
-            .anyRequest().authenticated()
-        );
+                .requestMatchers("/api/appointments/**").hasAnyRole("ADMIN", "DOCTOR", "ASSISTOR")
+                .requestMatchers("/api/medical-packages/**").hasAnyRole("ADMIN", "DOCTOR", "ASSISTOR")
+                .requestMatchers("/api/medicines/**").hasAnyRole("ADMIN", "DOCTOR", "ASSISTOR")
+                .requestMatchers("/api/prescription-invoices/**").hasAnyRole("ADMIN", "DOCTOR", "ASSISTOR")
+                .requestMatchers("/api/service-invoices/**").hasAnyRole("ADMIN", "DOCTOR", "ASSISTOR")
+                .anyRequest().authenticated());
         http.oauth2ResourceServer(oauth2r -> oauth2r
-            .jwt(jwt -> jwt
-                .jwtAuthenticationConverter(config.jwtAuthenticationConverter())
-            )
-        );
+                .jwt(jwt -> jwt
+                        .jwtAuthenticationConverter(config.jwtAuthenticationConverter())));
         http.exceptionHandling(exception -> exception
-            .accessDeniedHandler(this.accessDeniedConfig)
-            .authenticationEntryPoint(this.authEntryPointConfig)
-        );
+                .accessDeniedHandler(this.accessDeniedConfig)
+                .authenticationEntryPoint(this.authEntryPointConfig));
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        // Config basic auth. Use username and password any request
+        // Config basic auth. Any request requires username and password
         // http.httpBasic(basic -> {});
         return http.build();
     }
 
-    // AuthenticationProvider to use the custom user details service and password encoder
+    // AuthenticationProvider to use the custom user details service and password
+    // encoder. If you use basic auth, this bean is required to encode passwords
     @Bean
     public AuthenticationProvider authenticationProvider(UserDetailService userDetailService) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailService);

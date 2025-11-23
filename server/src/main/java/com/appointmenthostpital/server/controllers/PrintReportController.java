@@ -22,7 +22,7 @@ public class PrintReportController {
     ReportService reportService;
 
     @GetMapping("/import/{id}")
-    public ResponseEntity<byte[]> printImportTicket(@PathVariable Long id) {
+    public ResponseEntity<byte[]> printImportTicket(@PathVariable(name = "id", required = true) Long id) {
         byte[] pdf;
         try {
             pdf = reportService.printImportTicket(id);
@@ -40,7 +40,7 @@ public class PrintReportController {
     }
 
     @GetMapping("/export/{id}")
-    public ResponseEntity<byte[]> printExportTicket(@PathVariable Long id) {
+    public ResponseEntity<byte[]> printExportTicket(@PathVariable(name = "id", required = true) Long id) {
         try {
             byte[] pdf = reportService.printExportTicket(id);
 
@@ -55,7 +55,7 @@ public class PrintReportController {
     }
 
     @GetMapping("/prescription/{id}")
-    public ResponseEntity<byte[]> printPrescriptionTicket(@PathVariable Long id) {
+    public ResponseEntity<byte[]> printPrescriptionTicket(@PathVariable(name = "id", required = true) Long id) {
         try {
             byte[] pdf = reportService.printMedicineReport(id);
 
@@ -70,7 +70,7 @@ public class PrintReportController {
     }
 
     @GetMapping("/service/{id}")
-    public ResponseEntity<byte[]> printServiceTicket(@PathVariable Long id) {
+    public ResponseEntity<byte[]> printServiceTicket(@PathVariable(name = "id", required = true) Long id) {
         try {
             byte[] pdf = reportService.printServiceReport(id);
 

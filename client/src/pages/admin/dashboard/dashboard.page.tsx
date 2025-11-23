@@ -78,7 +78,7 @@ const AdminDashboardPage = () => {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Dashboard</h1>
-                    <p className="text-gray-600 mt-1">Tổng quan hệ thống bệnh viện</p>
+                    <p className="text-sm text-gray-600 mt-1">Tổng quan hệ thống bệnh viện</p>
                 </div>
                 <div className="text-sm text-gray-500 mt-2 sm:mt-0">
                     Cập nhật lúc: {new Date().toLocaleString('vi-VN')}

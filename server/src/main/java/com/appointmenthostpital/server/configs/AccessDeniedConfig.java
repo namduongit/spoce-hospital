@@ -16,6 +16,11 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class AccessDeniedConfig implements AccessDeniedHandler {
+
+    /**
+     * Handles access denied exceptions by sending a JSON response with a 403 status code.
+     * Example: Use account with role USER to access ADMIN resource.
+     */
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,
             AccessDeniedException accessDeniedException) throws IOException, ServletException {

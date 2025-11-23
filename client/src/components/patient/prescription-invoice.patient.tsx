@@ -28,7 +28,7 @@ const PrescriptionInvoicePatient = (props: PrescriptionInvoicePatientProps) => {
                     <div className="space-y-4">
                         {prescriptionInvoices.slice((page - 1) * row, page * row).map((invoice, index) => (
                             <div key={index} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                                <div className="flex justify-between items-start">
+                                <div className="flex flex-col md:flex-row justify-between items-start">
                                     <div className="flex-1">
                                         <div className="mb-2">
                                             <p className="text-sm text-gray-500">Bác sĩ kê đơn</p>

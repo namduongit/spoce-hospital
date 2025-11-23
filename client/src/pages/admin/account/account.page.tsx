@@ -73,9 +73,13 @@ const AdminAccountPage = () => {
         <main className="p-4 sm:p-6">
             <div className="max-w-full">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-                    <h3 className="text-xl sm:text-2xl font-bold text-blue-700 mb-2 sm:mb-0">
-                        Quản lý tài khoản
-                    </h3>
+                    <div>
+                        <h3 className="text-xl sm:text-2xl font-bold text-blue-700 mb-2 sm:mb-0">
+                            Quản lý tài khoản
+                        </h3>
+                        <p className="text-sm text-gray-600 mt-1">Quản lý các tài khoản trong hệ thống</p>
+                    </div>
+
                     <div className="text-sm text-gray-600">
                         <div>Tổng: <span className="font-semibold text-blue-600">{stats.totalAccounts}</span> tài khoản</div>
                         <div>Hoạt động: <span className="font-semibold text-green-600">{stats.activeAccounts}</span></div>
@@ -142,18 +146,26 @@ const AdminAccountPage = () => {
 
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6 grid gap-4 grid-cols-1 lg:grid-cols-2">
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:space-x-3">
-                        <div className="appointments__filter__item relative flex-1">
-                            <i className="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                            <input
-                                value={searchForm.input}
-                                onChange={(event) => handleChangeSearch("input", event.target.value)}
-                                type="text"
-                                className="border border-gray-300 rounded-md py-2 pl-10 pr-4 text-sm w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                                placeholder="Tìm theo tên tài khoản hoặc id ..."
-                            />
+                        <div className="relative flex-1">
+                            <label className="block text-xs text-gray-600 mb-1">
+                                Tìm kiếm
+                            </label>
+                            <div className="relative">
+                                <i className="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                                <input
+                                    value={searchForm.input}
+                                    onChange={(event) => handleChangeSearch("input", event.target.value)}
+                                    type="text"
+                                    className="border border-gray-300 rounded-md py-2 pl-10 pr-4 text-sm w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                    placeholder="Tìm theo tên tài khoản hoặc id ..."
+                                />
+                            </div>
                         </div>
 
                         <div className="flex-1">
+                            <label className="block text-xs text-gray-600 mb-1">
+                                Chọn quyền
+                            </label>
                             <select
                                 className="w-full border border-gray-300 rounded-md py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                                 value={searchForm.role}
@@ -169,6 +181,9 @@ const AdminAccountPage = () => {
                         </div>
 
                         <div className="flex-1">
+                            <label className="block text-xs text-gray-600 mb-1">
+                                Chọn trạng thái
+                            </label>
                             <select
                                 className="w-full border border-gray-300 rounded-md py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                                 value={searchForm.status}

@@ -4,6 +4,7 @@ import { useToast } from '../../contexts/toast.context';
 
 const navLinks = [
   { href: '/doctor/appointment', label: 'Lịch khám', icon: 'fa-solid fa-calendar-check' },
+  { href: '/doctor/schedule', label: 'Lịch làm việc', icon: 'fa-solid fa-calendar-days' },
   { href: '/doctor/prescription-invoice', label: 'Kê đơn thuốc', icon: 'fa-solid fa-receipt' },
   { href: '/doctor/service-invoice', label: 'Kê đơn dịch vụ', icon: 'fa-solid fa-receipt' },
   { href: '/doctor/profile', label: 'Cá nhân', icon: 'fa-solid fa-user' },

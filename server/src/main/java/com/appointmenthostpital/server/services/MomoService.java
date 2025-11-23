@@ -41,17 +41,18 @@ public class MomoService extends MomoConfig {
 
         Long totalAmount = 0L;
         String orderRequestType = order.getOrderType();
-        ServiceInvoiceModel serviceInvoice = serviceInvoiceService.getServiceInvoiceById(order.getOrderId());
         if (orderRequestType.equals("SERVICE INVOICE")) {
-
+            ServiceInvoiceModel serviceInvoice = serviceInvoiceService.getServiceInvoiceById(order.getOrderId());
             totalAmount = serviceInvoice.getTotalAmount();
 
         } else if (orderRequestType.equals("PRESCRIPTION INVOICE")) {
             PrescriptionInvoiceModel prescriptionInvoice = prescriptionInvoiceService
                     .getPrescriptionInvoiceById(order.getOrderId());
+            
             if (!prescriptionInvoiceService.checkMedicineStockForPrescriptionInvoice(prescriptionInvoice)) {
                 throw new VNPayException("Không đủ tồn kho để thanh toán hóa đơn");
             }
+            
             totalAmount = prescriptionInvoice.getTotalAmount();
         } else {
             throw new IllegalArgumentException("Lỗi tạo hóa đơn do sai loại");
@@ -207,7 +208,8 @@ public class MomoService extends MomoConfig {
     }
 
     public String getDirectUrl(Authentication authentication, String orderType) {
-        if (authentication == null) return "/";
+        if (authentication == null)
+            return "/";
 
         String email = authentication.getName();
         AccountModel accountModel = accountService.getUserByEmail(email);

@@ -104,9 +104,12 @@ const AdminDepartmentPage = () => {
         <main className="p-4 sm:p-6">
             <div className="max-w-full">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-                    <h3 className="text-xl sm:text-2xl font-bold text-blue-700 mb-2 sm:mb-0">
-                        Quản lý phòng khám & khoa khám
-                    </h3>
+                    <div>
+                        <h3 className="text-xl sm:text-2xl font-bold text-blue-700 mb-2 sm:mb-0">
+                            Quản lý phòng khám & khoa khám
+                        </h3>
+                        <p className="text-sm text-gray-600 mt-1">Quản lý các phòng và khoa khám trong bệnh viện</p>
+                    </div>
                     <div className="text-sm text-gray-600">
                         <div>Tổng: <span className="font-semibold text-blue-600">{stats.totalRooms}</span> phòng khám</div>
                         <div>Tổng: <span className="font-semibold text-blue-600">{stats.totalDepartments}</span> khoa khám</div>
@@ -173,18 +176,26 @@ const AdminDepartmentPage = () => {
 
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6 grid gap-4 grid-cols-1 lg:grid-cols-2">
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:space-x-3">
-                        <div className="appointments__filter__item relative flex-1">
-                            <i className="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                            <input
-                                type="text"
-                                value={searchForm.input}
-                                onChange={(event) => handleSearchFormChange("input", event.target.value)}
-                                className="border border-gray-300 rounded-md py-2 pl-10 pr-4 text-sm w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                                placeholder="Tìm kiếm theo tên hoặc id ..."
-                            />
+                        <div className="flex-1">
+                            <label className="block text-xs text-gray-600 mb-1">
+                                Tìm kiếm
+                            </label>
+                            <div className="relative">
+                                <i className="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                                <input
+                                    type="text"
+                                    value={searchForm.input}
+                                    onChange={(event) => handleSearchFormChange("input", event.target.value)}
+                                    className="border border-gray-300 rounded-md py-2 pl-10 pr-4 text-sm w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                    placeholder="Tìm kiếm theo tên hoặc id ..."
+                                />
+                            </div>
                         </div>
 
                         <div className="flex-1">
+                            <label className="block text-xs text-gray-600 mb-1">
+                                Trạng thái
+                            </label>
                             <select
                                 className={`w-full border border-gray-300 rounded-md py-2 px-3 text-sm ${select === "department" ? "bg-gray-50 text-gray-600" : "focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"}`}
                                 disabled={select === "department"}
@@ -200,6 +211,9 @@ const AdminDepartmentPage = () => {
                             </select>
                         </div>
                         <div className="flex-1">
+                            <label className="block text-xs text-gray-600 mb-1">
+                                Trang quản lý
+                            </label>
                             <select
                                 className="w-full border border-gray-300 rounded-md py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                                 value={select}

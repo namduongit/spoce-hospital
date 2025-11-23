@@ -18,7 +18,9 @@ const AdminServiceInvoicePage = () => {
     const [searchForm, setSearchForm] = useState({
         input: "",
         status: "",
-        date: ""
+        date: "",
+        fromDate: "",
+        toDate: ""
     });
 
     const handleChangeSearch = (field: keyof typeof searchForm, value: string) => {
@@ -48,6 +50,23 @@ const AdminServiceInvoicePage = () => {
         }
         if (searchForm.status) {
             filtered = filtered.filter(invoice => invoice.status === searchForm.status);
+        }
+
+        // Lọc theo khoảng thời gian
+        if (searchForm.fromDate) {
+            filtered = filtered.filter(invoice => {
+                const invoiceDate = new Date(invoice.createAt);
+                const fromDate = new Date(searchForm.fromDate);
+                return invoiceDate >= fromDate;
+            });
+        }
+        if (searchForm.toDate) {
+            filtered = filtered.filter(invoice => {
+                const invoiceDate = new Date(invoice.createAt);
+                const toDate = new Date(searchForm.toDate);
+                toDate.setHours(23, 59, 59, 999); // Set to end of day
+                return invoiceDate <= toDate;
+            });
         }
 
         if (searchForm.date === "ASC") {
@@ -120,9 +139,12 @@ const AdminServiceInvoicePage = () => {
         <main className="service-invoice-page p-4 sm:p-6">
             <div className="service-invoice-page__wrap max-w-full">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-                    <h3 className="text-xl sm:text-2xl font-bold text-blue-700 mb-2 sm:mb-0">
-                        Quản lý hóa đơn dịch vụ
-                    </h3>
+                    <div>
+                        <h3 className="text-xl sm:text-2xl font-bold text-blue-700 mb-2 sm:mb-0">
+                            Quản lý hóa đơn dịch vụ
+                        </h3>
+                        <p className="text-sm text-gray-600 mt-1">Quản lý hóa đơn khám dịch vụ tại bệnh viện</p>
+                    </div>
                     <div className="text-sm text-gray-600">
                         <div>Tổng: <span className="font-semibold text-blue-600">{stats.totalInvoices}</span> hóa đơn</div>
                         <div>Hôm nay: <span className="font-semibold text-green-600">{stats.todayInvoices}</span></div>
@@ -198,19 +220,27 @@ const AdminServiceInvoicePage = () => {
                     </div>
                 </div>
 
-                <div className="service-invoice__sort bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
-                    <div className="service-invoice__filter flex flex-col gap-3 sm:flex-row sm:items-center sm:space-x-3">
-                        <div className="service-invoice__filter__item relative flex-1">
-                            <i className="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                            <input
-                                type="text"
-                                className="border border-gray-300 rounded-md py-2 pl-10 pr-4 text-sm w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                                placeholder="Tìm theo tên bệnh nhân, bác sĩ, mã hóa đơn..."
-                                value={searchForm.input}
-                                onChange={(e) => handleChangeSearch("input", e.target.value)}
-                            />
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:space-x-3">
+                        <div className="flex-1">
+                            <label className="block text-xs text-gray-600 mb-1">
+                                Tìm kiếm
+                            </label>
+                            <div className="relative">
+                                <i className="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                                <input
+                                    type="text"
+                                    className="border border-gray-300 rounded-md py-2 pl-10 pr-4 text-sm w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                    placeholder="Tìm theo tên bệnh nhân, bác sĩ, mã hóa đơn..."
+                                    value={searchForm.input}
+                                    onChange={(e) => handleChangeSearch("input", e.target.value)}
+                                />
+                            </div>
                         </div>
                         <div className="flex-1">
+                            <label className="block text-xs text-gray-600 mb-1">
+                                Trạng thái
+                            </label>
                             <select
                                 className="w-full border border-gray-300 rounded-md py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                                 value={searchForm.status}
@@ -225,6 +255,9 @@ const AdminServiceInvoicePage = () => {
                             </select>
                         </div>
                         <div className="flex-1">
+                            <label className="block text-xs text-gray-600 mb-1">
+                                Sắp xếp theo
+                            </label>
                             <select
                                 className="w-full border border-gray-300 rounded-md py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                                 value={searchForm.date}
@@ -236,6 +269,62 @@ const AdminServiceInvoicePage = () => {
                             </select>
                         </div>
 
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row gap-3 mt-3 sm:space-x-3">
+                        <div className="flex-1">
+                            <label className="block text-xs text-gray-600 mb-1">
+                                Từ ngày
+                            </label>
+                            <input
+                                type="date"
+                                className="w-full border border-gray-300 rounded-md py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                value={searchForm.fromDate}
+                                onChange={(e) => handleChangeSearch("fromDate", e.target.value)}
+                            />
+                        </div>
+                        <div className="flex-1">
+                            <label className="block text-xs text-gray-600 mb-1">
+                                Đến ngày
+                            </label>
+                            <input
+                                type="date"
+                                className="w-full border border-gray-300 rounded-md py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                value={searchForm.toDate}
+                                onChange={(e) => handleChangeSearch("toDate", e.target.value)}
+                            />
+                        </div>
+                        <div className="flex-1">
+                            <label className="block text-xs text-gray-600 mb-1">
+                                Hành động
+                            </label>
+                            <div className="flex gap-3 items-center">
+                                <button
+                                    className="flex-1
+                                    px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors text-sm font-medium"
+                                    onClick={handleGetServiceInvoices}
+                                >
+                                    <i className="fa-solid fa-arrows-rotate"></i>
+                                    Làm mới
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setSearchForm({
+                                            input: "",
+                                            status: "",
+                                            date: "",
+                                            fromDate: "",
+                                            toDate: ""
+                                        })
+                                    }}
+                                    className="flex-1
+                                    px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm font-medium"
+                                >
+                                    <i className="fa-solid fa-times mr-1"></i>
+                                    Xóa lọc
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

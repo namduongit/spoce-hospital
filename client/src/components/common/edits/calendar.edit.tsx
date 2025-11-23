@@ -6,6 +6,10 @@ import { updateDoctorWorkDay } from "../../../services/doctor.service";
 import useCallApi from "../../../hooks/useCallApi";
 import type { DoctorResponse } from "../../../responses/doctor.response";
 
+// Import switch input template
+// Source: https://getcssscan.com/css-checkboxes-examples
+import "../../../assets/css-templates/switch-input.css";
+
 type EditCalendarModal = {
     doctorSelect: DoctorResponse,
     setShowCalendar: (setShowCalendar: boolean) => void,
@@ -81,113 +85,170 @@ const EditCalendarModal = (props: EditCalendarModal) => {
     }, []);
 
     return (
-        <div className="space-y-2 fixed top-0 start-0 bg-gray-400/60 w-full h-full z-10 flex justify-center items-center">
-            <div className="bg-white px-10 py-5 space-y-5 rounded-lg shadow-lg">
-                <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-xl font-bold text-gray-800">Lịch làm việc của bác sĩ</h2>
+        <div className="space-y-2 fixed top-0 start-0 bg-gray-900/50 w-full h-full z-50 flex justify-center items-center p-4">
+            <div className="bg-white px-4 sm:px-6 py-5 space-y-5 rounded-xl shadow-2xl max-w-6xl w-full max-h-[95vh] overflow-y-auto">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-gray-200">
+                    <div className="flex-1">
+                        <h2 className="text-xl sm:text-2xl font-bold text-blue-700 flex items-center">
+                            <i className="fa-solid fa-calendar-days mr-2 text-blue-600"></i>
+                            Lịch làm việc của bác sĩ
+                        </h2>
+                        <p className="text-sm text-gray-600 mt-1">
+                            <i className="fa-solid fa-user-md mr-1"></i>
+                            {doctorSelect.fullName}
+                        </p>
+                    </div>
                     <button
                         onClick={handleClose}
-                        className="text-gray-500 hover:text-gray-700 text-xl"
+                        className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full w-10 h-10 flex items-center justify-center transition-colors absolute top-4 right-4 sm:relative sm:top-0 sm:right-0"
+                        title="Đóng"
                     >
-                        x
+                        <i className="fa-solid fa-times text-xl"></i>
                     </button>
                 </div>
 
-                <div className="flex justify-between items-center">
-                    <div className="flex gap-5 items-center">
-                        <div className="flex gap-2 items-center">
-                            <div className="w-5 h-5 bg-green-300 rounded"></div>
-                            <span className="font-semibold">Làm việc</span>
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div className="flex flex-wrap gap-6 items-center">
+                            <h4 className="font-semibold text-gray-700">Chú thích:</h4>
+                            <div className="flex gap-2 items-center">
+                                <div className="w-6 h-6 bg-green-300 rounded border border-green-400"></div>
+                                <span className="text-sm font-medium text-gray-700">Ca làm việc</span>
+                            </div>
+                            <div className="flex gap-2 items-center">
+                                <div className="w-6 h-6 bg-gray-100 rounded border border-gray-300"></div>
+                                <span className="text-sm font-medium text-gray-700">Thời gian trống</span>
+                            </div>
                         </div>
-                        <div className="flex gap-2 items-center">
-                            <div className="w-5 h-5 bg-gray-100 rounded"></div>
-                            <span className="font-semibold">Trống</span>
+                        <div className={`transition-all duration-300 rounded-lg px-4 py-2`}>
+                            <label className="flex gap-3 items-center cursor-pointer">
+                                <span className={`font-semibold transition-colors`}>
+                                    {editMode ? 'Đang chỉnh sửa' : 'Chế độ xem'}
+                                </span>
+
+                                {/* <input type="checkbox" value="" className="sr-only peer" checked={editMode} onChange={() => setEditMode(!editMode)} />
+                                <div className="relative w-14 h-7 bg-gray-300 
+                                    peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300
+                                    rounded-full peer 
+                                    peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full 
+                                    peer-checked:after:border-white after:content-[''] after:absolute after:top-[3px] 
+                                    after:start-[3px] after:bg-white after:border-gray-300 after:border after:rounded-full 
+                                    after:h-5 after:w-5 after:transition-all after:shadow-md
+                                    peer-checked:bg-blue-600 hover:peer-checked:bg-blue-700"
+                                    
+                                >
+                                </div> */}
+                                <div className="checkbox-wrapper-14">
+                                    <input id="s1-14" type="checkbox" className="switch" checked={editMode} onChange={() => setEditMode(!editMode)} />
+                                    {/* <label htmlFor="s1-14">Switch</label> */}
+                                </div>
+                            </label>
                         </div>
-                    </div>
-                    <div>
-                        <label className="flex gap-3 items-center cursor-pointer">
-                            <input type="checkbox" value="" className="sr-only peer" onClick={() => setEditMode(!editMode)} />
-                            <span className="font-semibold">Sửa</span>
-                            <div className="relative w-11 h-6 bg-gray-200 
-                            peer-focus:outline-none
-                            dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-200 
-                            peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full 
-                            peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] 
-                            after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all 
-                            dark:border-gray-700 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
-                        </label>
                     </div>
                 </div>
-                <table className="w-full">
-                    <thead>
-                        <tr className="bg-gray-900 text-white font-medium">
-                            <th className="px-10 py-2 border-2 border-e border-b border-white">Giờ / Ngày</th>
-                            {weekDate.map((day) => (
-                                <th className="px-10 py-2 border-2 border-e border-b border-white last:border-e-0" key={day}>{day}</th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {timeSlots.map((time, index) => (
-                            <tr key={index} className={`cursor-pointer bg-gray-100`}>
-                                <td className="py-2.5 text-center border-2 border-e border-white font-medium">{time.name}</td>
 
-                                {weekDate.map((day) => {
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                    <div className="overflow-x-auto">
+                        <table className="w-full">
+                            <thead>
+                                <tr className="bg-blue-600 text-white font-medium">
+                                    <th className="px-4 sm:px-6 py-3 border-2 border-white text-left min-w-[100px] sm:min-w-[120px]">
+                                        <i className="fa-solid fa-clock mr-2"></i>
+                                        Giờ / Ngày
+                                    </th>
+                                    {weekDate.map((day) => (
+                                        <th className="px-4 sm:px-8 py-3 border-2 border-white text-center min-w-[80px] sm:min-w-[100px]" key={day}>
+                                            {day}
+                                        </th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {timeSlots.map((time, index) => (
+                                    <tr key={index} className={`transition-colors ${editMode ? 'hover:bg-blue-50' : 'hover:bg-gray-50'}`}>
+                                        <td className="py-3 px-4 text-center border-2 border-white font-medium bg-gray-50 text-gray-700">
+                                            {time.name}
+                                        </td>
 
-                                    const hasWork = isHasWork(day);
-                                    if (!hasWork) {
-                                        return (
-                                            <td key={day} className="border-2 border-e border-white last:border-e-0 text-center bg-gray-100"
-                                                onClick={() => handleEditSchedule(time.name.replace("Tiết", "").trim(), day)}
-                                            >
+                                        {weekDate.map((day) => {
 
-                                            </td>
-                                        )
-                                    }
-                                    const timeRanges = schedule[day];
-                                    const isInRange = timeRanges.includes(time.name.replace("Tiết", "").trim());
+                                            const hasWork = isHasWork(day);
+                                            if (!hasWork) {
+                                                return (
+                                                    <td key={day} className={`border-2 border-white text-center bg-gray-100 h-12 ${editMode ? 'cursor-pointer hover:bg-blue-100 hover:ring-2 hover:ring-inset hover:ring-blue-400' : ''}`}
+                                                        onClick={() => handleEditSchedule(time.name.replace("Tiết", "").trim(), day)}
+                                                    >
 
-                                    if (isInRange) {
-                                        return (
-                                            <td key={day} className="border-2 border-e border-white last:border-e-0 text-center bg-green-300"
-                                                onClick={() => handleEditSchedule(time.name.replace("Tiết", "").trim(), day)}
-                                            ></td>
-                                        );
-                                    } else {
-                                        return (
-                                            <td key={day} className="border-2 border-e border-white last:border-e-0 text-center bg-gray-100"
-                                                onClick={() => handleEditSchedule(time.name.replace("Tiết", "").trim(), day)}
-                                            ></td>
-                                        )
-                                    }
-                                })}
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-                <div className="flex justify-end gap-2">
-                    <div className="flex-8"></div>
+                                                    </td>
+                                                )
+                                            }
+                                            const timeRanges = schedule[day];
+                                            const isInRange = timeRanges.includes(time.name.replace("Tiết", "").trim());
+
+                                            if (isInRange) {
+                                                return (
+                                                    <td key={day} className={`border-2 border-white text-center bg-green-300 h-12 relative group ${editMode ? 'cursor-pointer hover:bg-green-400 hover:ring-2 hover:ring-inset hover:ring-green-600' : ''}`}
+                                                        onClick={() => handleEditSchedule(time.name.replace("Tiết", "").trim(), day)}
+                                                    >
+                                                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                                            <i className={`fa-solid ${editMode ? 'fa-times text-red-600' : 'fa-check text-green-700'}`}></i>
+                                                        </div>
+                                                    </td>
+                                                );
+                                            } else {
+                                                return (
+                                                    <td key={day} className={`border-2 border-white text-center bg-gray-100 h-12 ${editMode ? 'cursor-pointer hover:bg-blue-100 hover:ring-2 hover:ring-inset hover:ring-blue-400' : ''}`}
+                                                        onClick={() => handleEditSchedule(time.name.replace("Tiết", "").trim(), day)}
+                                                    >
+                                                        {editMode && (
+                                                            <div className="opacity-0 hover:opacity-100 transition-opacity">
+                                                                <i className="fa-solid fa-plus text-gray-400"></i>
+                                                            </div>
+                                                        )}
+                                                    </td>
+                                                )
+                                            }
+                                        })}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-gray-200">
                     <button
                         type="button"
                         onClick={handleClose}
-                        className="flex-1 px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50 transition"
+                        className="px-6 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition font-medium"
                     >
                         Hủy
                     </button>
                     <button
                         type="button"
                         onClick={handleClear}
-                        className="flex-1 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
+                        disabled={!editMode || loading}
+                        className={`px-6 py-2.5 rounded-lg transition font-medium ${!editMode || loading
+                            ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                            : 'bg-red-600 text-white hover:bg-red-700 hover:shadow-lg'
+                            }`}
                     >
                         Xóa hết
                     </button>
                     <button
                         type="submit"
-                        className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+                        className={`px-6 py-2.5 rounded-lg transition font-medium ${loading
+                            ? 'bg-gray-400 text-white cursor-not-allowed'
+                            : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg'
+                            }`}
                         onClick={handleSubmit}
                         disabled={loading}
                     >
-                        {loading ? "Đang cập nhật" : "Cập nhật"}
+                        {loading ? (
+                            "Đang cập nhật..."
+                        ) : (
+                            "Cập nhật lịch"
+                        )}
                     </button>
                 </div>
             </div>

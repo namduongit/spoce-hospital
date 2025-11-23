@@ -7,6 +7,7 @@ import icon from '../../assets/images/admin/icon.png'
 const navLinks = [
     { id: "home", href: '/admin', label: 'Trang chủ', icon: 'fa-solid fa-chart-line' },
     { id: "medicine-dashboard", href: '/admin/medicine-dashboard', label: 'Tổng quan thuốc', icon: 'fa-solid fa-chart-pie' },
+    { id: "revenue-statistics", href: '/admin/revenue-statistics', label: 'Thống kê doanh thu', icon: 'fa-solid fa-chart-bar' },
     { id: "accounts", href: '/admin/accounts', label: 'Quản lý tài khoản', icon: 'fa-solid fa-users' },
     { id: "doctor-profile", href: '/admin/doctors-profile', label: 'Quản lý bác sĩ', icon: 'fa-solid fa-user-doctor' },
     { id: "appointment", href: '/admin/appointments', label: 'Quản lý lịch hẹn', icon: 'fa-solid fa-calendar-check' },

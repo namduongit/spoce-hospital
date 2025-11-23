@@ -40,26 +40,26 @@ const AdminInventoryPage = () => {
     }
 
     const handleSearch = () => {
-        
+
     }
 
     const filteredImportTickets = useMemo(() => {
         return importTickets.filter(ticket => {
-            const matchInput = !searchForm.input || 
+            const matchInput = !searchForm.input ||
                 ticket.id.toString().includes(searchForm.input.toLowerCase()) ||
                 ticket.performedBy.toLowerCase().includes(searchForm.input.toLowerCase()) ||
                 (ticket.supplierName && ticket.supplierName.toLowerCase().includes(searchForm.input.toLowerCase())) ||
-                ticket.items.some(item => 
+                ticket.items.some(item =>
                     item.medicineName.toLowerCase().includes(searchForm.input.toLowerCase()) ||
                     item.medicineId.toString().includes(searchForm.input.toLowerCase())
                 );
 
             const matchStatus = !searchForm.status || ticket.status === searchForm.status;
 
-            const matchDateFrom = !searchForm.dateFrom || 
+            const matchDateFrom = !searchForm.dateFrom ||
                 new Date(ticket.createdAt) >= new Date(searchForm.dateFrom);
 
-            const matchDateTo = !searchForm.dateTo || 
+            const matchDateTo = !searchForm.dateTo ||
                 new Date(ticket.createdAt) <= new Date(searchForm.dateTo + 'T23:59:59');
 
             return matchInput && matchStatus && matchDateFrom && matchDateTo;
@@ -68,20 +68,20 @@ const AdminInventoryPage = () => {
 
     const filteredExportTickets = useMemo(() => {
         return exportTickets.filter(ticket => {
-            const matchInput = !searchForm.input || 
+            const matchInput = !searchForm.input ||
                 ticket.id.toString().includes(searchForm.input.toLowerCase()) ||
                 ticket.performedBy.toLowerCase().includes(searchForm.input.toLowerCase()) ||
-                ticket.items.some(item => 
+                ticket.items.some(item =>
                     item.medicineName.toLowerCase().includes(searchForm.input.toLowerCase()) ||
                     item.medicineId.toString().includes(searchForm.input.toLowerCase())
                 );
 
             const matchStatus = !searchForm.status || ticket.status === searchForm.status;
 
-            const matchDateFrom = !searchForm.dateFrom || 
+            const matchDateFrom = !searchForm.dateFrom ||
                 new Date(ticket.createdAt) >= new Date(searchForm.dateFrom);
 
-            const matchDateTo = !searchForm.dateTo || 
+            const matchDateTo = !searchForm.dateTo ||
                 new Date(ticket.createdAt) <= new Date(searchForm.dateTo + 'T23:59:59');
 
             return matchInput && matchStatus && matchDateFrom && matchDateTo;
@@ -148,9 +148,12 @@ const AdminInventoryPage = () => {
         <main className="p-4 sm:p-6">
             <div className="max-w-full">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-                    <h3 className="text-xl sm:text-2xl font-bold text-blue-700 mb-2 sm:mb-0">
-                        Quản lý nhập xuất kho
-                    </h3>
+                    <div>
+                        <h3 className="text-xl sm:text-2xl font-bold text-blue-700 mb-2 sm:mb-0">
+                            Quản lý nhập xuất kho
+                        </h3>
+                        <p className="text-sm text-gray-600 mt-1">Quản lý kho và xuất/nhập hàng</p>
+                    </div>
                     <div className="text-sm text-gray-600">
                         <div>Tổng giao dịch: <span className="font-semibold text-blue-600">{stats.totalTransactions}</span></div>
                         <div>Chờ xử lý: <span className="font-semibold text-yellow-600">{stats.pendingTransactions}</span></div>
@@ -208,8 +211,8 @@ const AdminInventoryPage = () => {
                     <div className="grid gap-4">
 
                         <div className="grid gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-                            <div className="appointments__filter__item relative">
-                                <label className="block text-xs text-gray-600 mb-1">Tìm kiếm:</label>
+                            <div className="relative">
+                                <label className="block text-xs text-gray-600 mb-1">Tìm kiếm</label>
                                 <div className="relative">
                                     <i className="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
                                     <input
@@ -224,7 +227,7 @@ const AdminInventoryPage = () => {
                             </div>
 
                             <div>
-                                <label className="block text-xs text-gray-600 mb-1">Trạng thái:</label>
+                                <label className="block text-xs text-gray-600 mb-1">Trạng thái</label>
                                 <select
                                     className="w-full border border-gray-300 rounded-md py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                                     value={searchForm.status}
@@ -240,7 +243,7 @@ const AdminInventoryPage = () => {
                             </div>
 
                             <div>
-                                <label className="block text-xs text-gray-600 mb-1">Từ ngày:</label>
+                                <label className="block text-xs text-gray-600 mb-1">Từ ngày</label>
                                 <input
                                     type="date"
                                     value={searchForm.dateFrom}
@@ -250,7 +253,7 @@ const AdminInventoryPage = () => {
                             </div>
 
                             <div>
-                                <label className="block text-xs text-gray-600 mb-1">Đến ngày:</label>
+                                <label className="block text-xs text-gray-600 mb-1">Đến ngày</label>
                                 <input
                                     type="date"
                                     value={searchForm.dateTo}

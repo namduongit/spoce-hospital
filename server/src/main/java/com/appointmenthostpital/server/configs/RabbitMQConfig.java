@@ -5,6 +5,7 @@ import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -18,6 +19,7 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 
 @Configuration
 public class RabbitMQConfig { 
+    // Converter to JSON
     @Bean
     public MessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter();
@@ -72,6 +74,8 @@ public class RabbitMQConfig {
         return new Queue(RabbitMQ.EMAIL_CONTACT_QUEUE);
     }
 
+    /* @Qualifier("params") -> params -> Func name */
+
     /**
      * Upload Doctor Binding. Used to upload doctor profile pictures.
      *  
@@ -81,14 +85,20 @@ public class RabbitMQConfig {
      * 
      */
     @Bean
-    public Binding uploadDoctorBinding(Queue uploadDoctorQueue, DirectExchange uploadDoctorExchange) {
-        return BindingBuilder.bind(uploadDoctorQueue).to(uploadDoctorExchange).with(RabbitMQ.UPLOAD_DOCTOR_ROUTING_KEY);
+    public Binding uploadDoctorBinding(
+        @Qualifier("uploadDoctorQueue") Queue uploadDoctorQueue, @Qualifier("uploadDoctorExchange") DirectExchange uploadDoctorExchange) {
+        return BindingBuilder.bind(uploadDoctorQueue)
+        .to(uploadDoctorExchange)
+        .with(RabbitMQ.UPLOAD_DOCTOR_ROUTING_KEY);
     }
 
 
     @Bean
-    public Binding removeDoctorBinding(Queue removeDoctorQueue, DirectExchange removeDoctorExchange) {
-        return BindingBuilder.bind(removeDoctorQueue).to(removeDoctorExchange).with(RabbitMQ.REMOVE_DOCTOR_ROUTING_KEY);
+    public Binding removeDoctorBinding(
+        @Qualifier("removeDoctorQueue") Queue removeDoctorQueue, @Qualifier("removeDoctorExchange") DirectExchange removeDoctorExchange) {
+        return BindingBuilder.bind(removeDoctorQueue)
+        .to(removeDoctorExchange)
+        .with(RabbitMQ.REMOVE_DOCTOR_ROUTING_KEY);
     }
 
     /**
@@ -101,8 +111,12 @@ public class RabbitMQConfig {
      * #: Allows binding with routing keys that have zero or more words in place of the # symbol.
      */
     @Bean
-    public Binding resetPasswordBinding(Queue resetPasswordQueue, TopicExchange sendEmailExchange) {
-        return BindingBuilder.bind(resetPasswordQueue).to(sendEmailExchange).with(RabbitMQ.SEND_EMAIL_ROUTING_KEY +".reset-password.#");
+    public Binding resetPasswordBinding(
+        @Qualifier("resetPasswordQueue") Queue resetPasswordQueue,
+        @Qualifier("sendEmailExchange") TopicExchange sendEmailExchange) {
+        return BindingBuilder.bind(resetPasswordQueue)
+        .to(sendEmailExchange)
+        .with(RabbitMQ.SEND_EMAIL_ROUTING_KEY +".reset-password.#");
     }
 
     /**
@@ -113,7 +127,11 @@ public class RabbitMQConfig {
      * @return
      */
     @Bean
-    public Binding emailContactBinding(Queue emailContactQueue, TopicExchange sendEmailExchange) {
-        return BindingBuilder.bind(emailContactQueue).to(sendEmailExchange).with(RabbitMQ.SEND_EMAIL_ROUTING_KEY +".contact.#");
+    public Binding emailContactBinding(
+        @Qualifier("emailContactQueue") Queue emailContactQueue,
+        @Qualifier("sendEmailExchange") TopicExchange sendEmailExchange) {
+        return BindingBuilder.bind(emailContactQueue)
+        .to(sendEmailExchange)
+        .with(RabbitMQ.SEND_EMAIL_ROUTING_KEY +".contact.#");
     }
 }

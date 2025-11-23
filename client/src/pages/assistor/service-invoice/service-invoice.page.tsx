@@ -6,15 +6,16 @@ import { serviceInvoiceStatus } from "../../../constants/status.constant";
 import type { ServiceInvoiceResponse } from "../../../responses/service-nvoice.response";
 import ServiceInvoiceDetail from "../../../components/common/details/service-invoice.detail";
 import { formatPriceVND } from "../../../utils/format-number.util";
+import { printServiceTicket } from "../../../services/report-print.service";
 
 const AssistorServiceInvoicePage = () => {
-    const { execute } = useCallApi();
+    const { execute, notify } = useCallApi();
 
     const [serviceInvoices, setServiceInvoices] = useState<ServiceInvoiceResponse[]>([]);
     const [filteredInvoices, setFilteredInvoices] = useState<ServiceInvoiceResponse[]>([]);
     const [showDetail, setShowDetail] = useState(false);
     const [selectedInvoice, setSelectedInvoice] = useState<ServiceInvoiceResponse | null>(null);
-    
+
     const [searchForm, setSearchForm] = useState({
         input: "",
         status: "",
@@ -111,13 +112,21 @@ const AssistorServiceInvoicePage = () => {
         setShowDetail(true);
     }
 
+    const handlePrint = async (invoice: ServiceInvoiceResponse) => {
+        const res = await execute(printServiceTicket(invoice.id));
+        notify(res, 'In hóa đơn thành công');
+    }
+
     return (
         <main className="service-invoice-page p-4 sm:p-6">
             <div className="service-invoice-page__wrap max-w-full">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-                    <h3 className="text-xl sm:text-2xl font-bold text-blue-700 mb-2 sm:mb-0">
-                        Quản lý hóa đơn dịch vụ
-                    </h3>
+                    <div>
+                        <h3 className="text-xl sm:text-2xl font-bold text-blue-700 mb-2 sm:mb-0">
+                            Quản lý hóa đơn dịch vụ
+                        </h3>
+                        <p className="text-sm text-gray-600 mt-1">Quản lý hóa đơn khám dịch vụ tại bệnh viện</p>
+                    </div>
                     <div className="text-sm text-gray-600">
                         <div>Tổng: <span className="font-semibold text-blue-600">{stats.totalInvoices}</span> hóa đơn</div>
                         <div>Hôm nay: <span className="font-semibold text-green-600">{stats.todayInvoices}</span></div>
@@ -281,7 +290,7 @@ const AssistorServiceInvoicePage = () => {
                                                 </span>
                                             </td>
                                             <td className="px-4 py-3 font-semibold text-blue-600">
-                                                {formatPriceVND(invoice.totalAmount)} 
+                                                {formatPriceVND(invoice.totalAmount)}
                                             </td>
                                             <td className="px-4 py-3 text-center">
                                                 <div className="flex items-center justify-center gap-2">
@@ -292,6 +301,15 @@ const AssistorServiceInvoicePage = () => {
                                                     >
                                                         <i className="fa-solid fa-eye mr-1"></i>
                                                         Chi tiết
+                                                    </button>
+
+                                                    <button
+                                                        onClick={() => handlePrint(invoice)}
+                                                        className="px-3 py-1 bg-yellow-100 text-yellow-600 rounded hover:bg-yellow-200 transition-colors text-xs font-medium"
+                                                        title="In hóa đơn"
+                                                    >
+                                                        <i className="fa-solid fa-edit mr-1"></i>
+                                                        In hóa đơn
                                                     </button>
                                                 </div>
                                             </td>
@@ -320,7 +338,7 @@ const AssistorServiceInvoicePage = () => {
                                 </span>
                                 <span>
                                     Tổng giá trị: <span className="font-semibold text-blue-600">
-                                        {formatPriceVND(filteredInvoices.reduce((sum, invoice) => sum + invoice.totalAmount, 0))} 
+                                        {formatPriceVND(filteredInvoices.reduce((sum, invoice) => sum + invoice.totalAmount, 0))}
                                     </span>
                                 </span>
                             </div>

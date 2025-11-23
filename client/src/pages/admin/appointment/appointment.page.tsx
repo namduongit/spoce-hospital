@@ -113,9 +113,13 @@ const AdminAppointmentsPage = () => {
         <main className="appointments-page p-4 sm:p-6">
             <div className="appointments-page__wrap max-w-full">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-                    <h3 className="text-xl sm:text-2xl font-bold text-blue-700 mb-2 sm:mb-0">
-                        Quản lý lịch hẹn
-                    </h3>
+                    <div>
+                        <h3 className="text-xl sm:text-2xl font-bold text-blue-700 mb-2 sm:mb-0">
+                            Quản lý lịch hẹn
+                        </h3>
+                        <p className="text-sm text-gray-600 mt-1">Quản lý các lịch hẹn của khách hàng</p>
+                    </div>
+
                     <div className="text-sm text-gray-600">
                         <div>Tổng: <span className="font-semibold text-blue-600">{stats.totalAppointments}</span> lịch hẹn</div>
                         <div>Hôm nay: <span className="font-semibold text-green-600">{stats.todayAppointments}</span></div>
@@ -171,18 +175,26 @@ const AdminAppointmentsPage = () => {
 
                 <div className="appointments__sort bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6 grid gap-4 grid-cols-1 lg:grid-cols-2">
                     <div className="appointments__filter flex flex-col gap-3 sm:flex-row sm:items-center sm:space-x-3">
-                        <div className="appointments__filter__item relative flex-1">
-                            <i className="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                            <input
-                                type="text"
-                                className="border border-gray-300 rounded-md py-2 pl-10 pr-4 text-sm w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                                placeholder="Tìm theo tên bệnh nhân hoặc id ..."
-                                value={searchForm.input}
-                                onChange={(e) => handleChangeSearch("input", e.target.value)}
-                            />
+                        <div className="flex-1">
+                            <label className="block text-xs text-gray-600 mb-1">
+                                Tìm kiếm
+                            </label>
+                            <div className="relative">
+                                <i className="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                                <input
+                                    type="text"
+                                    className="border border-gray-300 rounded-md py-2 pl-10 pr-4 text-sm w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                    placeholder="Tìm kiếm theo tên bệnh nhân hoặc id ..."
+                                    value={searchForm.input}
+                                    onChange={(e) => handleChangeSearch("input", e.target.value)}
+                                />
+                            </div>
                         </div>
 
-                        <div className="appointments__filter__item flex-1">
+                        <div className="flex-1">
+                            <label className="block text-xs text-gray-600 mb-1">
+                                Trạng thái
+                            </label>
                             <select
                                 className="w-full border border-gray-300 rounded-md py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                                 value={searchForm.status}
@@ -197,6 +209,9 @@ const AdminAppointmentsPage = () => {
                             </select>
                         </div>
                         <div className="flex-1">
+                            <label className="block text-xs text-gray-600 mb-1">
+                                Sắp xếp theo
+                            </label>
                             <select
                                 className="w-full border border-gray-300 rounded-md py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                                 value={searchForm.date}

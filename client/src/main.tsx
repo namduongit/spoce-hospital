@@ -13,6 +13,7 @@ import AuthDirect from "./contexts/_auth-direct";
 
 const AssistorLayout = lazy(() => import("./layouts/assistor/layout"));
 const AssistorAppointmentPage = lazy(() => import("./pages/assistor/appointment/appointment.page"));
+const AssistorDoctorSchedulePage = lazy(() => import("./pages/assistor/doctor-schedule/doctor-schedule.page"));
 const AssistorPrescriptionInvoicePage = lazy(() => import("./pages/assistor/prescription-invoice/prescription-invoice.page"));
 const AssistorServiceInvoicePage = lazy(() => import("./pages/assistor/service-invoice/service-invoice.page"));
 const AssistorMedicinePage = lazy(() => import("./pages/assistor/medicine/medicine.page"));
@@ -20,6 +21,7 @@ const AssistorMedicalPackagePage = lazy(() => import("./pages/assistor/medical-p
 
 const DoctorLayout = lazy(() => import("./layouts/doctor/layout"));
 const DoctorAppointmentPage = lazy(() => import("./pages/doctor/appointment/appointment.page"));
+const DoctorSchedulePage = lazy(() => import("./pages/doctor/schedule/schedule.page"));
 const DoctorProfilePage = lazy(() => import("./pages/doctor/profile/profile.page"));
 const CreatePrescriptionInvoicePage = lazy(() => import("./pages/doctor/prescription-invoice/prescription-invoice.page"));
 const CreateServiceInvoicePage = lazy(() => import("./pages/doctor/service-invoice/service-invoice.page"));
@@ -27,6 +29,7 @@ const CreateServiceInvoicePage = lazy(() => import("./pages/doctor/service-invoi
 const AdminLayout = lazy(() => import("./layouts/admin/layout"));
 const AdminDashboardPage = lazy(() => import("./pages/admin/dashboard/dashboard.page"));
 const AdminMedicineDashboardPage = lazy(() => import("./pages/admin/medicine-dashboard/medicine-dashboard.page"));
+const AdminRevenueStatisticsPage = lazy(() => import("./pages/admin/revenue-statistics/revenue-statistics.page"));
 const AdminAccountPage = lazy(() => import("./pages/admin/account/account.page"));
 const AdminDoctorPage = lazy(() => import("./pages/admin/doctor/doctor.page"));
 const AdminAppointmentsPage = lazy(() => import("./pages/admin/appointment/appointment.page"));
@@ -113,6 +116,13 @@ const router = createBrowserRouter([
           </ProtectRoute>
       },
       {
+        path: "doctor-schedules",
+        element:
+          <ProtectRoute roles={["ASSISTOR"]}>
+            <AssistorDoctorSchedulePage />
+          </ProtectRoute>
+      },
+      {
         path: "prescription-invoices",
         element:
           <ProtectRoute roles={["ASSISTOR"]}>
@@ -161,6 +171,13 @@ const router = createBrowserRouter([
           </ProtectRoute>
       },
       {
+        path: "schedule",
+        element:
+          <ProtectRoute roles={["DOCTOR"]}>
+            <DoctorSchedulePage />
+          </ProtectRoute>
+      },
+      {
         path: "service-invoice",
         element:
           <ProtectRoute roles={["DOCTOR"]}>
@@ -199,6 +216,13 @@ const router = createBrowserRouter([
         element:
           <ProtectRoute roles={["ADMIN"]}>
             <AdminMedicineDashboardPage />
+          </ProtectRoute>
+      },
+      {
+        path: "revenue-statistics",
+        element:
+          <ProtectRoute roles={["ADMIN"]}>
+            <AdminRevenueStatisticsPage />
           </ProtectRoute>
       },
       {

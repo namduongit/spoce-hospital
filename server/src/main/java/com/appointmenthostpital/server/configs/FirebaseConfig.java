@@ -10,6 +10,8 @@ import jakarta.annotation.PostConstruct;
 
 @Configuration
 public class FirebaseConfig {
+
+    // Example code in Firebase console to initialize Firebase App
     @PostConstruct
     public void initFirebase() throws Exception {
         ClassPathResource serviceAccount = new ClassPathResource("firebase/config.json");

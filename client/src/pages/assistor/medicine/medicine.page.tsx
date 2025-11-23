@@ -94,7 +94,7 @@ const AssistorMedicinePage = () => {
         outOfStockMedicines: medicines.filter(m => m.status === 'out_of_stock').length,
         lowStockMedicines: medicines.filter(m => m.currentStock <= m.minStock).length,
         totalCurrentStock: medicines.reduce((sum, m) => sum + (m.currentStock || 0), 0),
-        averagePrice: medicines.length > 0 ? 
+        averagePrice: medicines.length > 0 ?
             medicines.reduce((sum, m) => sum + (m.price || 0), 0) / medicines.length : 0,
         totalValue: medicines.reduce((sum, m) => sum + (m.price * m.currentStock || 0), 0),
     };
@@ -103,9 +103,14 @@ const AssistorMedicinePage = () => {
         <main className="p-4 sm:p-6">
             <div className="max-w-full">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-                    <h3 className="text-xl sm:text-2xl font-bold text-blue-700 mb-2 sm:mb-0">
-                        Quản lý thuốc & loại thuốc
-                    </h3>
+                    <div>
+                        <h3 className="text-xl sm:text-2xl font-bold text-blue-700 mb-2 sm:mb-0">
+                            Quản lý thuốc & loại thuốc
+                        </h3>
+                        <p className="text-sm text-gray-600 mt-1">
+                            Quản lý các thuốc và loại thuốc trong bệnh viện
+                        </p>
+                    </div>
                     <div className="text-sm text-gray-600">
                         <div>Tổng: <span className="font-semibold text-blue-600">{stats.totalMedicines}</span> thuốc</div>
                         <div>Tổng: <span className="font-semibold text-blue-600">{stats.totalCategories}</span> loại thuốc</div>
@@ -183,7 +188,7 @@ const AssistorMedicinePage = () => {
 
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6 grid gap-4 grid-cols-1 lg:grid-cols-2">
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:space-x-3">
-                        <div className="appointments__filter__item relative flex-1">
+                        <div className="relative flex-1">
                             <i className="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
                             <input
                                 type="text"

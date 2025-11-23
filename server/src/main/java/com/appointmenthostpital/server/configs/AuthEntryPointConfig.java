@@ -16,12 +16,16 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class AuthEntryPointConfig implements AuthenticationEntryPoint {
+
+    /**
+     * Handles authentication exceptions by sending a JSON response with a 401 status code.
+     * Example: Accessing a protected resource without authentication.
+     */
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException authException) throws IOException, ServletException {
         response.setStatus(HttpStatusResponse.UNAUTHORIZED);
         response.setContentType("application/json;charset=UTF-8");
-
         RestResponse<Object> restResponse = new RestResponse<>(
                 HttpStatusResponse.UNAUTHORIZED,
                 false,

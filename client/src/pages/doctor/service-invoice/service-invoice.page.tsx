@@ -58,7 +58,7 @@ const CreateServiceInvoicePage = () => {
     };
 
     const handleSelectUser = (accountId: number | null) => {
-        setSubmitForm(prev => ({ ...prev, userId: accountId }) );
+        setSubmitForm(prev => ({ ...prev, userId: accountId }));
     };
 
     const handleAddPackage = (medicalPackage: MedicalPackageResponse) => {
@@ -66,9 +66,9 @@ const CreateServiceInvoicePage = () => {
             const selectedPackage: SelectedMedicalPackage = {
                 medicalPackageId: medicalPackage.id
             };
-            
+
             const updatedPackages = [...submitForm.selectedPackages, selectedPackage];
-            
+
             setSubmitForm(prev => ({
                 ...prev,
                 selectedPackages: updatedPackages
@@ -126,9 +126,12 @@ const CreateServiceInvoicePage = () => {
         <main className="create-service-invoice-page p-4 sm:p-6">
             <div className="create-service-invoice-page__wrap max-w-7xl mx-auto">
                 <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-xl sm:text-2xl font-bold text-blue-700">
-                        Tạo hóa đơn dịch vụ
-                    </h3>
+                    <div>
+                        <h3 className="text-xl sm:text-2xl font-bold text-blue-700">
+                            Tạo hóa đơn dịch vụ
+                        </h3>
+                        <p className="text-sm text-gray-600 mt-1">Tạo hóa đơn khám dịch vụ</p>
+                    </div>
                     <button
                         onClick={() => navigate("/doctor/service-invoice")}
                         className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
@@ -249,7 +252,7 @@ const CreateServiceInvoicePage = () => {
                                     submitForm.selectedPackages.map((selectedPackage) => {
                                         const packageDetails = getPackageDetails(selectedPackage.medicalPackageId);
                                         if (!packageDetails) return null;
-                                        
+
                                         return (
                                             <div key={selectedPackage.medicalPackageId} className="flex items-center justify-between p-3 bg-blue-50 rounded-md">
                                                 <div className="flex-1">
