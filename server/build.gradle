@@ -49,6 +49,7 @@ dependencies {
 	implementation("net.sf.jasperreports:jasperreports-fonts:7.0.3")
 	implementation("net.sf.jasperreports:jasperreports-functions:7.0.3")
 	implementation("net.sf.jasperreports:jasperreports-pdf:7.0.3")
+
 }
 
 tasks.named('test') {
