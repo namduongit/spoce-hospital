@@ -51,8 +51,8 @@ const VNPayReturnPayment = () => {
             setDirectUrl(data.directUrl);
             setIsPaid(data.paid);
         } else {
-            const path = paymentInfo.orderInfo.includes('PRESCRIPTION INVOICE') ? '/prescription-invoices' : '/service-invoices';
-            setDirectUrl((auth.role != 'USER' && auth.role != 'DOCTOR') ? auth.role?.toLocaleLowerCase() + path : '/');
+            const path = paymentInfo.orderInfo.includes('PRESCRIPTION INVOICE') ? '/prescription-invoice' : '/service-invoice';
+            setDirectUrl((auth.role != 'USER' && auth.role != 'DOCTOR') ? `/${auth.role?.toLocaleLowerCase()}` + path : '/');
             setIsPaid(false);
         }
     }
