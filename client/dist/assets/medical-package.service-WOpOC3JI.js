@@ -1,0 +1,1 @@
+import{g as a}from"./index-wOwRfMo4.js";const o=async()=>(await a.get("/api/medical-packages")).data,p=async s=>(await a.post("/api/medical-packages",s)).data,r=async(s,e)=>(await a.put(`/api/medical-packages/${s}`,e)).data,i=async(s,e)=>(await a.put(`/api/medical-packages/${s}/status`,{status:e})).data;export{i as a,p as c,o as g,r as u};

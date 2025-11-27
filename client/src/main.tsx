@@ -84,7 +84,7 @@ const router = createBrowserRouter([
       {
         path: "page/account",
         element:
-          <ProtectRoute roles={["ADMIN", "ASSISTOR"]}>
+          <ProtectRoute roles={["USER"]}>
             <AccountPage />
           </ProtectRoute>
       },

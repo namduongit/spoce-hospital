@@ -10,9 +10,42 @@ services:
       - "3306:3306"
     volumes:
       - ./mysql_data:/var/lib/mysql
-  
+
+  amqp:
+    image: rabbitmq:management
+    container_name: amqp-service
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: namduongit
+      RABBITMQ_DEFAULT_PASS: NDuong205
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ./rabbitmq_data:/var/lib/rabbitmq
+    
   server:
-    image: 
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: server-service
+    ports:
+      - "8000:8000"
+    depends_on:
+      - database
+      - amqp
+    environment:
+    # Override variables in application.properties
+      SPRING_DATASOURCE_URL: jdbc:mysql://database-service:3306/appointment_hospital
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: NDuong205
+
+      SPRING_RABBITMQ_HOST: amqp-service
+      SPRING_RABBITMQ_PORT: 5672
+
+      CLIENT_URL: http://localhost:5173/
+
+      TZ: Asia/Ho_Chi_Minh
   
   client:
     image: node:lts
@@ -21,11 +54,12 @@ services:
     volumes:
       - ./client:/app
     environment:
-      - VITE_SERVER_URL=http://localhost:8000
+    # Override variables in .env
+      - VITE_SERVER_URL=http://localhost:8000 
     command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
     ports:
       - "5173:5173"
     stdin_open: true
     tty: true
     depends_on:
-      - database
+      - server

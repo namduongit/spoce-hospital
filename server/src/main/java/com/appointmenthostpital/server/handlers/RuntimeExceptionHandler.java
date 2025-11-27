@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.appointmenthostpital.server.dtos.RestResponse;
 import com.appointmenthostpital.server.exceptions.AccountLockedException;
 import com.appointmenthostpital.server.exceptions.DuplicateResourceException;
-import com.appointmenthostpital.server.exceptions.MomoException;
 import com.appointmenthostpital.server.exceptions.NotAllowedException;
 import com.appointmenthostpital.server.exceptions.NotFoundResourceException;
 import com.appointmenthostpital.server.exceptions.PasswordNotValidException;
@@ -25,8 +24,7 @@ public class RuntimeExceptionHandler {
         AccountLockedException.class,
         UploadFileException.class,
         NullPointerException.class,
-        VNPayException.class,
-        MomoException.class
+        VNPayException.class
     })
     public ResponseEntity<RestResponse<?>> runtimeExceptionHandler(Exception exception) {
         RestResponse<Object> restResponse = new RestResponse<>();

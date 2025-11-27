@@ -35,3 +35,4 @@ server/gradle/
 
 # Database
 mysql_data/
+rabbitmq_data/
